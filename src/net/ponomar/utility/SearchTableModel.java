@@ -1,4 +1,4 @@
-package net.ponomar;
+package net.ponomar.utility;
 
 import javax.swing.table.DefaultTableModel;
 

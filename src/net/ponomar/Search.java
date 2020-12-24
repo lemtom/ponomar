@@ -4,6 +4,7 @@ import net.ponomar.internationalization.LanguagePack;
 import net.ponomar.parsing.Commemoration;
 import net.ponomar.utility.Constants;
 import net.ponomar.utility.Helpers;
+import net.ponomar.utility.SearchTableModel;
 import net.ponomar.utility.StringOp;
 
 import javax.swing.*;
@@ -59,15 +60,9 @@ public class Search extends JFrame implements ActionListener {
 	String[] availableLanguages;
 
 	public Search(LinkedHashMap<String, Object> dayInfo) {
-		// Assuming at present only English exists:
 		analyse.setDayInfo(dayInfo);
-		/*
-		 * Text = new LanguagePack(dayInfo); captions = Text.obtainValues((String)
-		 * Text.Phrases.get("BibleW"));
-		 */
-		setTitle("Search Commemorations");
 
-//        LanguagePack getLang = new LanguagePack(Analyse.getDayInfo());
+		setTitle("Search Commemorations");
 
 		JPanel top = new JPanel();
 		JPanel bottom = new JPanel();
@@ -90,24 +85,22 @@ public class Search extends JFrame implements ActionListener {
 		JSplitPane truetop = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		truetop.setTopComponent(top);
 		JPanel warningTextPanel = new JPanel();
-		JTextPane warningText = new JTextPane();
-		warningText.setContentType(Constants.CONTENT_TYPE);
+		JTextArea warningText = new JTextArea();
+		//warningText.setContentType(Constants.CONTENT_TYPE);
 		warningText.setText(
 				"This is a trial search of the commemorations in a given language with display across languages. Unfortunately, no stemming or collation is available so that the results are very, very, very dependent on what you enter. The fewer letters or words that are entered here, the more likely you are to find what you are looking for. Entering \"George\" is more likely to give results than \"George the New Martyr.\"");
 		warningText.setEditable(false);
-		warningText.setPreferredSize(new Dimension((int) warningText.getPreferredSize().getWidth(), (int) warningText.getPreferredSize().getHeight()*3));
-		JScrollPane scroll = new JScrollPane(warningText);
-		warningTextPanel.add(scroll);
-		warningTextPanel.setLayout(new BoxLayout(warningTextPanel, BoxLayout.PAGE_AXIS));
-
-		truetop.setBottomComponent(warningTextPanel);
+		warningText.setLineWrap(true);
+		warningText.setWrapStyleWord(true);
+		warningText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		truetop.setBottomComponent(warningText);
 		
 		tableModel = new SearchTableModel();
 		String rough = ConfigurationFiles.getDefaults().get("AvailableLanguages");
 		availableLanguages=rough.split(",");
 		tableModel.addColumn("ID");
 		tableModel.addColumn("Name");
-        Helpers getFile=new Helpers(analyse.getDayInfo());
+        Helpers getFile = new Helpers(analyse.getDayInfo());
 
  		for(int i=0;i<availableLanguages.length;i++)
  		{
@@ -116,6 +109,10 @@ public class Search extends JFrame implements ActionListener {
  		}
 
 		results = new JTable(tableModel); 
+		//Times New Roman doesn't properly fall back on Linux
+		results.setFont(new Font(Font.SANS_SERIF, 0, 14));
+		results.getTableHeader().setFont(new Font(Font.SANS_SERIF, 0, 14));
+		setFont(new Font(Font.SANS_SERIF, 0, 14));
 		JScrollPane scrollPane3 = new JScrollPane(results);
 		bottom.add(scrollPane3);
 		
@@ -148,8 +145,6 @@ public class Search extends JFrame implements ActionListener {
 		setSize(700, 600);
 		setVisible(true);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Remove in the final version
-
 	}
 
 	public String getUsualBeginning() {
@@ -172,21 +167,18 @@ public class Search extends JFrame implements ActionListener {
 	private void search() {
 		tableModel.setRowCount(0);
 		String search = searchTerm.getText();
-		// Will only search English
-		//dayinfo.put("LS", "en/");
-		String localPath = "/en/";
-		localPath = "/" + analyse.getDayInfo().get("LS").toString();
+		String localPath = "/" + analyse.getDayInfo().get("LS").toString();
 		File folder = new File(Constants.LANGUAGES_PATH + localPath + LIVES_PATH);
 		File[] listOfFiles = folder.listFiles();
 		//System.out.println(listOfFiles.length);
 
-		Commemoration test = new Commemoration();
+		Commemoration commemoration;
 		for (File file : listOfFiles) {
 			if (file.isFile() && file.getName().endsWith("xml")) {
 					//System.out.println(file.getName());
-					test = new Commemoration(file.getName().substring(0, file.getName().length() - 4),
+					commemoration = new Commemoration(file.getName().substring(0, file.getName().length() - 4),
 							file.getName().substring(0, file.getName().length() - 4), analyse.getDayInfo());
-					String nameF = test.getGrammar(Constants.NOMINATIVE);
+					String nameF = commemoration.getGrammar(Constants.NOMINATIVE);
 					if (nameF.contains(search)) {
 						Vector<String> foundFile = new Vector<>();
 						String id = (file.getName().subSequence(0, file.getName().length() - 4)).toString();
@@ -214,7 +206,7 @@ public class Search extends JFrame implements ActionListener {
 		LinkedHashMap<String, Object> dayinfo = new LinkedHashMap<>();
 		//dayinfo.put("LS", "fr/");
 		dayinfo.put("LS", "en/");
-		Search testing = new Search(dayinfo);
+		new Search(dayinfo);
 
 	}
 }
