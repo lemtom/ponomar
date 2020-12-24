@@ -98,7 +98,7 @@ public class MenuFiles extends JMenu implements ItemListener, PropertyChangeList
 		JMenu menu = new JMenu(saintNames[0]);
 		menu.setMnemonic(KeyEvent.VK_N);
 		menu.getAccessibleContext().setAccessibleDescription(saintNames[1]);
-		menu.add(generateMenuItem(saintNames[2], saintNames[3], KeyEvent.VK_S, KeyEvent.VK_W, al, false));
+		menu.add(generateMenuItem(saintNames[2], saintNames[3], KeyEvent.VK_S, KeyEvent.VK_W, al, true));
 
 		return menu;
 	}
