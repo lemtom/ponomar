@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.text.Normalizer;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 
@@ -58,6 +59,8 @@ public class Search extends JFrame implements ActionListener {
 	private JTable results;
 	DefaultTableModel tableModel;
 	String[] availableLanguages;
+	private JCheckBox ignoreDiacritics;
+	private JCheckBox ignoreCapitalization;
 
 	public Search(LinkedHashMap<String, Object> dayInfo) {
 		analyse.setDayInfo(dayInfo);
@@ -66,7 +69,7 @@ public class Search extends JFrame implements ActionListener {
 
 		JPanel top = new JPanel();
 		JPanel bottom = new JPanel();
-		top.setLayout(new GridLayout(1, 3));
+		top.setLayout(new GridLayout(2, 3));
 		bottom.setLayout(new BoxLayout(bottom, BoxLayout.PAGE_AXIS));
 
 		JLabel text = new JLabel("Search Term: ", SwingConstants.RIGHT);
@@ -75,18 +78,23 @@ public class Search extends JFrame implements ActionListener {
 		searchTerm.setText("");
 		top.add(searchTerm);
 
-
-
 		okay = new JButton("Search");
 		okay.addActionListener(this);
 		// okay.setFont(CurrentFont); NEEDS TO BE IMPLEMENTED IN THE FINAL VERSION
 		top.add(okay);
-		
+
+		ignoreDiacritics = new JCheckBox("Ignore diacritical marks");
+		ignoreDiacritics.setSelected(false);
+		top.add(ignoreDiacritics);
+		ignoreCapitalization = new JCheckBox("Ignore capitalization");
+		ignoreCapitalization.setSelected(true);
+		top.add(ignoreCapitalization);
+
 		JSplitPane truetop = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		truetop.setTopComponent(top);
-		JPanel warningTextPanel = new JPanel();
+		// JPanel warningTextPanel = new JPanel();
 		JTextArea warningText = new JTextArea();
-		//warningText.setContentType(Constants.CONTENT_TYPE);
+		// warningText.setContentType(Constants.CONTENT_TYPE);
 		warningText.setText(
 				"This is a trial search of the commemorations in a given language with display across languages. Unfortunately, no stemming or collation is available so that the results are very, very, very dependent on what you enter. The fewer letters or words that are entered here, the more likely you are to find what you are looking for. Entering \"George\" is more likely to give results than \"George the New Martyr.\"");
 		warningText.setEditable(false);
@@ -94,38 +102,37 @@ public class Search extends JFrame implements ActionListener {
 		warningText.setWrapStyleWord(true);
 		warningText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		truetop.setBottomComponent(warningText);
-		
+
 		tableModel = new SearchTableModel();
 		String rough = ConfigurationFiles.getDefaults().get("AvailableLanguages");
-		availableLanguages=rough.split(",");
+		availableLanguages = rough.split(",");
 		tableModel.addColumn("ID");
 		tableModel.addColumn("Name");
-        Helpers getFile = new Helpers(analyse.getDayInfo());
+		Helpers getFile = new Helpers(analyse.getDayInfo());
 
- 		for(int i=0;i<availableLanguages.length;i++)
- 		{
- 			 LanguagePack lang=new LanguagePack(getFile.langFileFind(availableLanguages[i], Constants.LANGUAGE_PACKS),(LinkedHashMap) analyse.getDayInfo().clone());
- 			tableModel.addColumn(lang.getPhrases().get("NameLocal"));
- 		}
+		for (int i = 0; i < availableLanguages.length; i++) {
+			LanguagePack lang = new LanguagePack(getFile.langFileFind(availableLanguages[i], Constants.LANGUAGE_PACKS),
+					(LinkedHashMap) analyse.getDayInfo().clone());
+			tableModel.addColumn(lang.getPhrases().get("NameLocal"));
+		}
 
-		results = new JTable(tableModel); 
-		//Times New Roman doesn't properly fall back on Linux
+		results = new JTable(tableModel);
+		// Times New Roman doesn't properly fall back on Linux
 		results.setFont(new Font(Font.SANS_SERIF, 0, 14));
 		results.getTableHeader().setFont(new Font(Font.SANS_SERIF, 0, 14));
 		setFont(new Font(Font.SANS_SERIF, 0, 14));
 		JScrollPane scrollPane3 = new JScrollPane(results);
 		bottom.add(scrollPane3);
-		
+
 		results.addMouseListener(new MouseAdapter() {
 			@Override
-            public void mouseClicked(MouseEvent evt) {
-                int index = results.getSelectedRow();
-                String id = tableModel.getValueAt(index, 0).toString();
-                Commemoration commemoration = new Commemoration(id, id, analyse.getDayInfo());
-    			new DoSaint(commemoration, analyse.getDayInfo());
-            }
-        });
-
+			public void mouseClicked(MouseEvent evt) {
+				int index = results.getSelectedRow();
+				String id = tableModel.getValueAt(index, 0).toString();
+				Commemoration commemoration = new Commemoration(id, id, analyse.getDayInfo());
+				new DoSaint(commemoration, analyse.getDayInfo());
+			}
+		});
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		splitter.setTopComponent(truetop);
@@ -170,41 +177,59 @@ public class Search extends JFrame implements ActionListener {
 		String localPath = "/" + analyse.getDayInfo().get("LS").toString();
 		File folder = new File(Constants.LANGUAGES_PATH + localPath + LIVES_PATH);
 		File[] listOfFiles = folder.listFiles();
-		//System.out.println(listOfFiles.length);
+		// System.out.println(listOfFiles.length);
 
 		Commemoration commemoration;
 		for (File file : listOfFiles) {
 			if (file.isFile() && file.getName().endsWith("xml")) {
-					//System.out.println(file.getName());
-					commemoration = new Commemoration(file.getName().substring(0, file.getName().length() - 4),
-							file.getName().substring(0, file.getName().length() - 4), analyse.getDayInfo());
-					String nameF = commemoration.getGrammar(Constants.NOMINATIVE);
-					if (nameF.contains(search)) {
-						Vector<String> foundFile = new Vector<>();
-						String id = (file.getName().subSequence(0, file.getName().length() - 4)).toString();
-						foundFile.add(id);
-						foundFile.add(nameF.replaceAll("\\<.*?>","")); //Removes HTML tags
-				 		for(int i=0;i<availableLanguages.length;i++)
-				 		{
-							foundFile.add(checkIfFound(file, availableLanguages[i]));
-				 		}
-						tableModel.addRow(foundFile);
+				// System.out.println(file.getName());
+				commemoration = new Commemoration(file.getName().substring(0, file.getName().length() - 4),
+						file.getName().substring(0, file.getName().length() - 4), analyse.getDayInfo());
+				String nameF = commemoration.getGrammar(Constants.NOMINATIVE);
+				if (searchName(search, nameF)) {
+					Vector<String> foundFile = new Vector<>();
+					String id = (file.getName().subSequence(0, file.getName().length() - 4)).toString();
+					foundFile.add(id);
+					foundFile.add(nameF.replaceAll("\\<.*?>", "")); // Removes HTML tags
+					for (int i = 0; i < availableLanguages.length; i++) {
+						foundFile.add(checkIfFound(file, availableLanguages[i]));
 					}
+					tableModel.addRow(foundFile);
 				}
+			}
 		}
 	}
 
+	private boolean searchName(String searchString, String commName) {
+		if (ignoreDiacritics.isSelected()) {
+			commName = stripDiacriticalMarks(commName);
+			searchString = stripDiacriticalMarks(searchString);
+		}
+		if (ignoreCapitalization.isSelected()) {
+			commName = commName.toLowerCase();
+			searchString = searchString.toLowerCase();
+		}
+		return commName.contains(searchString);
+	}
+
+	// Probably will move this to a utility class this at some point
+	private static String stripDiacriticalMarks(String word) {
+		word = Normalizer.normalize(word, Normalizer.Form.NFD);
+		word = word.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+		return word;
+	}
+
 	private String checkIfFound(File file, String langPath) {
-			if (new File(Constants.LANGUAGES_PATH + "/" + langPath + LIVES_PATH + file.getName()).exists()) {
-				return EXISTS;
-			} else {
-				return N_A;
-			}
+		if (new File(Constants.LANGUAGES_PATH + "/" + langPath + LIVES_PATH + file.getName()).exists()) {
+			return EXISTS;
+		} else {
+			return N_A;
+		}
 	}
 
 	public static void main(String[] argz) {
 		LinkedHashMap<String, Object> dayinfo = new LinkedHashMap<>();
-		//dayinfo.put("LS", "fr/");
+		// dayinfo.put("LS", "fr/");
 		dayinfo.put("LS", "en/");
 		new Search(dayinfo);
 
