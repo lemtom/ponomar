@@ -5,6 +5,7 @@ import net.ponomar.parsing.Commemoration;
 import net.ponomar.utility.Constants;
 import net.ponomar.utility.Helpers;
 import net.ponomar.utility.SearchTableModel;
+import net.ponomar.utility.SearchUtils;
 import net.ponomar.utility.StringOp;
 
 import javax.swing.*;
@@ -16,7 +17,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.text.Normalizer;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 
@@ -45,9 +45,8 @@ import java.util.Vector;
  * 
  */
 public class Search extends JFrame implements ActionListener {
-	private static final String N_A = "N/A";
-	private static final String EXISTS = "Exists";
 	private static final String LIVES_PATH = "xml/lives/";
+
 	// SOME QUICK NOTES FOR FURTHER IMPLEMENTATION:
 	// THE DATE OR THE RELEVANT INFORMATION WILL HAVE TO BE GIVEN
 	// TO THE PROGRAMME. AT PRESENT IT WILL BE ASSUMED THAT IT IS TONE 1
@@ -61,6 +60,7 @@ public class Search extends JFrame implements ActionListener {
 	String[] availableLanguages;
 	private JCheckBox ignoreDiacritics;
 	private JCheckBox ignoreCapitalization;
+	private JCheckBox searchFullText;
 
 	public Search(LinkedHashMap<String, Object> dayInfo) {
 		analyse.setDayInfo(dayInfo);
@@ -89,6 +89,10 @@ public class Search extends JFrame implements ActionListener {
 		ignoreCapitalization = new JCheckBox("Ignore capitalization");
 		ignoreCapitalization.setSelected(true);
 		top.add(ignoreCapitalization);
+		
+		searchFullText = new JCheckBox("Search full text");
+		searchFullText.setSelected(false);
+		top.add(searchFullText);
 
 		JSplitPane truetop = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		truetop.setTopComponent(top);
@@ -175,56 +179,45 @@ public class Search extends JFrame implements ActionListener {
 		tableModel.setRowCount(0);
 		String search = searchTerm.getText();
 		String localPath = "/" + analyse.getDayInfo().get("LS").toString();
+		
 		File folder = new File(Constants.LANGUAGES_PATH + localPath + LIVES_PATH);
+
 		File[] listOfFiles = folder.listFiles();
-		// System.out.println(listOfFiles.length);
 
 		Commemoration commemoration;
 		for (File file : listOfFiles) {
 			if (file.isFile() && file.getName().endsWith("xml")) {
-				// System.out.println(file.getName());
 				commemoration = new Commemoration(file.getName().substring(0, file.getName().length() - 4),
 						file.getName().substring(0, file.getName().length() - 4), analyse.getDayInfo());
-				String nameF = commemoration.getGrammar(Constants.NOMINATIVE);
-				if (searchName(search, nameF)) {
-					Vector<String> foundFile = new Vector<>();
-					String id = (file.getName().subSequence(0, file.getName().length() - 4)).toString();
-					foundFile.add(id);
-					foundFile.add(nameF.replaceAll("\\<.*?>", "")); // Removes HTML tags
-					for (int i = 0; i < availableLanguages.length; i++) {
-						foundFile.add(checkIfFound(file, availableLanguages[i]));
-					}
-					tableModel.addRow(foundFile);
+				String foundCommemoration = extractCommemorationText(commemoration);
+				if (SearchUtils.searchName(search, foundCommemoration, localPath, ignoreDiacritics.isSelected(), ignoreCapitalization.isSelected())) {
+					tableModel.addRow(prepareRow(commemoration, file));
 				}
 			}
 		}
 	}
 
-	private boolean searchName(String searchString, String commName) {
-		if (ignoreDiacritics.isSelected()) {
-			commName = stripDiacriticalMarks(commName);
-			searchString = stripDiacriticalMarks(searchString);
+	private Vector<String> prepareRow(Commemoration commemoration, File file) {
+		Vector<String> foundFile = new Vector<>();
+		String id = (file.getName().subSequence(0, file.getName().length() - 4)).toString();
+		foundFile.add(id);
+		foundFile.add(getCleanCommemorationTitle(commemoration));
+		for (int i = 0; i < availableLanguages.length; i++) {
+			foundFile.add(SearchUtils.checkIfFound(file, availableLanguages[i]));
 		}
-		if (ignoreCapitalization.isSelected()) {
-			commName = commName.toLowerCase();
-			searchString = searchString.toLowerCase();
-		}
-		return commName.contains(searchString);
+		return foundFile;
 	}
 
-	// Probably will move this to a utility class this at some point
-	private static String stripDiacriticalMarks(String word) {
-		word = Normalizer.normalize(word, Normalizer.Form.NFD);
-		word = word.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-		return word;
+	private String getCleanCommemorationTitle(Commemoration commemoration) {
+		return commemoration.getGrammar(Constants.NOMINATIVE).replaceAll("\\<.*?>", "");
 	}
 
-	private String checkIfFound(File file, String langPath) {
-		if (new File(Constants.LANGUAGES_PATH + "/" + langPath + LIVES_PATH + file.getName()).exists()) {
-			return EXISTS;
-		} else {
-			return N_A;
+	private String extractCommemorationText(Commemoration commemoration) {
+		String extractedText = commemoration.getGrammar(Constants.NOMINATIVE);
+		if (searchFullText.isSelected() && commemoration.getLife() != null) {
+			return extractedText + " " + commemoration.getLife().replaceAll("\\<.*?>", "");
 		}
+		return extractedText;
 	}
 
 	public static void main(String[] argz) {
@@ -232,6 +225,5 @@ public class Search extends JFrame implements ActionListener {
 		// dayinfo.put("LS", "fr/");
 		dayinfo.put("LS", "en/");
 		new Search(dayinfo);
-
 	}
 }
