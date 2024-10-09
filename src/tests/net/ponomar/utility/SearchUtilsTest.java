@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 
 class SearchUtilsTest {
 
-	@Disabled //This library can possibly take care of it https://github.com/houbb/opencc4j
+	//@Disabled //This library can possibly take care of it https://github.com/houbb/opencc4j
 	@Test
 	void chineseCases(){
 		//An example to try: traditional: 格奧爾吉; simplified: 格奥尔吉 (both forms correspond to George in Chinese). 
 		// Only the middle two characters are different.
-		assertTrue(searchName("格奥尔吉", "格奧爾吉", "lang", true, false));
+		assertTrue(searchName("格奥尔吉", "格奧爾吉", "zh", true, false));
 	}
 
 	@Test

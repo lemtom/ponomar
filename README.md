@@ -42,21 +42,31 @@ If you are not on Windows, make sure you also have the Times New Roman font. On 
 
 ### Building from the command line
 
-1) Install an SDK for Java. 
+1) Install a Java JDK that's at least version 8.
 
-2) Create the .class files by typing 
+2) Install Maven 
+
+2) Generate the jar by typing
 
 `make`
+
+or
+
+`mvn clean install`
 
 4) Run the main class by typing
 
 `make run`
 
+or
+ 
+`java -jar ponomar.jar`
+
+or simply double-clicking the .jar file.
+
 The main Ponomar interface should appear.
 
 An IDE such as Eclipse or IntelliJ will provide a smoother experience with building.
-
-Alternatively, you can also install in and run from a separate folder using the `make install-separate-directory` and `run-separate-directory`.
 
 ## Perl API
 

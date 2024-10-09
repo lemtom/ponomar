@@ -168,3 +168,5 @@ Makefile.old
 /binary/
 .idea/
 *.iml
+/target/
+ponomar.jar

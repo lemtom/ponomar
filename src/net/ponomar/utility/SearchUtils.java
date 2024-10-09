@@ -2,6 +2,7 @@ package net.ponomar.utility;
 
 import java.io.File;
 import java.text.Normalizer;
+import com.github.houbb.opencc4j.util.*;
 
 public final class SearchUtils {
 
@@ -34,7 +35,10 @@ public final class SearchUtils {
 				searchString = stripDiacriticalMarks(searchString);
 
 				if (lang.contains("zh")) {
-					// Not implemented
+					commName = ZhConverterUtil.toSimple(commName);
+					searchString = ZhConverterUtil.toSimple(searchString);
+					System.out.println("Search string: " + searchString);
+					System.out.println("Comm string: " + commName);
 				}
 			}
 			if (ignoreCapitalization) {
