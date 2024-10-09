@@ -1,19 +1,24 @@
 package net.ponomar;
 
+import net.ponomar.internationalization.LanguagePack;
 import net.ponomar.parsing.Commemoration;
 import net.ponomar.utility.Constants;
- 
- 
- 
+import net.ponomar.utility.Helpers;
+import net.ponomar.utility.SearchTableModel;
+import net.ponomar.utility.SearchUtils;
 import net.ponomar.utility.StringOp;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.LinkedHashMap;
-
+import java.util.Vector;
 
 /***********************************************************************
 (C) 2013 YURI SHARDT. ALL RIGHTS RESERVED.
@@ -33,181 +38,192 @@ import java.util.LinkedHashMap;
 
 /**
  * 
- * This module creates the text for the searching for commemorations across languages and jurisdictions.
+ * This module creates the text for the searching for commemorations across
+ * languages and jurisdictions.
  * 
  * @author Yuri Shardt
  * 
  */
-public class Search extends JFrame implements ActionListener
-{
-	private static final String N_A = "N/A;\t";
-	private static final String EXISTS = "Exists;\t";
+public class Search extends JFrame implements ActionListener {
 	private static final String LIVES_PATH = "xml/lives/";
-	//SOME QUICK NOTES FOR FURTHER IMPLEMENTATION:
-	//THE DATE OR THE RELEVANT INFORMATION WILL HAVE TO BE GIVEN
-	//TO THE PROGRAMME. AT PRESENT IT WILL BE ASSUMED THAT IT IS TONE 1
-	//DURING THE COURSE OF A SINGLE WEEK.
+
+	// SOME QUICK NOTES FOR FURTHER IMPLEMENTATION:
+	// THE DATE OR THE RELEVANT INFORMATION WILL HAVE TO BE GIVEN
+	// TO THE PROGRAMME. AT PRESENT IT WILL BE ASSUMED THAT IT IS TONE 1
+	// DURING THE COURSE OF A SINGLE WEEK.
 	public String usualBeginning1;
-        private StringOp analyse=new StringOp();
-        private JTextField searchTerm = new JTextField("");
-        private JButton okay;
-        private JTextPane results;
+	private StringOp analyse = new StringOp();
+	private JTextField searchTerm = new JTextField("");
+	private JButton okay;
+	private JTable results;
+	DefaultTableModel tableModel;
+	String[] availableLanguages;
+	private JCheckBox ignoreDiacritics;
+	private JCheckBox ignoreCapitalization;
+	private JCheckBox searchFullText;
+
+	public Search(LinkedHashMap<String, Object> dayInfo) {
+		analyse.setDayInfo(dayInfo);
+
+		setTitle("Search Commemorations");
+
+		JPanel top = new JPanel();
+		JPanel bottom = new JPanel();
+		top.setLayout(new GridLayout(2, 3));
+		bottom.setLayout(new BoxLayout(bottom, BoxLayout.PAGE_AXIS));
+
+		JLabel text = new JLabel("Search Term: ", SwingConstants.RIGHT);
+		top.add(text);
+		searchTerm.setEditable(true);
+		searchTerm.setText("");
+		top.add(searchTerm);
+
+		okay = new JButton("Search");
+		okay.addActionListener(this);
+		// okay.setFont(CurrentFont); NEEDS TO BE IMPLEMENTED IN THE FINAL VERSION
+		top.add(okay);
+
+		ignoreDiacritics = new JCheckBox("Ignore diacritical marks");
+		ignoreDiacritics.setSelected(false);
+		top.add(ignoreDiacritics);
+		ignoreCapitalization = new JCheckBox("Ignore capitalization");
+		ignoreCapitalization.setSelected(true);
+		top.add(ignoreCapitalization);
 		
-	public Search(LinkedHashMap<String, Object> dayInfo)
-	{
-		//Assuming at present only English exists:
-            analyse.setDayInfo(dayInfo);
-/*        Text = new LanguagePack(dayInfo);
-        captions = Text.obtainValues((String) Text.Phrases.get("BibleW"));*/
-        setTitle("Search Commemorations");
+		searchFullText = new JCheckBox("Search full text");
+		searchFullText.setSelected(false);
+		top.add(searchFullText);
 
-//        LanguagePack getLang = new LanguagePack(Analyse.getDayInfo());
+		JSplitPane truetop = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		truetop.setTopComponent(top);
+		// JPanel warningTextPanel = new JPanel();
+		JTextArea warningText = new JTextArea();
+		// warningText.setContentType(Constants.CONTENT_TYPE);
+		warningText.setText(
+				"This is a trial search of the commemorations in a given language with display across languages. Unfortunately, no stemming or collation is available so that the results are very, very, very dependent on what you enter. The fewer letters or words that are entered here, the more likely you are to find what you are looking for. Entering \"George\" is more likely to give results than \"George the New Martyr.\"");
+		warningText.setEditable(false);
+		warningText.setLineWrap(true);
+		warningText.setWrapStyleWord(true);
+		warningText.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		truetop.setBottomComponent(warningText);
 
+		tableModel = new SearchTableModel();
+		String rough = ConfigurationFiles.getDefaults().get("AvailableLanguages");
+		availableLanguages = rough.split(",");
+		tableModel.addColumn("ID");
+		tableModel.addColumn("Name");
+		Helpers getFile = new Helpers(analyse.getDayInfo());
 
-        JPanel top = new JPanel();
-        JPanel bottom = new JPanel();
-        top.setLayout(new GridLayout(2,2));
-        bottom.setLayout(new BoxLayout(bottom, BoxLayout.PAGE_AXIS));
+		for (int i = 0; i < availableLanguages.length; i++) {
+			LanguagePack lang = new LanguagePack(getFile.langFileFind(availableLanguages[i], Constants.LANGUAGE_PACKS),
+					(LinkedHashMap) analyse.getDayInfo().clone());
+			tableModel.addColumn(lang.getPhrases().get("NameLocal"));
+		}
 
-        JLabel text =new JLabel("Search Term: ",SwingConstants.RIGHT);
-        top.add(text);
-        searchTerm.setEditable(true);
-        searchTerm.setText("Please enter your search terms.");
-        top.add(searchTerm);
-        JTextPane text2 = new JTextPane();
-        text2.setContentType(Constants.CONTENT_TYPE);
-        text2.setText("This is a trial search of the commemorations in a given language with display across languages. Unfortunately, no stemming or collation is available so that the results are very, very, very dependent on what you enter. The fewer letters or words that are entered here, the more likely you are to find what you are looking for. Entering \"George\" is more likely to give results than \"George the New Martyr.\"");
-        text2.setEditable(false);
-        JScrollPane scroll = new JScrollPane(text2);
-        top.add(scroll);
+		results = new JTable(tableModel);
+		// Times New Roman doesn't properly fall back on Linux
+		results.setFont(new Font(Font.SANS_SERIF, 0, 14));
+		results.getTableHeader().setFont(new Font(Font.SANS_SERIF, 0, 14));
+		setFont(new Font(Font.SANS_SERIF, 0, 14));
+		JScrollPane scrollPane3 = new JScrollPane(results);
+		bottom.add(scrollPane3);
 
-         okay=new JButton("Search");
-         okay.addActionListener(this);
-         //okay.setFont(CurrentFont); NEEDS TO BE IMPLEMENTED IN THE FINAL VERSION
-         top.add(okay);
+		results.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent evt) {
+				int index = results.getSelectedRow();
+				String id = tableModel.getValueAt(index, 0).toString();
+				Commemoration commemoration = new Commemoration(id, id, analyse.getDayInfo());
+				new DoSaint(commemoration, analyse.getDayInfo());
+			}
+		});
 
-         results=new JTextPane();
-         results.setEditable(false);
-         results.setContentType(Constants.CONTENT_TYPE);
-         results.setText("There are no results.");
-         JScrollPane scrollPane3 = new JScrollPane(results);
-         bottom.add(scrollPane3);
+		JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitter.setTopComponent(truetop);
+		splitter.setBottomComponent(bottom);
 
-        JSplitPane splitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        splitter.setTopComponent(top);
-        splitter.setBottomComponent(bottom);
+		add(splitter);
 
-        add(splitter);
+		// Adding a Menu Bar
+		/*
+		 * MenuFiles demo = new MenuFiles(Analyse.getDayInfo().clone()); JMenuBar
+		 * MenuBar = new JMenuBar(); MenuBar.add(demo.createFileMenu(this));
+		 * MenuBar.add(demo.createHelpMenu(this)); MenuBar.setFont(CurrentFont);
+		 * setJMenuBar(MenuBar);
+		 */
 
-        //Adding a Menu Bar
-       /* MenuFiles demo = new MenuFiles(Analyse.getDayInfo().clone());
-        JMenuBar MenuBar = new JMenuBar();
-        MenuBar.add(demo.createFileMenu(this));
-        MenuBar.add(demo.createHelpMenu(this));
-        MenuBar.setFont(CurrentFont);
-        setJMenuBar(MenuBar);
-*/
+		pack();
+		setSize(700, 600);
+		setVisible(true);
 
-        pack();
-        setSize(700, 600);
-        setVisible(true);
-
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Remove in the final version
-
-		 	
-		 	
 	}
-	public String getUsualBeginning()
-	{
+
+	public String getUsualBeginning() {
 		return usualBeginning1;
 	}
 
-         public void actionPerformed(ActionEvent e)
-  {
-        //JMenuItem source = (JMenuItem)(e.getSource());
-        //String name = source.getText();
+	public void actionPerformed(ActionEvent e) {
+		// JMenuItem source = (JMenuItem)(e.getSource());
+		// String name = source.getText();
 
-        //Helpers helper = new Helpers(Analyse.getDayInfo());
-        String name = e.getActionCommand();
-        //ALLOWS A MULTILINGUAL PROPER VERSION
-        if (name.equals("Search")) {
-            System.out.println("Hello");
-            String search = searchTerm.getText();
-            //Will only search English
-            File folder = new File(Constants.LANGUAGES_PATH + "/en/" + LIVES_PATH);
-            File[] listOfFiles = folder.listFiles();
-            System.out.println(listOfFiles.length);
+		// Helpers helper = new Helpers(Analyse.getDayInfo());
+		String name = e.getActionCommand();
+		// ALLOWS A MULTILINGUAL PROPER VERSION
+		if (name.equals("Search")) {
+			search();
+		}
 
-            StringBuilder found = new StringBuilder("CId\tEnglish\tFrench\tRussian\tChurch Slavonic\tTraditional Chinese\tSimplified Chinese\tPolytonic Greek\tMonotonic Greek<BR>");
-            Commemoration test=new Commemoration();
-            int count=0;
-            for (File file : listOfFiles) {
-                if (file.isFile()) {
-                    if (file.getName().endsWith("xml")){
-                        System.out.println(file.getName());
-                        test =new Commemoration(file.getName().substring(0, file.getName().length()-4),file.getName().substring(0, file.getName().length()-4),analyse.getDayInfo());
-                        String nameF=test.getGrammar(Constants.NOMINATIVE);
-                        if (nameF.contains(search)){
-                            found.append(file.getName().subSequence(0, file.getName().length() - 4)).append("\t").append(nameF).append("\t");
-                            count+=1;
-                            if (new File(Constants.LANGUAGES_PATH + "/fr/" + LIVES_PATH + file.getName()).exists()){
-                                found.append(EXISTS);
-                            }else{
-                                found.append(N_A);
-                            }
-                            if (new File(Constants.LANGUAGES_PATH + "/cu/" + LIVES_PATH + file.getName()).exists()){
-                                found.append(EXISTS);
-                            }else{
-                                found.append(N_A);
-                            }
-                            if (new File(Constants.LANGUAGES_PATH + "/cu/ru/" + LIVES_PATH + file.getName()).exists()){
-                                found.append(EXISTS);
-                            }else{
-                                found.append(N_A);
-                            }
-                            if (new File(Constants.LANGUAGES_PATH + "/zh/Hant/" + LIVES_PATH + file.getName()).exists()){
-                                found.append(EXISTS);
-                            }else{
-                                found.append(N_A);
-                            }
-                            if (new File(Constants.LANGUAGES_PATH + "/zh/Hans/" + LIVES_PATH + file.getName()).exists()){
-                                found.append(EXISTS);
-                            }else{
-                                found.append(N_A);
-                            }
-                            if (new File(Constants.LANGUAGES_PATH + "/el/" + LIVES_PATH + file.getName()).exists()){
-                                found.append(EXISTS);
-                            }else{
-                                found.append(N_A);
-                            }
-                            if (new File(Constants.LANGUAGES_PATH + "/el/mono/" + LIVES_PATH + file.getName()).exists()){
-                                found.append(EXISTS);
-                            }else{
-                                found.append(N_A);
-                            }
-                            found.append("<BR>");
-                        }
+	}
 
-                    }
-                    
-                }                
-            }
-            //System.out.println(found);
-            results.setText(found+"<BR> Found a total of: "+count);
-            results.setCaretPosition(0);
+	private void search() {
+		tableModel.setRowCount(0);
+		String search = searchTerm.getText();
+		String localPath = "/" + analyse.getDayInfo().get("LS").toString();
+		
+		File folder = new File(Constants.LANGUAGES_PATH + localPath + LIVES_PATH);
 
-        }
+		File[] listOfFiles = folder.listFiles();
 
+		Commemoration commemoration;
+		for (File file : listOfFiles) {
+			if (file.isFile() && file.getName().endsWith("xml")) {
+				commemoration = new Commemoration(file.getName().substring(0, file.getName().length() - 4),
+						file.getName().substring(0, file.getName().length() - 4), analyse.getDayInfo());
+				String foundCommemoration = extractCommemorationText(commemoration);
+				if (SearchUtils.searchName(search, foundCommemoration, localPath, ignoreDiacritics.isSelected(), ignoreCapitalization.isSelected())) {
+					tableModel.addRow(prepareRow(commemoration, file));
+				}
+			}
+		}
+	}
 
-    }
+	private Vector<String> prepareRow(Commemoration commemoration, File file) {
+		Vector<String> foundFile = new Vector<>();
+		String id = (file.getName().subSequence(0, file.getName().length() - 4)).toString();
+		foundFile.add(id);
+		foundFile.add(getCleanCommemorationTitle(commemoration));
+		for (int i = 0; i < availableLanguages.length; i++) {
+			foundFile.add(SearchUtils.checkIfFound(file, availableLanguages[i]));
+		}
+		return foundFile;
+	}
 
-        public static void main(String[] argz)
-        {
-        	LinkedHashMap<String, Object> dayinfo=new LinkedHashMap<>();
-            dayinfo.put("LS","fr/");
-            Search testing = new Search(dayinfo);
-            
+	private String getCleanCommemorationTitle(Commemoration commemoration) {
+		return commemoration.getGrammar(Constants.NOMINATIVE).replaceAll("\\<.*?>", "");
+	}
 
-        }
+	private String extractCommemorationText(Commemoration commemoration) {
+		String extractedText = commemoration.getGrammar(Constants.NOMINATIVE);
+		if (searchFullText.isSelected() && commemoration.getLife() != null) {
+			return extractedText + " " + commemoration.getLife().replaceAll("\\<.*?>", "");
+		}
+		return extractedText;
+	}
+
+	public static void main(String[] argz) {
+		LinkedHashMap<String, Object> dayinfo = new LinkedHashMap<>();
+		// dayinfo.put("LS", "fr/");
+		dayinfo.put("LS", "en/");
+		new Search(dayinfo);
+	}
 }
-

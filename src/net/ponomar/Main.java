@@ -77,6 +77,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
 	private String[] mainNames;
 	private String[] fileNames;
 	private String[] serviceNames;
+	private String[] saintNames;
 	private String[] bibleName;
 	private String[] helpNames;
 	//Get the Correct Fonts
@@ -261,6 +262,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
 		fileNames = phrases.obtainValues(phrases.getPhrases().get("File"));
 		serviceNames = phrases.obtainValues(phrases.getPhrases().get("Services"));
 		bibleName = phrases.obtainValues(phrases.getPhrases().get("Bible"));
+		saintNames = phrases.obtainValues(phrases.getPhrases().get("SMenu"));
 		helpNames = phrases.obtainValues(phrases.getPhrases().get("Help"));
 		mainNames = phrases.obtainValues(phrases.getPhrases().get("Main"));
 	}
@@ -301,6 +303,10 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
 		}
 		if (name.equals(helpNames[0])) {
 			// HELP FILES
+		}
+		if (name.equals(saintNames[2])){
+			//SEARCH COMMEMORATIONS
+			new Search(analyse.getDayInfo());
 		}
 		if (name.equals(fileNames[1])) {
 			// SAVE THE CURRENT WINDOW
