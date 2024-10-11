@@ -1,5 +1,6 @@
 package tests.net.ponomar.utility;
 
+import static net.ponomar.utility.SearchUtils.cyrillicToAscii;
 import static net.ponomar.utility.SearchUtils.normalizeCu;
 import static net.ponomar.utility.SearchUtils.performAbbreviationExpansions;
 import static net.ponomar.utility.SearchUtils.searchName;
@@ -27,12 +28,20 @@ class SearchUtilsTest {
 
 	@Test
 	void slavonicCases() {
-		//These are taken from the Python tests
+		// These are taken from the Python tests
 		assertEquals("свѧ́тъ", performAbbreviationExpansions("ст҃ъ"), "Titlo resolution doesn't work.");
-		assertEquals("свя́тъ", normalizeCu("ст҃ъ", true, false, false), "Slavonic to Russian conversion doesn't work.");
-		assertEquals("святъ", normalizeCu("ст҃ъ", true, false, true), "NoAccents option not honored.");
-		assertEquals("свят", normalizeCu("ст҃ъ", true, true, true), "ModernRules option not honored.");
-			
+		assertEquals("свя́тъ", normalizeCu("ст҃ъ", false, false), "Slavonic to Russian conversion doesn't work.");
+		assertEquals("святъ", normalizeCu("ст҃ъ", false, true), "NoAccents option not honored.");
+		assertEquals("свят", normalizeCu("ст҃ъ", true, true), "ModernRules option not honored.");
+
+		//Numbers
+		assertEquals(121, cyrillicToAscii("рк҃а"), "Cyrillic numbers to ascii numbers not working.");
+
+		// the Slavonic word сн҃а could both be an abbreviation for Сы́на and a numeral
+		// (251)
+		assertEquals("сы́на", normalizeCu("сн҃а", false, false));
+		assertEquals(251, cyrillicToAscii("сн҃а"), "Cyrillic numbers to ascii numbers not working.");
+
 		// ѻ҆те́цъ (nominative singular), ѻ҆тє́цъ (genitive plural), and then пра́ѻтецъ,
 		// which all should be found if we
 		// search for “ѻтецъ”. Normalising the forms would give *отецъ*, *отецъ*, and
