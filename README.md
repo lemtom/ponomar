@@ -46,7 +46,7 @@ If you are not on Windows, make sure you also have the Times New Roman font. On 
 
 2) Install Maven 
 
-2) Generate the jar by typing
+3) Generate the jar by typing
 
 `make`
 
