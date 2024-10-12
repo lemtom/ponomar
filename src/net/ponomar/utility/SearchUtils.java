@@ -1,7 +1,11 @@
 package net.ponomar.utility;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
+import java.io.BufferedReader;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.Normalizer;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,36 +26,36 @@ public final class SearchUtils {
 	private static final HashMap<String, Integer> DIGITS = new HashMap<>();
 
 	static {
-		SLAVONIC_CHARACTERS.put("\u0405", "З"); // capital Zelo
-		SLAVONIC_CHARACTERS.put("\u0404", "Е"); // capital wide Est
-		SLAVONIC_CHARACTERS.put("\u0454", "е"); // lowercase wide est
-		SLAVONIC_CHARACTERS.put("\u0455", "з"); // lowercase zelo
-		SLAVONIC_CHARACTERS.put("\u0456\u0308", "\u0456"); // double-dotted i
-		SLAVONIC_CHARACTERS.put("\u0457", "\u0456");
-		SLAVONIC_CHARACTERS.put("\u0460", "О"); // capital Omega
-		SLAVONIC_CHARACTERS.put("\u0461", "о"); // lowercase omega
-		SLAVONIC_CHARACTERS.put("\u0466", "Я"); // capital small Yus
-		SLAVONIC_CHARACTERS.put("\u0467", "я"); // lowercase small yus
-		SLAVONIC_CHARACTERS.put("\u046E", "Кс"); // capital Xi
-		SLAVONIC_CHARACTERS.put("\u046F", "кс"); // lowercase xi
-		SLAVONIC_CHARACTERS.put("\u0470", "Пс"); // capital Psi
-		SLAVONIC_CHARACTERS.put("\u0471", "пс"); // lowercase psi
-		SLAVONIC_CHARACTERS.put("\u0472", "Ф"); // capital Theta
-		SLAVONIC_CHARACTERS.put("\u0473", "ф"); // lowercase theta
-		SLAVONIC_CHARACTERS.put("\u0474", "В"); // izhitsa
-		SLAVONIC_CHARACTERS.put("\u0475", "в"); // izhitsa
-		SLAVONIC_CHARACTERS.put("\u047A", "О"); // wide O
-		SLAVONIC_CHARACTERS.put("\u047B", "о"); // wide o
-		SLAVONIC_CHARACTERS.put("\u047C", "О"); // omega with great apostrophe
-		SLAVONIC_CHARACTERS.put("\u047D", "о"); // omega with great apostrophe
-		SLAVONIC_CHARACTERS.put("\u047E", "Отъ"); // Ot
-		SLAVONIC_CHARACTERS.put("\u047F", "отъ"); // ot
-		SLAVONIC_CHARACTERS.put("\uA64A", "У"); // Uk
-		SLAVONIC_CHARACTERS.put("\uA64B", "у"); // uk
-		SLAVONIC_CHARACTERS.put("\uA64C", "О"); // wide omega
-		SLAVONIC_CHARACTERS.put("\uA64D", "о"); // wide omega
-		SLAVONIC_CHARACTERS.put("\uA656", "Я"); // Ioted a
-		SLAVONIC_CHARACTERS.put("\uA657", "я"); // ioted a
+		SLAVONIC_CHARACTERS.put("Ѕ", "З"); // capital Zelo
+		SLAVONIC_CHARACTERS.put("Є", "Е"); // capital wide Est
+		SLAVONIC_CHARACTERS.put("є", "е"); // lowercase wide est
+		SLAVONIC_CHARACTERS.put("ѕ", "з"); // lowercase zelo
+		SLAVONIC_CHARACTERS.put("ї", "і"); // double-dotted i
+		SLAVONIC_CHARACTERS.put("ї", "і");
+		SLAVONIC_CHARACTERS.put("Ѡ", "О"); // capital Omega
+		SLAVONIC_CHARACTERS.put("ѡ", "о"); // lowercase omega
+		SLAVONIC_CHARACTERS.put("Ѧ", "Я"); // capital small Yus
+		SLAVONIC_CHARACTERS.put("ѧ", "я"); // lowercase small yus
+		SLAVONIC_CHARACTERS.put("Ѯ", "Кс"); // capital Xi
+		SLAVONIC_CHARACTERS.put("ѯ", "кс"); // lowercase xi
+		SLAVONIC_CHARACTERS.put("Ѱ", "Пс"); // capital Psi
+		SLAVONIC_CHARACTERS.put("ѱ", "пс"); // lowercase psi
+		SLAVONIC_CHARACTERS.put("Ѳ", "Ф"); // capital Theta
+		SLAVONIC_CHARACTERS.put("ѳ", "ф"); // lowercase theta
+		SLAVONIC_CHARACTERS.put("Ѵ", "В"); // izhitsa
+		SLAVONIC_CHARACTERS.put("ѵ", "в"); // izhitsa
+		SLAVONIC_CHARACTERS.put("Ѻ", "О"); // wide O
+		SLAVONIC_CHARACTERS.put("ѻ", "о"); // wide o
+		SLAVONIC_CHARACTERS.put("Ѽ", "О"); // omega with great apostrophe
+		SLAVONIC_CHARACTERS.put("ѽ", "о"); // omega with great apostrophe
+		SLAVONIC_CHARACTERS.put("Ѿ", "Отъ"); // Ot
+		SLAVONIC_CHARACTERS.put("ѿ", "отъ"); // ot
+		SLAVONIC_CHARACTERS.put("Ꙋ", "У"); // Uk
+		SLAVONIC_CHARACTERS.put("ꙋ", "у"); // uk
+		SLAVONIC_CHARACTERS.put("Ꙍ", "О"); // wide omega
+		SLAVONIC_CHARACTERS.put("ꙍ", "о"); // wide omega
+		SLAVONIC_CHARACTERS.put("Ꙗ", "Я"); // Ioted a
+		SLAVONIC_CHARACTERS.put("ꙗ", "я"); // ioted a
 
 		DIGITS.put("", 0);
 		DIGITS.put("а", 1);
@@ -83,38 +87,37 @@ public final class SearchUtils {
 		DIGITS.put("ц", 900);
 
 		// Load the Titlo resolution data into memory
-		try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(
-				Objects.requireNonNull(SearchUtils.class.getResourceAsStream("data.txt")), StandardCharsets.UTF_8))) {
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+				Objects.requireNonNull(SearchUtils.class.getResourceAsStream("data.txt")), UTF_8))) {
 			String line;
 			while ((line = reader.readLine()) != null) {
 				if (line.charAt(1) == '#') {
 					continue;
 				}
 				line = line.replaceAll("\\r?\\n", "");
-				if (line.isEmpty()) {
-					continue;
+				if (!line.isEmpty()) {
+					String[] parts = line.split("\t");
+					parts[0] = parts[0].replaceAll("\\.", "\\\\b");
+					DEFINITIONS.put(parts[0], parts[1]);
 				}
-				String[] parts = line.split("\t");
-				parts[0] = parts[0].replaceAll("\\.", "\\\\b");
-				DEFINITIONS.put(parts[0], parts[1]);
 			}
-		} catch (java.io.IOException e) {
+		} catch (IOException e) {
 			throw new RuntimeException("Error loading Titlo resolution data", e);
 		}
 	}
 
 	private SearchUtils() {
+		throw new IllegalStateException("Utility class");
 	}
 
 	/**
-	 * 
 	 * Takes well-formatted Church Slavonic text and transforms it into Russian
 	 * (civil) orthography. The following operations are performed:
 	 * <p>
 	 * Titli and lettered titli are resolved
 	 * <p>
-	 * Cyrillic numerals are resolved to Ascii numbers (but see note concerning
-	 * B<сн҃а>) TO BE IMPLEMENTED
+	 * Cyrillic numerals are resolved to ASCII numbers (but see note concerning
+	 * сн҃а)
 	 * <p>
 	 * Stress marks are transformed to the acute accent (U+0301) and all other
 	 * diacritical marks are removed
@@ -142,17 +145,17 @@ public final class SearchUtils {
 		text = performAbbreviationExpansions(text);
 
 		// Convert yerok to hard sign
-		text = text.replaceAll("[\u033E\u2E2F]", "ъ");
+		text = text.replaceAll("[̾ⸯ]", "ъ");
 
 		// Convert grave and circumflex accents to acute
-		text = text.replaceAll("[\u0300\u0311]", "\u0301");
+		text = text.replaceAll("[̀̑]", "́");
 
 		// Convert izhitsa
-		text = text.replaceAll("\u0474([\u0486\u0301])", "И$1");
-		text = text.replaceAll("\u0475([\u0486\u0301])", "и$1");
+		text = text.replaceAll("Ѵ([҆́])", "И$1");
+		text = text.replaceAll("ѵ([҆́])", "и$1");
 
 		// Remove all breathing marks and double dots
-		text = text.replaceAll("[\u0486\uA67C\uA67E\u0308]", "");
+		text = text.replaceAll("[҆꙼꙾̈]", "");
 
 		// Resolve diagraph OU to U
 		text = text.replaceAll("ᲂу|ѹ", "у");
@@ -161,7 +164,7 @@ public final class SearchUtils {
 		text = resolveIzhitsaForms(text);
 
 		// Remove all variation selectors
-		text = text.replaceAll("[\uFE00\uFE01]", "");
+		text = text.replaceAll("[︀︁]", "");
 
 		// Convert semicolon to question mark
 		text = text.replace(";", "?");
@@ -179,7 +182,7 @@ public final class SearchUtils {
 
 		if (noAccents) {
 			// Remove stress mark (acute accent)
-			text = text.replaceAll("\u0301", "");
+			text = text.replace("́", "");
 		}
 
 		return text;
@@ -187,6 +190,7 @@ public final class SearchUtils {
 
 	/**
 	 * Only works for numerals below one thousand
+	 * 
 	 * @param text
 	 * @return
 	 */
@@ -203,12 +207,12 @@ public final class SearchUtils {
 
 	private static String implementModernRules(String text) {
 		// Get rid of the decimal I
-		text = text.replaceAll("\u0406", "И");
-		text = text.replaceAll("\u0456", "и");
+		text = text.replace("І", "И");
+		text = text.replace("і", "и");
 
 		// Get rid of the yat
-		text = text.replaceAll("\u0462", "Е");
-		text = text.replaceAll("\u0463", "е");
+		text = text.replace("Ѣ", "Е");
+		text = text.replace("ѣ", "е");
 
 		// Get rid of all trailing hard signs
 		text = text.replaceAll("ъ\\b|Ъ\\b", "");
@@ -222,10 +226,10 @@ public final class SearchUtils {
 	 * @return
 	 */
 	private static String resolveIzhitsaForms(String text) {
-		text = text.replaceAll("\u0474\u0301", "И\u0301");
-		text = text.replaceAll("\u0475\u0301", "и\u0301");
-		text = text.replaceAll("\u0474\u030F", "И");
-		text = text.replaceAll("\u0475\u030F", "и");
+		text = text.replace("Ѵ́", "И́");
+		text = text.replace("ѵ́", "и́");
+		text = text.replace("Ѷ", "И");
+		text = text.replace("ѷ", "и");
 		return text;
 	}
 
@@ -327,12 +331,12 @@ public final class SearchUtils {
 				.toArray(String[]::new));
 		String h = String.join("|", DIGITS.keySet().stream().filter(k -> DIGITS.get(k) >= 100).toArray(String[]::new));
 
-		number = number.replaceAll("\u0483", "");
+		number = number.replace("҃", "");
 		int result = 0;
 		Matcher matcher;
 		if (number.contains(" ")) {
 			String umpteen = number.substring(0, number.indexOf(" "));
-			umpteen = umpteen.replaceAll("҂", "");
+			umpteen = umpteen.replace("҂", "");
 			matcher = Pattern.compile("^([" + h + "]?)([клмнѯопч]?)([" + o + "]?)$").matcher(umpteen);
 			if (matcher.matches()) {
 				result += (matchGroup(matcher, 1) + matchGroup(matcher, 2) + matchGroup(matcher, 3)) * 1000;

@@ -15,4 +15,8 @@ public class StringReplacer {
 
 		return resultString.toString();
 	}
+
+	private StringReplacer() {
+		throw new IllegalStateException("Utility class");
+	}
 }
