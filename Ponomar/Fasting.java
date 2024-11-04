@@ -1,13 +1,11 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
+
 /***********************************************************************
 THIS MODULE READS THE FASTING.XML FILE TO DETERMINE THE FAST ON A GIVEN DAY
 
@@ -103,7 +101,7 @@ public class Fasting implements DocHandler
 		//System.out.print("Today's rank is "+StringOp.dayInfo.get("dRank")+"\n");
 		try
 		{
-			BufferedReader frf1 = new BufferedReader(new InputStreamReader(new FileInputStream(helper.langFileFind(Analyse.dayInfo.get("LS").toString(),FileName)), "UTF8"));
+			BufferedReader frf1 = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(helper.langFileFind(Analyse.dayInfo.get("LS").toString(), FileName))), StandardCharsets.UTF_8));
 			QDParser.parse(this, frf1);
 		}
 		catch (Exception e)
@@ -129,44 +127,28 @@ public class Fasting implements DocHandler
 		*/
 		
 		String[] FastNames= Phrases.obtainValues((String)Phrases.Phrases.get("Fasts"));
-				
-		if(Fast.equals("0000000"))
-		{
-			return FastNames[4]+ FastNames[1]+FastNames[6]+ FastNames[7];
-		}
-		if(Fast.equals("0000001"))
-		{
-			return  FastNames[4]+FastNames[1]+FastNames[6]+ FastNames[8];
-		}
-		if(Fast.equals("0000011"))
-		{
-			return  FastNames[4]+FastNames[1]+FastNames[6]+ FastNames[9];
-		}
-		if(Fast.equals("0000111"))
-		{
-			return  FastNames[4]+FastNames[2];
-		}
-		if(Fast.equals("0001111"))
-		{
-			return FastNames[4]+FastNames[10];
-		}
-		if(Fast.equals("0011111"))
-		{
-			return  FastNames[4]+FastNames[3];
-		}
-		if(Fast.equals("0111111"))
-		{
-			return FastNames[4]+FastNames[11];
-		}
-		if(Fast.equals("1111111"))
-		{
-			return  FastNames[4]+FastNames[0];
-		}
-		if(Fast.equals("0000010"))
-		{
-			return FastNames[4]+FastNames[12];
-		}
-		//NONE OF THE PREDEFINED SEQUENCES WERE ENCOUNTERED.
+
+        switch (Fast) {
+            case "0000000":
+                return FastNames[4] + FastNames[1] + FastNames[6] + FastNames[7];
+            case "0000001":
+                return FastNames[4] + FastNames[1] + FastNames[6] + FastNames[8];
+            case "0000011":
+                return FastNames[4] + FastNames[1] + FastNames[6] + FastNames[9];
+            case "0000111":
+                return FastNames[4] + FastNames[2];
+            case "0001111":
+                return FastNames[4] + FastNames[10];
+            case "0011111":
+                return FastNames[4] + FastNames[3];
+            case "0111111":
+                return FastNames[4] + FastNames[11];
+            case "1111111":
+                return FastNames[4] + FastNames[0];
+            case "0000010":
+                return FastNames[4] + FastNames[12];
+        }
+        //NONE OF THE PREDEFINED SEQUENCES WERE ENCOUNTERED.
 		//PARSE IT ELEMENT BY ELEMENT!
 		String[] item = new String[] {FastNames[13],FastNames[14],FastNames[15],FastNames[16],FastNames[17],FastNames[18],FastNames[19]};
 		String[] permitted=new String[7];
@@ -188,57 +170,57 @@ public class Fasting implements DocHandler
 				forbid++;
 			}
 		}
-		String output=FastNames[27]+" ";
+		StringBuilder output= new StringBuilder(FastNames[27] + " ");
 		for(int i=0;i < permit;i++)
 		{
-			output+=permitted[i];
+			output.append(permitted[i]);
 			if(i<permit-1)
 			{
-				output+=", ";
+				output.append(", ");
 			}
 			if(i==permit-2)
 			{
-				output+=" "+FastNames[25]+" ";
+				output.append(" ").append(FastNames[25]).append(" ");
 			}
 		}
 		if(permit==1)
 		{
-			output+=" "+FastNames[20]+" "+FastNames[23]; 
+			output.append(" ").append(FastNames[20]).append(" ").append(FastNames[23]);
 		}
 		else if(permit==2)
 		{
 			//FOR THOSES SLAVIC LANGUAGES WITH THE DUAL
-			output+=" "+FastNames[21]+" "+FastNames[23];
+			output.append(" ").append(FastNames[21]).append(" ").append(FastNames[23]);
 		}
 		else
 		{
-			output+=" "+FastNames[22]+" "+FastNames[23];
+			output.append(" ").append(FastNames[22]).append(" ").append(FastNames[23]);
 		}
-		output+=FastNames[26]+" ";
+		output.append(FastNames[26]).append(" ");
 		for(int i=0;i < forbid;i++)
 		{
-			output+=forbidden[i];
+			output.append(forbidden[i]);
 			if(i<forbid-1)
 			{
-				output+=", ";
+				output.append(", ");
 			}
 			if(i==forbid-2)
 			{
-				output+=" "+FastNames[25]+" ";
+				output.append(" ").append(FastNames[25]).append(" ");
 			}
 		}
 		if(forbid==1)
 		{
-			output+=output+=" "+FastNames[20]+" "+FastNames[24]; 
+			output.append(output.append(" ").append(FastNames[20]).append(" ").append(FastNames[24]));
 		}
 		else if(forbid==2)
 		{
 			//FOR THOSES SLAVIC LANGUAGES WITH THE DUAL
-			output+=" "+FastNames[21]+" "+FastNames[24];
+			output.append(" ").append(FastNames[21]).append(" ").append(FastNames[24]);
 		}
 		else
 		{
-			output+=" "+FastNames[22]+" "+FastNames[24];
+			output.append(" ").append(FastNames[22]).append(" ").append(FastNames[24]);
 		}
 		return FastNames[4]+" " +output;
 	}

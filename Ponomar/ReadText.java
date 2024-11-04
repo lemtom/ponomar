@@ -1,13 +1,10 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
 
 
 /***********************************************************************
@@ -117,9 +114,9 @@ public class ReadText implements DocHandler
 		try
 		{
        			 text= new String();
-       			 BufferedReader fr = new BufferedReader(new InputStreamReader(new FileInputStream(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(),filename)), "UTF8"));
+       			 BufferedReader fr = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(), filename))), StandardCharsets.UTF_8));
        			 QDParser.parse(this,fr);
-       			 if(text.length()==0)
+       			 if(text.isEmpty())
        			 {
        			 	text=null;
        			 }       			 			
@@ -140,9 +137,9 @@ public class ReadText implements DocHandler
 		try
 		{
        			 header= new String();
-       			 BufferedReader fr = new BufferedReader(new InputStreamReader(new FileInputStream(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(),filename)), "UTF8"));
+       			 BufferedReader fr = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(), filename))), StandardCharsets.UTF_8));
        			 QDParser.parse(this,fr);
-       			 if(header.length()==0)
+       			 if(header.isEmpty())
        			 {
        			 	header=null;
        			 }       			 			

@@ -1,13 +1,9 @@
 package Ponomar;
 
 import javax.swing.*;
-import java.beans.*;
 import java.awt.*;
-import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
 import java.awt.event.*;
-import java.beans.*;
 
 
 /***********************************************************************
@@ -269,59 +265,59 @@ public class Search extends JFrame implements ActionListener
             }
             
         }
-        String found =captions[6];
+        StringBuilder found = new StringBuilder(captions[6]);
         String search = searchTerm.getText();
         int count=0;
             //We have already built the database and now we need to search it.
-            for (int i=0;i<database.length;i++){
-               OrderedHashtable current=(OrderedHashtable)database[i];
-               
-               //System.out.println(database);
-               //System.out.println(current);
-               if (!current.isEmpty()){
-                String nameF=current.get("Nominative").toString();
-                        if (nameF.contains(search)){
-                            found+="<B>"+current.get("CId").toString()+"</B>\t"+nameF+";\t";
-                            count+=1;
-                            if ((boolean) current.get("fr")){
-                                found+=captions[7]+"\t";
-                            }else{
-                                found+=captions[8]+"\t";
-                            }
-                            if ((boolean) current.get("cu")){
-                                found+=captions[7]+"\t";
-                            }else{
-                                found+=captions[8]+"\t";
-                            }
-                            if ((boolean) current.get("ru")){
-                                found+=captions[7]+"\t";
-                            }else{
-                                found+=captions[8]+"\t";
-                            }
-                            if ((boolean) current.get("zht")){
-                                found+=captions[7]+"\t";
-                            }else{
-                                found+=captions[8]+"\t";
-                            }
-                            if ((boolean) current.get("zhs")){
-                                found+=captions[7]+"\t";
-                            }else{
-                                found+=captions[8]+"\t";
-                            }
-                            if ((boolean) current.get("el")){
-                                found+=captions[7]+"\t";
-                            }else{
-                                found+=captions[8]+"\t";
-                            }
-                            if ((boolean) current.get("eln")){
-                                found+=captions[7]+"\t";
-                            }else{
-                                found+=captions[8]+"\t";
-                            }
-                            found+="<BR>";
-                        }
+        for (OrderedHashtable orderedHashtable : database) {
+            OrderedHashtable current = (OrderedHashtable) orderedHashtable;
+
+            //System.out.println(database);
+            //System.out.println(current);
+            if (!current.isEmpty()) {
+                String nameF = current.get("Nominative").toString();
+                if (nameF.contains(search)) {
+                    found.append("<B>").append(current.get("CId").toString()).append("</B>\t").append(nameF).append(";\t");
+                    count += 1;
+                    if ((boolean) current.get("fr")) {
+                        found.append(captions[7]).append("\t");
+                    } else {
+                        found.append(captions[8]).append("\t");
+                    }
+                    if ((boolean) current.get("cu")) {
+                        found.append(captions[7]).append("\t");
+                    } else {
+                        found.append(captions[8]).append("\t");
+                    }
+                    if ((boolean) current.get("ru")) {
+                        found.append(captions[7]).append("\t");
+                    } else {
+                        found.append(captions[8]).append("\t");
+                    }
+                    if ((boolean) current.get("zht")) {
+                        found.append(captions[7]).append("\t");
+                    } else {
+                        found.append(captions[8]).append("\t");
+                    }
+                    if ((boolean) current.get("zhs")) {
+                        found.append(captions[7]).append("\t");
+                    } else {
+                        found.append(captions[8]).append("\t");
+                    }
+                    if ((boolean) current.get("el")) {
+                        found.append(captions[7]).append("\t");
+                    } else {
+                        found.append(captions[8]).append("\t");
+                    }
+                    if ((boolean) current.get("eln")) {
+                        found.append(captions[7]).append("\t");
+                    } else {
+                        found.append(captions[8]).append("\t");
+                    }
+                    found.append("<BR>");
+                }
             }
-            }
+        }
             results.setText(found+"<BR> " +captions[9]+count);
             results.setCaretPosition(0);
         }

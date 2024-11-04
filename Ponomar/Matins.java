@@ -1,10 +1,6 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
 import java.util.*;
-import java.io.*;
 
 /***************************************************************
 Matins.java :: MODULE THAT TAKES THE GIVEN MATINS READINGS FOR THE DAY,
@@ -190,7 +186,7 @@ public class Matins implements DocHandler {
             lineNumber = nday + 1;
         }
 
-        filename += lineNumber >= 10 ? lineNumber + "" : "0" + lineNumber + ""; // CLEANED UP
+        filename += lineNumber >= 10 ? lineNumber + "" : "0" + lineNumber; // CLEANED UP
         // READ THE PENTECOSTARION / TRIODION INFORMATION
         Day checkingP = new Day(filename,Information3.dayInfo);
 
@@ -217,10 +213,10 @@ public class Matins implements DocHandler {
         OrderedHashtable CombinedReadings = new OrderedHashtable();
 
 
-        for (int k = 0; k < MenaionReadings.length; k++) {
-            OrderedHashtable Reading = (OrderedHashtable) MenaionReadings[k].get("Readings");
+        for (OrderedHashtable menaionReading : MenaionReadings) {
+            OrderedHashtable Reading = (OrderedHashtable) menaionReading.get("Readings");
             OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
-            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements();) {
+            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements(); ) {
                 String element1 = e.nextElement().toString();
                 if (CombinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
@@ -251,10 +247,10 @@ public class Matins implements DocHandler {
                 }
             }
         }
-        for (int k = 0; k < PaschalReadings.length; k++) {
-            OrderedHashtable Reading = (OrderedHashtable) PaschalReadings[k].get("Readings");
+        for (OrderedHashtable paschalReading : PaschalReadings) {
+            OrderedHashtable Reading = (OrderedHashtable) paschalReading.get("Readings");
             OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
-            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements();) {
+            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements(); ) {
                 String element1 = e.nextElement().toString();
                 if (CombinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
@@ -299,16 +295,13 @@ public class Matins implements DocHandler {
         Vector type = new Vector();
 
 
-        for (int j = 0; j < Readings.size(); j++) {
-            OrderedHashtable liturgy = (OrderedHashtable) Readings.get(j);
+        for (Object reading : Readings) {
+            OrderedHashtable liturgy = (OrderedHashtable) reading;
             OrderedHashtable stepE = (OrderedHashtable) liturgy.get(readingType);
-            if (stepE != null)
-            {
+            if (stepE != null) {
 
-            type.add(stepE.get("Reading").toString());
-            }
-            else
-            {
+                type.add(stepE.get("Reading").toString());
+            } else {
                 //type.add("");
             }
 
@@ -328,17 +321,17 @@ public class Matins implements DocHandler {
     protected String Display(String a, String b, String c) {
         //THIS FUNCTION TAKES THE POSSIBLE 3 READINGS AND COMBINES THEM AS APPROPRIATE, SO THAT NO SPACES OR OTHER UNDESIRED STUFF IS DISPLAYED!
         String output = "";
-        if (a.length() > 0) {
+        if (!a.isEmpty()) {
             output += a;
         }
-        if (b.length() > 0) {
-            if (output.length() > 0) {
+        if (!b.isEmpty()) {
+            if (!output.isEmpty()) {
                 output += Information3.dayInfo.get("ReadSep") + " ";
             }
             output += b;
         }
-        if (c.length() > 0) {
-            if (output.length() > 0) {
+        if (!c.isEmpty()) {
+            if (!output.isEmpty()) {
                 output += Information3.dayInfo.get("ReadSep") + " ";
             }
             output += c;
@@ -350,39 +343,39 @@ public class Matins implements DocHandler {
     }
 
     public String format(Vector vectV, Vector vectR, Vector vectT) {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         
         Bible ShortForm = new Bible(Information3.dayInfo);
         try {
             Enumeration e3 = vectV.elements();
             for (int k = 0; k < vectV.size(); k++) {
                 String reading = (String) vectV.get(k);
-                output += ShortForm.getHyperlinkLoc(reading);
+                output.append(ShortForm.getHyperlinkLoc(reading));
 
                 if ((Integer) vectR.get(k) == -2 ) {
                     if (vectV.size()>1){
                     int tag = (Integer) vectT.get(k);
-                    output += " (" + Week(vectT.get(k).toString()) + ")";
+                    output.append(" (").append(Week(vectT.get(k).toString())).append(")");
                     }
                 } else if ((Integer) vectR.get(k) == -99 ) {
                     
                 } 
                 else {
-                    output += vectT.get(k);
+                    output.append(vectT.get(k));
                 }
 
                 if (k < vectV.size() - 1) {
-                    output += Information3.dayInfo.get("ReadSep");		//IF THERE ARE MORE READINGS OF THE SAME TYPE APPEND A SEMICOLON!
+                    output.append(Information3.dayInfo.get("ReadSep"));		//IF THERE ARE MORE READINGS OF THE SAME TYPE APPEND A SEMICOLON!
                 }
             }
         } catch (Exception a) {
 
-            System.out.println(a.toString());
+            System.out.println(a);
             StackTraceElement[] trial=a.getStackTrace();
             System.out.println(trial[0].toString());
 
         }
-        return output;
+        return output.toString();
     }
 
     private String Week(String dow) {
@@ -551,10 +544,10 @@ public class Matins implements DocHandler {
             }
 
             if (dow == 0 && dRank <= 6){
-                for (int k = 0; k < menaionV.size(); k++) {
-                    suppressedV.add(menaionV.get(k));
-                    suppressedR.add(menaionV.get(k));
-                    suppressedT.add(menaionV.get(k));
+                for (Object o : menaionV) {
+                    suppressedV.add(o);
+                    suppressedR.add(o);
+                    suppressedT.add(o);
                 }
                 menaionV.clear();
                 menaionV.clear();

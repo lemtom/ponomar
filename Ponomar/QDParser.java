@@ -25,7 +25,7 @@ import java.util.*;
 public class QDParser {
   private static int popMode(Stack st) {
     if(!st.empty())
-      return ((Integer)st.pop()).intValue();
+      return (Integer) st.pop();
     else
       return PRE;
   }
@@ -53,8 +53,8 @@ public class QDParser {
     int c = 0;
     int quotec = '"';
     depth = 0;
-    StringBuffer sb = new StringBuffer();
-    StringBuffer etag = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
+    StringBuilder etag = new StringBuilder();
     String tagName = null;
     String lvalue = null;
     String rvalue = null;
@@ -91,14 +91,14 @@ public class QDParser {
       // We are between tags collecting text.
       } else if(mode == TEXT) {
         if(c == '<') {
-	  st.push(new Integer(mode));
+	  st.push(mode);
 	  mode = START_TAG;
 	  if(sb.length() > 0) {
 	    doc.text(sb.toString());
 	    sb.setLength(0);
 	  }
         } else if(c == '&') {
-	  st.push(new Integer(mode));
+	  st.push(mode);
 	  mode = ENTITY;
 	  etag.setLength(0);
 	} else
@@ -143,7 +143,7 @@ public class QDParser {
       } else if(mode == PRE) {
 	if(c == '<') {
 	  mode = TEXT;
-	  st.push(new Integer(mode));
+	  st.push(mode);
 	  mode = START_TAG;
         }
 
@@ -161,12 +161,12 @@ public class QDParser {
       } else if(mode == START_TAG) {
         mode = popMode(st);
 	if(c == '/') {
-	  st.push(new Integer(mode));
+	  st.push(mode);
 	  mode = CLOSE_TAG;
 	} else if (c == '?') {
 	  mode = DOCTYPE;
         } else {
-	  st.push(new Integer(mode));
+	  st.push(mode);
 	  mode = OPEN_TAG;
 	  tagName = null;
 	  attrs = new Hashtable();
@@ -265,7 +265,7 @@ public class QDParser {
 	  sb.append(' ');
 	// TEMPORARILY REMOVED FOR DEBUG PURPOSES
 	} else if(c == '&') {
-	  st.push(new Integer(mode));
+	  st.push(mode);
 	  mode = ENTITY;
 	  etag.setLength(0);
 	} else {
@@ -277,8 +277,7 @@ public class QDParser {
 	  quotec = c;
 	  mode = QUOTE;
 	} else if(Character.isWhitespace((char)c)) {
-	  ;
-	} else {
+        } else {
 	  exc("Error in attribute processing",line,col);
 	}
 
@@ -299,8 +298,7 @@ public class QDParser {
         if(c == '=') {
 	  mode = ATTRIBUTE_RVALUE;
 	} else if(Character.isWhitespace((char)c)) {
-	  ;
-	} else {
+        } else {
 	  exc("Error in attribute processing.",line,col);
 	}
 
@@ -314,8 +312,7 @@ public class QDParser {
 	} else if(c == '/') {
 	  mode = SINGLE_TAG;
         } else if(Character.isWhitespace((char)c)) {
-	  ;
-	} else {
+    } else {
 	  mode = ATTRIBUTE_LVALUE;
 	  sb.append((char)c);
 	}

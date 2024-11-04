@@ -1,16 +1,10 @@
 package Ponomar;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import java.beans.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import java.lang.Math;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-import javax.swing.text.MutableAttributeSet;
 
 /***********************************************************************
 Main.java :: MAIN MODULE FOR THE PONOMAR PROGRAM.
@@ -100,14 +94,14 @@ public class FindReadingList {
         today = new JDate2(start.getMonth(), start.getDay(), start.getYear(),ReligiousCal);
         int nday = (int) JDate2.difference(today, Paschalion.getPascha(today.getYear(),ReligiousCal));
         int ndayP = (int) JDate2.difference(today, Paschalion.getPascha(today.getYear() - 1,ReligiousCal));
-        String outputE="Year: "+today.getYear();
-        outputE+="\n";
-        String outputG=outputE;
+        StringBuilder outputE= new StringBuilder("Year: " + today.getYear());
+        outputE.append("\n");
+        StringBuilder outputG= new StringBuilder(outputE.toString());
                         
         while (nday >= 134 || nday < -70)
         {
-        outputE+=nday+" M"+today.getMonth()+"."+today.getDay()+" ";
-        outputG+=nday+" M"+today.getMonth()+"."+today.getDay()+" ";
+        outputE.append(nday).append(" M").append(today.getMonth()).append(".").append(today.getDay()).append(" ");
+        outputG.append(nday).append(" M").append(today.getMonth()).append(".").append(today.getDay()).append(" ");
         int dow = today.getDayOfWeek();
         int doy = today.getDoy();
         nday = (int) JDate2.difference(today, Paschalion.getPascha(today.getYear(),ReligiousCal));
@@ -201,75 +195,75 @@ public class FindReadingList {
         //System.out.println("First Menologion Reading is :"+MenaionReadings[0].get("Readings"));
         OrderedHashtable CombinedReadings = new OrderedHashtable();
         //for(int j=0;j<7;j++){
-        for (int k = 0; k < MenaionReadings.length; k++) {
-            OrderedHashtable Reading = (OrderedHashtable) MenaionReadings[k].get("Readings");
-            OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
-            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements();) {
-                String element1 = e.nextElement().toString();
-                if (CombinedReadings.get(element1) != null) {
-                    //Type of Reading already exists combine them
-                    OrderedHashtable temp = (OrderedHashtable) CombinedReadings.get(element1);
-                    Vector Readings2 = (Vector) temp.get("Readings");
-                    Vector Rank = (Vector) temp.get("Rank");
-                    Vector Tag = (Vector) temp.get("Tag");
-                    Readings2.add(Readings.get(element1));
-                    Rank.add(Reading.get("Rank"));
-                    Tag.add(Reading.get("Name"));
-                    temp.put("Readings", Readings2);
-                    temp.put("Rank", Rank);
-                    temp.put("Tag", Tag);
-                    CombinedReadings.put(element1, temp);
-                } else {
-                    //Reading does not exist
-                    Vector Readings2 = new Vector();
-                    Vector Rank = new Vector();
-                    Vector Tag = new Vector();
-                    Readings2.add(Readings.get(element1));
-                    Rank.add(Reading.get("Rank"));
-                    Tag.add(Reading.get("Name"));
-                    OrderedHashtable temp = new OrderedHashtable();
-                    temp.put("Readings", Readings2);
-                    temp.put("Rank", Rank);
-                    temp.put("Tag", Tag);
-                    CombinedReadings.put(element1, temp);
+            for (OrderedHashtable menaionReading : MenaionReadings) {
+                OrderedHashtable Reading = (OrderedHashtable) menaionReading.get("Readings");
+                OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
+                for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements(); ) {
+                    String element1 = e.nextElement().toString();
+                    if (CombinedReadings.get(element1) != null) {
+                        //Type of Reading already exists combine them
+                        OrderedHashtable temp = (OrderedHashtable) CombinedReadings.get(element1);
+                        Vector Readings2 = (Vector) temp.get("Readings");
+                        Vector Rank = (Vector) temp.get("Rank");
+                        Vector Tag = (Vector) temp.get("Tag");
+                        Readings2.add(Readings.get(element1));
+                        Rank.add(Reading.get("Rank"));
+                        Tag.add(Reading.get("Name"));
+                        temp.put("Readings", Readings2);
+                        temp.put("Rank", Rank);
+                        temp.put("Tag", Tag);
+                        CombinedReadings.put(element1, temp);
+                    } else {
+                        //Reading does not exist
+                        Vector Readings2 = new Vector();
+                        Vector Rank = new Vector();
+                        Vector Tag = new Vector();
+                        Readings2.add(Readings.get(element1));
+                        Rank.add(Reading.get("Rank"));
+                        Tag.add(Reading.get("Name"));
+                        OrderedHashtable temp = new OrderedHashtable();
+                        temp.put("Readings", Readings2);
+                        temp.put("Rank", Rank);
+                        temp.put("Tag", Tag);
+                        CombinedReadings.put(element1, temp);
+                    }
                 }
             }
-        }
-        for (int k = 0; k < PaschalReadings.length; k++) {
-            OrderedHashtable Reading = (OrderedHashtable) PaschalReadings[k].get("Readings");
-            OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
-            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements();) {
-                String element1 = e.nextElement().toString();
-                if (CombinedReadings.get(element1) != null) {
-                    //Type of Reading already exists combine them
-                    OrderedHashtable temp = (OrderedHashtable) CombinedReadings.get(element1);
-                    Vector Readings2 = (Vector) temp.get("Readings");
-                    Vector Rank = (Vector) temp.get("Rank");
-                    Vector Tag = (Vector) temp.get("Tag");
-                    Readings2.add(Readings.get(element1));
-                    Rank.add(Reading.get("Rank"));
-                    Tag.add(Reading.get("Name"));
-                    temp.put("Readings", Readings2);
-                    temp.put("Rank", Rank);
-                    temp.put("Tag", Tag);
-                    CombinedReadings.put(element1, temp);
-                } else {
-                    //Reading does not exist
-                    Vector Readings2 = new Vector();
-                    Vector Rank = new Vector();
-                    Vector Tag = new Vector();
-                    Readings2.add(Readings.get(element1));
-                    Rank.add(Reading.get("Rank"));
+            for (OrderedHashtable paschalReading : PaschalReadings) {
+                OrderedHashtable Reading = (OrderedHashtable) paschalReading.get("Readings");
+                OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
+                for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements(); ) {
+                    String element1 = e.nextElement().toString();
+                    if (CombinedReadings.get(element1) != null) {
+                        //Type of Reading already exists combine them
+                        OrderedHashtable temp = (OrderedHashtable) CombinedReadings.get(element1);
+                        Vector Readings2 = (Vector) temp.get("Readings");
+                        Vector Rank = (Vector) temp.get("Rank");
+                        Vector Tag = (Vector) temp.get("Tag");
+                        Readings2.add(Readings.get(element1));
+                        Rank.add(Reading.get("Rank"));
+                        Tag.add(Reading.get("Name"));
+                        temp.put("Readings", Readings2);
+                        temp.put("Rank", Rank);
+                        temp.put("Tag", Tag);
+                        CombinedReadings.put(element1, temp);
+                    } else {
+                        //Reading does not exist
+                        Vector Readings2 = new Vector();
+                        Vector Rank = new Vector();
+                        Vector Tag = new Vector();
+                        Readings2.add(Readings.get(element1));
+                        Rank.add(Reading.get("Rank"));
 
-                    Tag.add(Reading.get("Name"));
-                    OrderedHashtable temp = new OrderedHashtable();
-                    temp.put("Readings", Readings2);
-                    temp.put("Rank", Rank);
-                    temp.put("Tag", Tag);
-                    CombinedReadings.put(element1, temp);
+                        Tag.add(Reading.get("Name"));
+                        OrderedHashtable temp = new OrderedHashtable();
+                        temp.put("Readings", Readings2);
+                        temp.put("Rank", Rank);
+                        temp.put("Tag", Tag);
+                        CombinedReadings.put(element1, temp);
+                    }
                 }
             }
-        }
         //}
         boolean firstTime = true;
         for (Enumeration e = CombinedReadings.enumerateKeys(); e.hasMoreElements();) {
@@ -291,8 +285,8 @@ public class FindReadingList {
                 Vector gospel = new Vector();
 
 
-                for (int j = 0; j < Readings.size(); j++) {
-                    OrderedHashtable liturgy = (OrderedHashtable) Readings.get(j);
+                for (Object reading : Readings) {
+                    OrderedHashtable liturgy = (OrderedHashtable) reading;
                     OrderedHashtable stepE = (OrderedHashtable) liturgy.get("apostol");
                     OrderedHashtable stepG = (OrderedHashtable) liturgy.get("gospel");
 
@@ -319,8 +313,8 @@ public class FindReadingList {
                     //System.out.println("Hello World");
                     DivineLiturgy1 trial1 = new DivineLiturgy1(Analyse.dayInfo);
                     String type1 = (String) Phrases.Phrases.get("apostol");
-                    outputE += trial1.Readings(readingsA, "apostol", today);
-                    outputE += " \n";
+                    outputE.append(trial1.Readings(readingsA, "apostol", today));
+                    outputE.append(" \n");
                 }
                 if (!gospel.get(0).equals("")) {
                     readingsA.put("Readings", gospel);
@@ -328,7 +322,7 @@ public class FindReadingList {
                     readingsA.put("Tag", Tag);
                     String type1 = (String) Phrases.Phrases.get("gospel");
                     DivineLiturgy1 trial1 = new DivineLiturgy1(Analyse.dayInfo);
-                    outputG += trial1.Readings(readingsA, "gospel", today)+" \n";
+                    outputG.append(trial1.Readings(readingsA, "gospel", today)).append(" \n");
                 }
 
 
@@ -373,11 +367,11 @@ public class FindReadingList {
         
         try
         {
-            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Ponomar/Regression/"+epistle),"UTF8"));
-            out.write(outputE);
+            BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get("Ponomar/Regression/" + epistle)), StandardCharsets.UTF_8));
+            out.write(outputE.toString());
             out.close();
-            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Ponomar/Regression/"+gospel),"UTF8"));
-            out.write(outputG);
+            out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get("Ponomar/Regression/" + gospel)), StandardCharsets.UTF_8));
+            out.write(outputG.toString());
             out.close();
         }
         catch(IOException e)
@@ -392,22 +386,21 @@ public class FindReadingList {
 
 
     public static void main(String[] argz) {
-        int yearsJulian[]=new int[]{2487, 2288, 2209,2053,2211,2128,2056,2214,2131,2132,2486,2134,2135,2136,2149,2139,2152,2153,2507,2157,2063,2150,2151,2154,2155,2509,2253,2159,2160,2077,2078,2527,2176,
+        int[] yearsJulian =new int[]{2487, 2288, 2209,2053,2211,2128,2056,2214,2131,2132,2486,2134,2135,2136,2149,2139,2152,2153,2507,2157,2063,2150,2151,2154,2155,2509,2253,2159,2160,2077,2078,2527,2176,
                     2177, 2083, 2254, 2087, 2525, 2100, 2174, 2175, 2004, 2179, 2001, 2192, 2193, 2099, 2196, 2197, 2103, 2094, 2117, 2023, 2205, 2279, 2282, 2021, 2202, 2203, 2025, 2122, 2123, 2118, 2383,
                     2222, 2060, 2084, 2535, 2091, 2456, 2095, 2457, 2024, 2027, 2028, 2031, 2035, 2064, 2085, 2104, 2105, 2351, 2142, 2143, 2230, 2407, 2162, 2250, 2294, 2223, 2242, 2243, 2247, 2347, 2021,
                     2453, 2199, 2302, 2303, 2322, 2271, 2283, 2287, 2291, 2488, 2267, 2275, 2307, 2338, 2295, 2315, 2331, 2335, 2439, 2423, 2443, 2467, 2427, 2447, 2491, 2511, 2515, 2163, 2089, 2065, 2119, 2095};
-        int yearsGregorian[] = new int[]{1999, 2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2014,2015,2017,2018,2019,2021,2022,2023,2026,2027,2030,2031,2032,2034,2035,2036,2037,2038,2039,2041,2042,2043,2046,2047,2048,2049,2050,2051,2054,2055,2056,2057,2058,2059,2061,2062,2063,2065,2066,2067,2070,2071,2074,2075,2076,2078,2079,2080,2082,2083,2089,2091,2092,2095,2098,2099,2112,2115,2119,2120,2123,2132,2136,2139,2140,2143,2147,2244,2265,2284,2285,2319,2390,2391,2478,2487,2494,2498,2599,2691,2699,2863,2867,2883,2887,2890,2894,2971,2982,2990,2991,2999,3134,3263,3275,3279,3283,3290,3783,3791,3891,4074,4183,4271,4287,4291,4463,4819,4839,4863,5279,5671,5783,6395,6483,7504,7599,8587,8739,16567,22267,23255,30095,31083,35795,35947};
+        int[] yearsGregorian = new int[]{1999, 2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2014,2015,2017,2018,2019,2021,2022,2023,2026,2027,2030,2031,2032,2034,2035,2036,2037,2038,2039,2041,2042,2043,2046,2047,2048,2049,2050,2051,2054,2055,2056,2057,2058,2059,2061,2062,2063,2065,2066,2067,2070,2071,2074,2075,2076,2078,2079,2080,2082,2083,2089,2091,2092,2095,2098,2099,2112,2115,2119,2120,2123,2132,2136,2139,2140,2143,2147,2244,2265,2284,2285,2319,2390,2391,2478,2487,2494,2498,2599,2691,2699,2863,2867,2883,2887,2890,2894,2971,2982,2990,2991,2999,3134,3263,3275,3279,3283,3290,3783,3791,3891,4074,4183,4271,4287,4291,4463,4819,4839,4863,5279,5671,5783,6395,6483,7504,7599,8587,8739,16567,22267,23255,30095,31083,35795,35947};
         
       //  for (int j=0;j<yearsJulian.length;j++)
         //{
           //  System.out.println("Years Julian: "+yearsJulian[j]+"\n");
             //new FindReadingList(yearsJulian[j],0);
         //}
-        
-       for (int j=0;j<yearsGregorian.length;j++)
-       {
-            System.out.println("Years Gregorian: "+yearsGregorian[j]+"\n");
-            new FindReadingList(yearsGregorian[j],1);
-       }
+
+        for (int i : yearsGregorian) {
+            System.out.println("Years Gregorian: " + i + "\n");
+            new FindReadingList(i, 1);
+        }
     }
 }

@@ -1,13 +1,11 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
+
 /***********************************************************************
 *******************************************************/
 
@@ -38,11 +36,11 @@ public class parseConvert implements DocHandler
 	public void prepareFiles(String FileNameIn)
 	{
 		String q=new String();
-		String renew=new String();
+		StringBuilder renew= new StringBuilder(new String());
 		
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(FileNameIn)));
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(FileNameIn))));
 			q=frf.readLine();
 			int counter=0;
 			int cont=0;
@@ -74,7 +72,7 @@ public class parseConvert implements DocHandler
 						{
 							break;
 						}
-						renew+=q+"\r\n";
+						renew.append(q).append("\r\n");
 						}
 					}
 					
@@ -83,8 +81,8 @@ public class parseConvert implements DocHandler
 				q=frf.readLine();
 			}
 			frf.close();	
-			BufferedWriter out2 = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FileNameIn),"UTF8"));
-			out2.write(renew);
+			BufferedWriter out2 = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(FileNameIn)), StandardCharsets.UTF_8));
+			out2.write(renew.toString());
 			out2.close();
 		}
 		catch (Exception e)
@@ -113,8 +111,8 @@ public class parseConvert implements DocHandler
 			
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(FileNameIn),"UTF8"));
-			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FileNameOut),"UTF8"));
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(FileNameIn)), StandardCharsets.UTF_8));
+			out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(FileNameOut)), StandardCharsets.UTF_8));
 			QDParser.parse(this, frf);
 			
 			//out.write(output);

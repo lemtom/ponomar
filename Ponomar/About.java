@@ -2,9 +2,6 @@ package Ponomar;
 
 import javax.swing.*;
 import java.awt.*;
-import javax.swing.event.*;
-import java.io.*;
-import java.util.*;
 
 /********************************************************************
 THIS CLASS CREATES THE ABOUT BOX THAT APPEARS IN THE WINDOW.

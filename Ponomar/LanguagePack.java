@@ -1,9 +1,8 @@
 package Ponomar;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 
@@ -59,7 +58,7 @@ class LanguagePack implements DocHandler
 		try
 		{
 			//ALLOWS MULTILINGUAL SUPPORT, WHICH IS A MUST IN OUR CASE.
-			BufferedReader fr = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF8"));
+			BufferedReader fr = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(filename)), StandardCharsets.UTF_8));
 			//FileReader fr = new FileReader(filename);
                         QDParser.parse(this, fr);
 		}
@@ -67,7 +66,7 @@ class LanguagePack implements DocHandler
 		{
 			//THIS STATEMENT CANNOT BE MULTILINGUAL!
 			System.out.println("Unable to find " + filename);
-                        System.out.println(e.toString());
+                        System.out.println(e);
                         for(int i=0;i<e.getStackTrace().length;i++)
                         {
                             System.out.println(e.getStackTrace()[i].toString());

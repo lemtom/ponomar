@@ -1,9 +1,8 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 
@@ -45,7 +44,7 @@ public class ConfigurationFiles implements DocHandler
 		try
 		{
 			//FileReader frf = new FileReader("Ponomar/xml/ponomar.config");
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream("Ponomar/languages/xml/ponomar.config"), "UTF8"));
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get("Ponomar/languages/xml/ponomar.config")), StandardCharsets.UTF_8));
 			//OutputStreamWriter out = new OutputStreamWriter(new ByteArrayOutputStream());
 			//System.out.println(out.getEncoding());
 
@@ -61,23 +60,23 @@ public class ConfigurationFiles implements DocHandler
 	
 	public static void WriteFile()
 	{
-		String output;
+		StringBuilder output;
 				
 		try
 		{
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Ponomar/languages/xml/ponomar.config"),"UTF8"));
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get("Ponomar/languages/xml/ponomar.config")), StandardCharsets.UTF_8));
 			//BufferedWriter out = new BufferedWriter(new FileWriter("Ponomar/xml/ponomar.config"));//,"UT8");
 			out.write("<CONFIGURATION>");
 			out.newLine();
-			output="<DEFAULT ";
+			output = new StringBuilder("<DEFAULT ");
 			for(Enumeration e=Defaults.keys(); e.hasMoreElements();)
 			{
 				String key = (String) e.nextElement();
 				String value=(String) Defaults.get(key);
-				output+=key + " = \"" + value + "\" ";
+				output.append(key).append(" = \"").append(value).append("\" ");
 			}
-			output+=" />";
-			out.write(output);
+			output.append(" />");
+			out.write(output.toString());
 			out.newLine();
 			out.write("</CONFIGURATION>");
 			out.close();

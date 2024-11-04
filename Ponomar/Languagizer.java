@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 
@@ -55,12 +58,12 @@ class Languagizer extends JFrame implements DocHandler, ListSelectionListener, A
 		
 		int month = today.getMonth();
 		int day   = today.getDay();
-		bmlfile = "Ponomar/xml/" + (month < 10 ? "0" + Integer.toString(month) : Integer.toString(month)) + "/" + 
-			(day < 10 ? "0" + Integer.toString(day) : Integer.toString(day)) + ".xml";
+		bmlfile = "Ponomar/xml/" + (month < 10 ? "0" + month : Integer.toString(month)) + "/" +
+			(day < 10 ? "0" + day : Integer.toString(day)) + ".xml";
 		
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(bmlfile), "UTF8"));	//Unicodised it.
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(bmlfile)), StandardCharsets.UTF_8));	//Unicodised it.
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -83,7 +86,7 @@ class Languagizer extends JFrame implements DocHandler, ListSelectionListener, A
 		Analyse.dayInfo.put("LS", LS);
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(bmlfile), "UTF8"));	//Unicodised it.
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(bmlfile)), StandardCharsets.UTF_8));	//Unicodised it.
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -106,7 +109,7 @@ class Languagizer extends JFrame implements DocHandler, ListSelectionListener, A
 		Analyse.dayInfo.put("LS", LS);
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(bmlfile), "UTF8"));	//Unicodised it.
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(bmlfile)), StandardCharsets.UTF_8));	//Unicodised it.
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -316,12 +319,12 @@ class Languagizer extends JFrame implements DocHandler, ListSelectionListener, A
 		Analyse.dayInfo.put("LS", LS);
 		int month = today.getMonth();
 		int day   = today.getDay();
-		bmlfile = "Ponomar/xml/" + (month < 10 ? "0" + Integer.toString(month) : Integer.toString(month)) + "/" + 
-			(day < 10 ? "0" + Integer.toString(day) : Integer.toString(day)) + ".xml";
+		bmlfile = "Ponomar/xml/" + (month < 10 ? "0" + month : Integer.toString(month)) + "/" +
+			(day < 10 ? "0" + day : Integer.toString(day)) + ".xml";
 
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(bmlfile), "UTF8"));	//Unicodised it.
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(bmlfile)), StandardCharsets.UTF_8));	//Unicodised it.
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -335,7 +338,7 @@ class Languagizer extends JFrame implements DocHandler, ListSelectionListener, A
 		Analyse.dayInfo.put("LS", LS);
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(bmlfile), "UTF8"));	//Unicodised it.
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(bmlfile)), StandardCharsets.UTF_8));	//Unicodised it.
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -349,7 +352,7 @@ class Languagizer extends JFrame implements DocHandler, ListSelectionListener, A
 		Analyse.dayInfo.put("LS", LS);
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(bmlfile), "UTF8"));	//Unicodised it.
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(bmlfile)), StandardCharsets.UTF_8));	//Unicodised it.
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)

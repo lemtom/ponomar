@@ -3,7 +3,6 @@ package Ponomar;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.print.*;
-import javax.swing.text.*;
 
 /****************************************************************************************
 PrintableTextPane.java : AN IMPLEMENTATION OF JTextPane TO INCLUDE PRINTING HTML

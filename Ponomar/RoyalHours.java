@@ -1,14 +1,14 @@
 package Ponomar;
 
 import javax.swing.*;
-import java.beans.*;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 import java.beans.*;
-import javax.swing.filechooser.FileFilter;
 
 /***********************************************************************
 THIS MODULE CREATES THE TEXT FOR THE ORTHODOX SERVICE OF THE FIRST HOUR (PRIME)
@@ -253,9 +253,9 @@ public class RoyalHours implements DocHandler, ActionListener, ItemListener, Pro
 		try
 		{
        			 text= new String();
-       			 BufferedReader fr = new BufferedReader(new InputStreamReader(new FileInputStream(helper.langFileFind(Analyse.dayInfo.get("LS").toString(),filename)), "UTF8"));
+       			 BufferedReader fr = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(helper.langFileFind(Analyse.dayInfo.get("LS").toString(), filename))), StandardCharsets.UTF_8));
        			 QDParser.parse(this,fr);
-       			 if(text.length()==0)
+       			 if(text.isEmpty())
        			 {
        			 	text=null;
        			 }

@@ -125,9 +125,9 @@ public class Options extends JFrame implements ActionListener, ItemListener, Pro
 
                 }
 */
-                for(int i=0;i<Zone.length;i++){
-                    TimeZone2.addItem(Zone[i]);
-                }
+        for (String s : Zone) {
+            TimeZone2.addItem(s);
+        }
                 TimeZone2.setSelectedItem(ConfigurationFiles.Defaults.get("TimeZone").toString());
                 TimeZone2.setEditable(false);
                 top.add(TimeZone2,BorderLayout.CENTER);

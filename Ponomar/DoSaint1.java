@@ -1,16 +1,15 @@
 package Ponomar;
 
 import javax.swing.*;
-import java.beans.*;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 import javax.swing.event.*;
 import java.awt.event.*;
 import java.beans.*;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.text.*;
-import javax.swing.text.html.HTMLDocument;
 
 /***********************************************************************
 THIS MODULE CREATES THE WINDOW TO DISPLAY THE SAINT INFORMATION.
@@ -98,7 +97,7 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
 
         Podobni = new OrderedHashtable();
         try {
-            BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(helper.langFileFind(Analyse.dayInfo.get("LS").toString(),"xml/Commands/Podobni.xml")), "UTF8"));
+            BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(helper.langFileFind(Analyse.dayInfo.get("LS").toString(), "xml/Commands/Podobni.xml"))), StandardCharsets.UTF_8));
             QDParser.parse(this, frf);
         } catch (Exception Primes) {
             Primes.printStackTrace();
@@ -172,22 +171,22 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
         String[] SaintInfo = Text.obtainValues((String) Text.Phrases.get("LivesW"));
         String textOut = "";
         
-        if (name.equals("")) {
+        if (name.isEmpty()) {
             textOut = SaintInfo[6];
         } else {
             String DisplayFontM = (String) Text.Phrases.get("FontFaceM");
             String DisplaySizeM = (String) Text.Phrases.get("FontSizeM");
             Font value1 = (Font) UIManager.get("Menu.font");
-            if (DisplaySizeM == null || DisplaySizeM.equals("")) {
+            if (DisplaySizeM == null || DisplaySizeM.isEmpty()) {
                 DisplaySizeM = Integer.toString(value1.getSize());
             }
-            if (DisplayFontM == null || DisplayFontM.equals("")) {
+            if (DisplayFontM == null || DisplayFontM.isEmpty()) {
                 DisplayFontM = value1.getFontName();
             }
             DisplaySizeM = Integer.toString(Math.max(Integer.parseInt(DisplaySizeM), value1.getSize()));
 
             textOut = "<body style=\"font-family:" + DisplayFontM + ";font-size:" + DisplaySizeM + ";\"><h1 style=\"text-align: center;\">" + name + "</h1>";
-            if (life != null && !life.equals("")) {
+            if (life != null && !life.isEmpty()) {
                 textOut += "<h2 style=\"text-align: center;\">" + SaintInfo[0] + "</h2>" + "<p style=\"text-align: center;\"><small>" + copyright + "</small></p>" + "<p>" + life + "</p>";
             }
 
@@ -195,10 +194,10 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
             String DisplayFont = (String) Text.Phrases.get("FontFaceL");
             String DisplaySize = (String) Text.Phrases.get("FontSizeL");
             
-            if (DisplaySize == null || DisplaySize.equals("")) {
+            if (DisplaySize == null || DisplaySize.isEmpty()) {
                 DisplaySize = Integer.toString(value1.getSize());
             }
-            if (DisplayFont == null || DisplayFont.equals("")) {
+            if (DisplayFont == null || DisplayFont.isEmpty()) {
                 DisplayFont = value1.getFontName();
             }
             DisplaySize = Integer.toString(Math.max(Integer.parseInt(DisplaySize), value1.getSize())); //If the default user's font size is larger than the required there is not need to change it.
@@ -367,8 +366,8 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
                 String[] iconImages=new String[ImageList.size()];
                 String[] iconNames=new String[NamesList.size()];
 
-                iconImages=(String[])ImageList.toArray(new String[ImageList.size()]);
-                iconNames=(String[])NamesList.toArray(new String[NamesList.size()]);
+                iconImages=(String[])ImageList.toArray(new String[0]);
+                iconNames=(String[])NamesList.toArray(new String[0]);
         System.out.println("Icon Length is: " + iconNames.length);
         IconDisplay icons=new IconDisplay(iconImages,iconNames,Analyse.dayInfo);
         left.add(new JPanel(),BorderLayout.NORTH);
@@ -393,7 +392,7 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
 		{
 			String cmd = e.getDescription();
 			String[] parts = cmd.split("=");
-			if (parts[0].indexOf("bible") != -1)
+			if (parts[0].contains("bible"))
 			{
 			String[] parts2=parts[1].split("#");
                             try
@@ -650,9 +649,9 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
     public String readText(String filename) {
         try {
             text = new String();
-            BufferedReader fr = new BufferedReader(new InputStreamReader(new FileInputStream(helper.langFileFind(Analyse.dayInfo.get("LS").toString(),filename)), "UTF8"));
+            BufferedReader fr = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(helper.langFileFind(Analyse.dayInfo.get("LS").toString(), filename))), StandardCharsets.UTF_8));
             QDParser.parse(this, fr);
-            if (text.length() == 0) {
+            if (text.isEmpty()) {
                 text = null;
             }
 

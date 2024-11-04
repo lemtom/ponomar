@@ -1,8 +1,5 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
 import java.util.*;
 import java.io.*;
 
@@ -350,7 +347,7 @@ public class DivineLiturgy1 implements DocHandler {
             lineNumber = nday + 1;
         }
 
-        filename += lineNumber >= 10 ? lineNumber + "" : "0" + lineNumber + ""; // CLEANED UP
+        filename += lineNumber >= 10 ? lineNumber + "" : "0" + lineNumber; // CLEANED UP
         // READ THE PENTECOSTARION / TRIODION INFORMATION
         Day checkingP = new Day(filename,Information3.dayInfo);
 
@@ -377,10 +374,10 @@ public class DivineLiturgy1 implements DocHandler {
         OrderedHashtable CombinedReadings = new OrderedHashtable();
 
 
-        for (int k = 0; k < MenaionReadings.length; k++) {
-            OrderedHashtable Reading = (OrderedHashtable) MenaionReadings[k].get("Readings");
+        for (OrderedHashtable menaionReading : MenaionReadings) {
+            OrderedHashtable Reading = (OrderedHashtable) menaionReading.get("Readings");
             OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
-            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements();) {
+            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements(); ) {
                 String element1 = e.nextElement().toString();
                 if (CombinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
@@ -411,10 +408,10 @@ public class DivineLiturgy1 implements DocHandler {
                 }
             }
         }
-        for (int k = 0; k < PaschalReadings.length; k++) {
-            OrderedHashtable Reading = (OrderedHashtable) PaschalReadings[k].get("Readings");
+        for (OrderedHashtable paschalReading : PaschalReadings) {
+            OrderedHashtable Reading = (OrderedHashtable) paschalReading.get("Readings");
             OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
-            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements();) {
+            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements(); ) {
                 String element1 = e.nextElement().toString();
                 if (CombinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
@@ -459,16 +456,13 @@ public class DivineLiturgy1 implements DocHandler {
         Vector type = new Vector();
 
 
-        for (int j = 0; j < Readings.size(); j++) {
-            OrderedHashtable liturgy = (OrderedHashtable) Readings.get(j);
+        for (Object reading : Readings) {
+            OrderedHashtable liturgy = (OrderedHashtable) reading;
             OrderedHashtable stepE = (OrderedHashtable) liturgy.get(readingType);
-            if (stepE != null)
-            {
+            if (stepE != null) {
 
-            type.add(stepE.get("Reading").toString());
-            }
-            else
-            {
+                type.add(stepE.get("Reading").toString());
+            } else {
                 //type.add("");
             }
 
@@ -490,17 +484,17 @@ public class DivineLiturgy1 implements DocHandler {
     protected String Display(String a, String b, String c) {
         //THIS FUNCTION TAKES THE POSSIBLE 3 READINGS AND COMBINES THEM AS APPROPRIATE, SO THAT NO SPACES OR OTHER UNDESIRED STUFF IS DISPLAYED!
         String output = "";
-        if (a.length() > 0) {
+        if (!a.isEmpty()) {
             output += a;
         }
-        if (b.length() > 0) {
-            if (output.length() > 0) {
+        if (!b.isEmpty()) {
+            if (!output.isEmpty()) {
                 output += Analyse.dayInfo.get("ReadSep") + " ";
             }
             output += b;
         }
-        if (c.length() > 0) {
-            if (output.length() > 0) {
+        if (!c.isEmpty()) {
+            if (!output.isEmpty()) {
                 output += Analyse.dayInfo.get("ReadSep") + " ";
             }
             output += c;
@@ -512,7 +506,7 @@ public class DivineLiturgy1 implements DocHandler {
     }
 
     public String format(Vector vectV, Vector vectR, Vector vectT) {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         //AT THIS POINT, THE PENTECOSTARION READINGS WILL BE FORMATED SO THAT THEY ARE SEQUENTIAL BY THE WEEK,
         //ESPECIALLY IF THERE ARE ANY RETRACTIONS OR THE LIKE.
         /*try {
@@ -547,29 +541,29 @@ public class DivineLiturgy1 implements DocHandler {
             Enumeration e3 = vectV.elements();
             for (int k = 0; k < vectV.size(); k++) {
                 String reading = (String) vectV.get(k);
-                output += ShortForm.getHyperlinkLoc(reading);
+                output.append(ShortForm.getHyperlinkLoc(reading));
 
                 if ((Integer) vectR.get(k) == -2 ) {
                     if (vectV.size()>1){
                     int tag = (Integer) vectT.get(k);
-                    output += " (" + Week(vectT.get(k).toString()) + ")";
+                    output.append(" (").append(Week(vectT.get(k).toString())).append(")");
                     }
                 } else {
-                    output += vectT.get(k);
+                    output.append(vectT.get(k));
                 }
 
                 if (k < vectV.size() - 1) {
-                    output += Analyse.dayInfo.get("ReadSep");		//IF THERE ARE MORE READINGS OF THE SAME TYPE APPEND A SEMICOLON!
+                    output.append(Analyse.dayInfo.get("ReadSep"));		//IF THERE ARE MORE READINGS OF THE SAME TYPE APPEND A SEMICOLON!
                 }
             }
         } catch (Exception a) {
             
-            System.out.println(a.toString());
+            System.out.println(a);
             StackTraceElement[] trial=a.getStackTrace();
             System.out.println(trial[0].toString());
 
         }
-        return output;
+        return output.toString();
     }
 
     private String Week(String dow) {

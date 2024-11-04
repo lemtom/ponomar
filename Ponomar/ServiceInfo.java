@@ -1,13 +1,11 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
+
 /***********************************************************************
 THIS MODULE READS THE ServiceRules.XML FILE TO DETERMINE THE CORRECT
 ORDER FOR PRIMES ON A GIVEN DAY
@@ -60,8 +58,8 @@ public class ServiceInfo implements DocHandler
 	
 	public OrderedHashtable ServiceRules() //throws IOException
 	{
-		Service=new OrderedHashtable();;
-		Information=new OrderedHashtable();
+		Service=new OrderedHashtable();
+        Information=new OrderedHashtable();
 		//THIS IS A KLUTZ THAT WILL BE REMOVED ONCE THERE IS A PROPER ABILITY TO RANK THE DAY
 		//RANK 1 HOLIDAYS
 		/*StringOp.dayInfo.put("dRank",1);	//ANY RANK LESS THAN 4 WILL DO
@@ -116,7 +114,7 @@ public class ServiceInfo implements DocHandler
 		//System.out.print("Today's rank is "+StringOp.dayInfo.get("dRank")+"\n");
 		try
 		{
-			BufferedReader frf1 = new BufferedReader(new InputStreamReader(new FileInputStream(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(),FileName)), "UTF8"));
+			BufferedReader frf1 = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(), FileName))), StandardCharsets.UTF_8));
 			QDParser.parse(this, frf1);
 		}
 		catch (Exception e)

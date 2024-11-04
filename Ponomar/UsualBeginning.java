@@ -1,14 +1,5 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
-import java.util.*;
-import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
-
 
 /***********************************************************************
 THIS MODULE CREATES THE TEXT FOR THE ORTHODOX USUAL BEGINNING OF A SERVICE
@@ -46,7 +37,7 @@ public class UsualBeginning
 		final String UsualFileName = "Ponomar/xml/Services/UsualBeginning/"; // THE LOCATION FOR ANY EXTRA INFORMATION
 		Service test2=new Service(Analyse.dayInfo.clone());
 		 test2.readService(UsualFileName+"UsualBeginning.xml");
-		UsualBeginning1=test2.Service1;
+		UsualBeginning1= Service.Service1;
 	}	
 	public UsualBeginning(OrderedHashtable dayInfo)
 	{

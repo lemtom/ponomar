@@ -1,13 +1,10 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
 
 /***********************************************************************
 THIS MODULE READS XML FILES THAT CONTAIN THAT ARE OF THE <COMMEMORATION> TYPE 
@@ -92,13 +89,13 @@ public class Commemoration1 implements DocHandler {
             String language = Analyse.dayInfo.get("LS").toString();
             String[] pathS = language.split("/");
             int path = pathS.length;
-            String pathF = "";
+            StringBuilder pathF = new StringBuilder();
            
             for (int i = -1; i < path; i++) {
                 if (i == -1) {
-                    pathF = "";
+                    pathF = new StringBuilder();
                 } else {
-                    pathF += "/" + pathS[i];
+                    pathF.append("/").append(pathS[i]);
                 }
                 //System.out.println("pathF=" + pathF);
 
@@ -108,7 +105,7 @@ public class Commemoration1 implements DocHandler {
 
                 if (f.exists()) {
 
-                    BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(FileName), "UTF8"));
+                    BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(FileName)), StandardCharsets.UTF_8));
                     QDParser.parse(this, frf);                    
                 } else {
                     //The given file does not exist, do nothing, it is not a calamity!
@@ -354,7 +351,7 @@ public class Commemoration1 implements DocHandler {
         if (Integer.parseInt(Information.get("CID").toString()) != -1) {
             grammar = (OrderedHashtable) Information.get("grammar");
 
-            if (value.equals("")) {
+            if (value.isEmpty()) {
                 //System.out.println( Information.get("Name").toString());
                 return grammar.get("Nominative").toString();
             }
@@ -588,7 +585,7 @@ public class Commemoration1 implements DocHandler {
     public boolean checkIcon(){
         //Checks whether the given commemoration has any icons assoicated with it
         OrderedHashtable checkIcon=getDisplayIcons();
-        if (checkIcon.size()>0){
+        if (!checkIcon.isEmpty()){
             return true;
         }
         return false;

@@ -1,9 +1,8 @@
 package Ponomar;
 
-import javax.swing.*;
-import javax.swing.event.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
 
@@ -83,7 +82,7 @@ class RuleBasedNumber implements DocHandler
 		try
 		{
 			//ALLOWS MULTILINGUAL SUPPORT, WHICH IS A MUST IN OUR CASE.
-			BufferedReader fr = new BufferedReader(new InputStreamReader(new FileInputStream(filename), "UTF8"));
+			BufferedReader fr = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(filename)), StandardCharsets.UTF_8));
 			//FileReader fr = new FileReader(filename);
 			QDParser.parse(this, fr);
 		}
@@ -335,7 +334,7 @@ class RuleBasedNumber implements DocHandler
 }
     private String FormatNumber(double Number)
     {
-        String FNumber="";
+        StringBuilder FNumber= new StringBuilder();
 
         if (Number==0)
         {
@@ -382,21 +381,21 @@ class RuleBasedNumber implements DocHandler
             //System.out.println(cb.substring(quoteF+2));
             int times=Integer.parseInt(cb.substring(quoteF+2));
             long divide=(long) remainder/times;
-            FNumber=format.substring(0,cbI);
+            FNumber = new StringBuilder(format.substring(0, cbI));
             remainder=remainder-divide*times;
             for(int i1=1;i1<=divide;i1++)
             {
-                FNumber+=repeat;
+                FNumber.append(repeat);
             }
             //System.out.println(FNumber);
             if (cbF+1<format.length())
             {
-                FNumber+=format.substring(cbF+1);
+                FNumber.append(format.substring(cbF + 1));
             }
         }
         else
         {
-            FNumber=format;
+            FNumber = new StringBuilder(format);
         }
         int octo=format.indexOf("#");
         
@@ -408,17 +407,17 @@ class RuleBasedNumber implements DocHandler
             
             if (octo==0)
             {
-                FNumber=multiplier+FNumber.substring(1);
+                FNumber = new StringBuilder(multiplier + FNumber.substring(1));
             }
             else
             {
                 if (octo==FNumber.length()-1)
                 {
-                    FNumber=FNumber.substring(0,octo)+multiplier;
+                    FNumber = new StringBuilder(FNumber.substring(0, octo) + multiplier);
                 }
                 else
                 {
-                    FNumber=FNumber.substring(0,octo)+multiplier+FNumber.substring(octo+1);
+                    FNumber = new StringBuilder(FNumber.substring(0, octo) + multiplier + FNumber.substring(octo + 1));
                     //System.out.println("After modifications, it is "+FNumber);
                 }
             }
@@ -441,12 +440,12 @@ class RuleBasedNumber implements DocHandler
 
            if (Analyse.evalbool(squareSplit[1]))
            {
-                     FNumber=FNumber.substring(0,squareF)+squareSplit[0].substring(1)+FNumber.substring(squareAF+1);
+                     FNumber = new StringBuilder(FNumber.substring(0, squareF) + squareSplit[0].substring(1) + FNumber.substring(squareAF + 1));
 
            }
            else
            {
-               FNumber=FNumber.substring(0,squareF)+FNumber.substring(squareAF+1);
+               FNumber = new StringBuilder(FNumber.substring(0, squareF) + FNumber.substring(squareAF + 1));
            }
            squareF=FNumber.indexOf("[");
 
@@ -467,53 +466,53 @@ class RuleBasedNumber implements DocHandler
             String amperNumber=FormatNumber(remainder);
             //System.out.println("The $ is given as "+amperNumber);
             //String amperNumber=Integer.toString(remainder);
-            if (amperNumber.equals(""))
+            if (amperNumber.isEmpty())
             {
                 //No number needs to be converted remove the symbol
                 if (amper==0)
             {
-                FNumber=FNumber.substring(1);
+                FNumber = new StringBuilder(FNumber.substring(1));
             }
             else
             {
                 if (amper==FNumber.length()-1)
                 {
                     //The ampersand is at the end of a number
-                    FNumber=FNumber.substring(0,amper);
+                    FNumber = new StringBuilder(FNumber.substring(0, amper));
                 }
                 else
                 {
                     //The ampersand is in the middle of the number
                     String before=FNumber.substring(0,amper);
                     String after=FNumber.substring(amper+1);
-                    FNumber=before+after;
+                    FNumber = new StringBuilder(before + after);
                 }
             }
             }else
             {
             if (amper==0)
             {
-                FNumber=amperNumber+FNumber.substring(1);
+                FNumber = new StringBuilder(amperNumber + FNumber.substring(1));
             }
             else
             {
                 if (amper==FNumber.length()-1)
                 {
                     //The ampersand is at the end of a number
-                    FNumber=FNumber.substring(0,amper)+amperNumber;
+                    FNumber = new StringBuilder(FNumber.substring(0, amper) + amperNumber);
                 }
                 else
                 {
                     //The ampersand is in the middle of the number
                     String before=FNumber.substring(0,amper);
                     String after=FNumber.substring(amper+1);
-                    FNumber=before+amperNumber+after;
+                    FNumber = new StringBuilder(before + amperNumber + after);
                 }
             }
             }
         }
         //System.out.println("At present, the number is converted as "+FNumber);
-        return FNumber;
+        return FNumber.toString();
     }
        public int ConvertToInteger(String FNumber)
        {

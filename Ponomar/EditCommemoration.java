@@ -1,31 +1,15 @@
 package Ponomar;
 
 import org.w3c.dom.*;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.xml.XMLConstants;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.nio.charset.StandardCharsets;
 
 import javax.swing.*;
-import java.beans.*;
 import java.awt.*;
-import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
 import java.awt.event.*;
-import java.beans.*;
+import java.nio.file.Files;
 
 
 /***********************************************************************
@@ -488,7 +472,7 @@ contacionCUP = new JPanel();
                 
                //Update Correction File
                try{
-               readCorrections(new FileInputStream(new File("Ponomar\\languages\\xml\\Commands\\Changes.txt")));
+               readCorrections(Files.newInputStream(new File("Ponomar\\languages\\xml\\Commands\\Changes.txt").toPath()));
                //System.out.println(corrections.get(5));
                //System.out.println(countCorr);
                }catch (IOException ed)

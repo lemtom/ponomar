@@ -1,13 +1,11 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
+
 /***********************************************************************
 THIS MODULE READS XML FILES THAT CONTAIN THAT ARE OF THE <COMMEMORATION> TYPE 
 AND STORES THE INFORMATION IN A MANNER USUABLE BY OTHER COMPONENTS
@@ -117,7 +115,7 @@ public class Commemoration implements DocHandler
 		
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(helper.langFileFind(Analyse.dayInfo.get("LS").toString(),FileName+".xml")), "UTF8"));
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(helper.langFileFind(Analyse.dayInfo.get("LS").toString(), FileName + ".xml"))), StandardCharsets.UTF_8));
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -337,7 +335,7 @@ public class Commemoration implements DocHandler
 		{
 			grammar=(OrderedHashtable)Information.get(grammar);
 		
-			if(value.equals(""))
+			if(value.isEmpty())
 			{
 				//System.out.println( Information.get("Name").toString());
 				return Information.get("Name").toString();

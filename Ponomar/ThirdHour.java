@@ -1,14 +1,14 @@
 package Ponomar;
 
 import javax.swing.*;
-import java.beans.*;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
 import java.awt.event.*;
 import java.beans.*;
-import javax.swing.filechooser.FileFilter;
 
 /***********************************************************************
 THIS MODULE CREATES THE TEXT FOR THE ORTHODOX SERVICE OF THE FIRST HOUR (PRIME)
@@ -170,8 +170,8 @@ public class ThirdHour implements DocHandler, ActionListener, ItemListener, Prop
 	private String createPrimes() throws IOException
 	{
 		//OBTAIN THE DEFAULTS FOR THE SERVICE (WHAT WAS LAST USED!)
-		Analyse.dayInfo.put("PS",SelectorP.getWhoValue());
-		int TypeP=SelectorP.getTypeValue();
+		Analyse.dayInfo.put("PS", PrimeSelector.getWhoValue());
+		int TypeP= PrimeSelector.getTypeValue();
 		Service ReadPrime=new Service(Analyse.dayInfo);
 		//FIRST READ THE TONE FILES:
 				int Weekday=Integer.parseInt(Analyse.dayInfo.get("dow").toString());
@@ -218,7 +218,7 @@ public class ThirdHour implements DocHandler, ActionListener, ItemListener, Prop
 
 				try
 				{
-					BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(helper.langFileFind(Analyse.dayInfo.get("LS").toString(),FileName)), "UTF8"));
+					BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(helper.langFileFind(Analyse.dayInfo.get("LS").toString(), FileName))), StandardCharsets.UTF_8));
 					QDParser.parse(this, frf);
 
 				}
@@ -257,7 +257,7 @@ public class ThirdHour implements DocHandler, ActionListener, ItemListener, Prop
 		
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(helper.langFileFind(Analyse.dayInfo.get("LS").toString(),filename)), "UTF8"));
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(helper.langFileFind(Analyse.dayInfo.get("LS").toString(), filename))), StandardCharsets.UTF_8));
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -301,7 +301,7 @@ public class ThirdHour implements DocHandler, ActionListener, ItemListener, Prop
 	       		{
 	       			Analyse.dayInfo.put("PFlag2",2);
 	       			//CREATE THE KATHISMA PART
-	       			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Ponomar/languages/"+Analyse.dayInfo.get("LS").toString()+ServicesFileName+"Var/PKath3.xml"),"UTF8"));
+	       			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get("Ponomar/languages/" + Analyse.dayInfo.get("LS").toString() + ServicesFileName + "Var/PKath3.xml")), StandardCharsets.UTF_8));
 	    			String Data="<SERVICES>\r\n<LANGUAGE>\r\n<GET File=\"Kathisma"+LentenK+"\" Null=\"1\"/>\r\n</LANGUAGE>\r\n</SERVICES>";
 	    			out.write(Data);
 	    			out.close();
@@ -316,18 +316,18 @@ public class ThirdHour implements DocHandler, ActionListener, ItemListener, Prop
 	    		{
 	    		    	if(Troparion2 != null)
 	    		    	{
-	    		    		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Ponomar/languages/"+Analyse.dayInfo.get("LS").toString()+ServicesFileName+"Var/PTrop31.xml"),"UTF8"));
+	    		    		BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get("Ponomar/languages/" + Analyse.dayInfo.get("LS").toString() + ServicesFileName + "Var/PTrop31.xml")), StandardCharsets.UTF_8));
 	    				String Data="<SERVICES>\r\n<LANGUAGE>\r\n<CREATE Who=\"\" What=\"TROPARION/"+Troparion1+"\" Header=\"1\" RedFirst=\"1\" NewLine=\"1\"/>\r\n</LANGUAGE>\r\n</SERVICES>";
 	    				out.write(Data);
 	    				out.close();
 	    				
-	    				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Ponomar/languages/"+Analyse.dayInfo.get("LS").toString()+ServicesFileName+"Var/PTrop32.xml"),"UTF8"));
+	    				out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get("Ponomar/languages/" + Analyse.dayInfo.get("LS").toString() + ServicesFileName + "Var/PTrop32.xml")), StandardCharsets.UTF_8));
 	    				Data="<SERVICES>\r\n<LANGUAGE>\r\n<CREATE Who=\"\" What=\"TROPARION/"+Troparion2+"\" Header=\"1\" RedFirst=\"1\" NewLine=\"1\"/>\r\n</LANGUAGE>\r\n</SERVICES>";
 	    				out.write(Data);
 	    				out.close();
 					
 	    		    	}
-    	     			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Ponomar/languages/"+Analyse.dayInfo.get("LS").toString()+ServicesFileName+"Var/PTrop32.xml"),"UTF8"));
+    	     			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get("Ponomar/languages/" + Analyse.dayInfo.get("LS").toString() + ServicesFileName + "Var/PTrop32.xml")), StandardCharsets.UTF_8));
 	    			String Data="<SERVICES>\r\n<LANGUAGE>\r\n<CREATE Who=\"\" What=\"TROPARION/"+Troparion1+"\" Header=\"1\" RedFirst=\"1\" NewLine=\"1\"/>\r\n</LANGUAGE>\r\n</SERVICES>";
 	    			out.write(Data);
 	    			out.close();
@@ -339,7 +339,7 @@ public class ThirdHour implements DocHandler, ActionListener, ItemListener, Prop
 	       	//APROPRIATE KONTAKION MUST STILL BE CREATED!
 	       	if (Kontakion1 != null)
 		{
-			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("Ponomar/languages/"+Analyse.dayInfo.get("LS").toString()+ServicesFileName+"Var/PKont3.xml"),"UTF8"));
+			BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get("Ponomar/languages/" + Analyse.dayInfo.get("LS").toString() + ServicesFileName + "Var/PKont3.xml")), StandardCharsets.UTF_8));
 	    		String Data="<SERVICES>\r\n<LANGUAGE>\r\n<CREATE Who=\"\" What=\"KONTAKION/"+Kontakion1+"\" Header=\"1\" RedFirst=\"1\" NewLine=\"1\"/>\r\n</LANGUAGE>\r\n</SERVICES>";
 	    		out.write(Data);
 	    		out.close();
@@ -458,9 +458,9 @@ public class ThirdHour implements DocHandler, ActionListener, ItemListener, Prop
 		try
 		{
        			 text= new String();
-       			 BufferedReader fr = new BufferedReader(new InputStreamReader(new FileInputStream(helper.langFileFind(Analyse.dayInfo.get("LS").toString(),filename)), "UTF8"));
+       			 BufferedReader fr = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(helper.langFileFind(Analyse.dayInfo.get("LS").toString(), filename))), StandardCharsets.UTF_8));
        			 QDParser.parse(this,fr);
-       			 if(text.length()==0)
+       			 if(text.isEmpty())
        			 {
        			 	text=null;
        			 }       			 			

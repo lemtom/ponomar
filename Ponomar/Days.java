@@ -1,13 +1,11 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
+
 /***********************************************************************
 THIS MODULE READS XML FILES THAT CONTAIN THE <DAY> TYPE 
 AND STORES THE INFORMATION IN A MANNER USUABLE BY OTHER COMPONENTS
@@ -68,7 +66,7 @@ public class Days implements DocHandler
 		resetVars();
 		try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(Location+FileName), "UTF8"));
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(Location + FileName)), StandardCharsets.UTF_8));
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -120,19 +118,18 @@ public class Days implements DocHandler
 			String IdAll=table.get("Id").toString();
 			String[] Id=IdAll.split(",");
 			Number++;
-			if(name.equals(""))
+			if(name.isEmpty())
 			{
 				//THERE IS ONLY A LIST OF POSSIBLE ID'S THAT NEED TO BE READ
-				for(int i=0;i<Id.length;i++)
-				{
-					Commemoration Saint=new Commemoration(Id[i],Analyse.dayInfo);
-					CommemorationList.add(Saint);
-				}
+                for (String s : Id) {
+                    Commemoration Saint = new Commemoration(s, Analyse.dayInfo);
+                    CommemorationList.add(Saint);
+                }
 			}
 			else
 			{
 				//THERE IS A NAME ASSIGNED FOR THE GIVEN DAY
-				if(Id[0].equals(""))
+				if(Id[0].isEmpty())
 				{
 					//System.out.println("Hello World : "+name);
 					Commemoration Saint= new Commemoration(name,new OrderedHashtable(),new OrderedHashtable());
@@ -191,37 +188,28 @@ public class Days implements DocHandler
 			Rank[0]="10";
 			Rank[1]=null;
 			Rank[2]=null;
-			for(int i=0;i<CommemorationList.size();i++)
-			{
-				Commemoration Saint=(Commemoration)CommemorationList.get(i);
-				String RankSaint=Saint.getRank();
-				int k=RankSaint.indexOf("_");
-				if(k == -1)
-				{
-					//THIS IS NOT A SPECIAL SEASON
-					int RankDay=Integer.parseInt(RankSaint);
-					if(RankDay<Integer.parseInt(Rank[0]) && RankDay != -1)
-					{
-						Rank[0]=RankSaint;
-					}
-					if(Integer.parseInt(RankSaint)>=2)
-					{
-						if(Rank[2]==null)
-						{
-							Rank[2]=RankSaint;
-						}
-						else
-						{
-							Rank[2]+=","+RankSaint;
-						}
-					}
-				}
-				else
-				{
-					//THIS IS A SPECIAL SEASON
-					Rank[1]=RankSaint;
-				}			
-			}
+            for (Object o : CommemorationList) {
+                Commemoration Saint = (Commemoration) o;
+                String RankSaint = Saint.getRank();
+                int k = RankSaint.indexOf("_");
+                if (k == -1) {
+                    //THIS IS NOT A SPECIAL SEASON
+                    int RankDay = Integer.parseInt(RankSaint);
+                    if (RankDay < Integer.parseInt(Rank[0]) && RankDay != -1) {
+                        Rank[0] = RankSaint;
+                    }
+                    if (Integer.parseInt(RankSaint) >= 2) {
+                        if (Rank[2] == null) {
+                            Rank[2] = RankSaint;
+                        } else {
+                            Rank[2] += "," + RankSaint;
+                        }
+                    }
+                } else {
+                    //THIS IS A SPECIAL SEASON
+                    Rank[1] = RankSaint;
+                }
+            }
 			if(Rank[0].equals("10"))
 			{
 				Rank[0]="-1";
@@ -251,19 +239,19 @@ public class Days implements DocHandler
 				{
 					//DETERMINE IF THERE ARE MULTIPLE ICONS FOR THE GIVEN DAY
 					String[] splits=IconTest.split(",");
-					String NameList=Name;
+					StringBuilder NameList= new StringBuilder(Name);
 					if(splits.length>1)
 					{
 						//THERE ARE MORE THAN ONE ICONS FOR A GIVEN DAY
 						for(i=2;i<splits.length;i++)
 						{
-							NameList+="%"+Name;
+							NameList.append("%").append(Name);
 						}
 					}
 					if(Icons[0]==null)
 					{
 						Icons[0]=IconTest;
-						Icons[1]=NameList;
+						Icons[1]= NameList.toString();
 					}
 					else
 					{

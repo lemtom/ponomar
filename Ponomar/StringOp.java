@@ -1,5 +1,4 @@
 package Ponomar;
-import java.util.Hashtable;
 
 /*****************************************************************************
  StringOp.java :: A CLASS TO HANDLE ADDITIONAL STRING OPERATIONS 
@@ -59,7 +58,7 @@ protected static String join(String[] pieces, String sep)
 {
 	if(pieces.length == 0) return "";
 
-	StringBuffer buf = new StringBuffer();
+	StringBuilder buf = new StringBuilder();
 	buf.append(pieces[0]);
 	for(int i=1,n=pieces.length; i<n; i++)
 	{
@@ -71,7 +70,7 @@ protected static String join(String[] pieces, String sep)
 // CAPITALIZES THE FIRST LETTER OF THE STRING
 protected static String capitalize(String str)
 {
-	return (str.length() > 0) ? Character.toUpperCase(str.charAt(0)) + str.substring(1) : str;
+	return (!str.isEmpty()) ? Character.toUpperCase(str.charAt(0)) + str.substring(1) : str;
 }
 
 // STORES VARIABLE VALUES FOR eval(String) AS String variable -> int value
@@ -193,7 +192,7 @@ protected double eval(String expression) throws IllegalArgumentException
 	
 	i = expression.lastIndexOf("==");
 	int j = expression.lastIndexOf("!=");
-	n = i > j ? i : j;
+	n = Math.max(i, j);
 	if (n != -1)
 	{
 		// SPLIT AT THE OPERATOR
@@ -222,9 +221,9 @@ protected double eval(String expression) throws IllegalArgumentException
 	int l = expression.lastIndexOf(">=");
 	
 	// DETERMINE THE LARGEST (CLOSEST TO END OF EXPRESSION) VALUE
-	n = i > j ? i : j;
-	n = n > k ? n : k;
-	n = n > l ? n : l; 	
+	n = Math.max(i, j);
+	n = Math.max(n, k);
+	n = Math.max(n, l);
 	
 	if (n != -1)
 	{
@@ -288,7 +287,7 @@ protected double eval(String expression) throws IllegalArgumentException
 		}
 	}
 	// DETERMINE THE LARGEST (CLOSEST TO END OF EXPRESSION) VALUE
-	n = i > j ? i : j;
+	n = Math.max(i, j);
 	
 	if (n != -1)
 	{
@@ -317,8 +316,8 @@ protected double eval(String expression) throws IllegalArgumentException
 	k = expression.lastIndexOf("%");
 	
 	// DETERMINE THE LARGEST (CLOSEST TO END OF EXPRESSION) VALUE
-	n = i > j ? i : j;
-	n = n > k ? n : k;
+	n = Math.max(i, j);
+	n = Math.max(n, k);
 	
 	if (n != -1)
 	{
@@ -353,7 +352,7 @@ protected double eval(String expression) throws IllegalArgumentException
 	i = expression.indexOf("!");
 	j = expression.indexOf("-");
 	
-	n = i > j ? i : j;
+	n = Math.max(i, j);
 	
 	if (n != -1)
 	{
@@ -378,12 +377,12 @@ protected double eval(String expression) throws IllegalArgumentException
 	// A BOOLEAN STATEMENT (TRUE or FALSE)
 	// OR A NUMBER
 
-	if (expression.indexOf("true") != -1)
+	if (expression.contains("true"))
 	{
 		result = bool2double(true);
 		return result; // <----------------- ADDED BY A. ANDREEV 8/1/07 N.S. TO FIX HANDLING OF !TRUE
 	}
-	else if (expression.indexOf("false") != -1)
+	else if (expression.contains("false"))
 	{
 		result = bool2double(false);
 		return result; // <----------------- ADDED BY A. ANDREEV 8/1/07 N.S. TO FIX HANDLING OF !TRUE
@@ -415,7 +414,7 @@ protected boolean evalbool(String expression)
 	// THIS FUNCTION SIMPLY CONVERTS A DOUBLE INTO A BOOLEAN EXPRESSION, WHERE 0 = FALSE
 	// EVERYTHING ELSE EQUALS TRUE! THIS FUNCTION IS REQUIRED FOR &&, ||, and ! OPERATORS
 	
-	Double result = eval(expression);
+	double result = eval(expression);
 	if (result == Double.NaN)
 	{
 		System.out.println("Error Reading the values");

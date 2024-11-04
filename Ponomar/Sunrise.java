@@ -204,7 +204,7 @@ final class Sunrise
 	{
 		double sidtime = revolution( GMST0(d) + 180.0 + lon );
 
-		double sRAsdec[] = sun_ra_dec(d);
+		double[] sRAsdec = sun_ra_dec(d);
 		double tsouth  = 12.0 - rev180( sidtime - sRAsdec[0] ) / 15.0;
 		double sradius = 0.2666 / sRAsdec[0];
 

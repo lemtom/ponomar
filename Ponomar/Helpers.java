@@ -1,13 +1,11 @@
 package Ponomar;
 
 import javax.swing.*;
-import java.beans.*;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
 import javax.swing.filechooser.FileFilter;
 import javax.print.*;
 import javax.print.attribute.*;
@@ -44,7 +42,7 @@ class Helpers
     		}
     		if(selectedValue instanceof Integer)
     		{
-    			if(((Integer)selectedValue).intValue()!=0)
+    			if((Integer) selectedValue !=0)
     			{
     				return false;
     			}
@@ -76,7 +74,7 @@ class Helpers
         			//CHECK WHETHER IT IS DESIRED TO OVERWRITE THE FILE
         			Object[] options = {LanguageNames[3],LanguageNames[5]};
 				JOptionPane pane=new JOptionPane();
-				pane.showOptionDialog(null, LanguageNames[6] + "\n "+FileName.getPath(),(String)Text.Phrases.get("0"), JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+				JOptionPane.showOptionDialog(null, LanguageNames[6] + "\n "+FileName.getPath(),(String)Text.Phrases.get("0"), JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 				Object selectedValue = pane.getValue();
      				if(selectedValue == null)
       					 //I WILL TREAT THIS AS NO
@@ -86,7 +84,7 @@ class Helpers
     				 	return;
     				 if(selectedValue instanceof Integer)
     				{
-    					if(((Integer)selectedValue).intValue()!=0)
+    					if((Integer) selectedValue !=0)
     					{
     						return;
     					}
@@ -97,7 +95,7 @@ class Helpers
         			//CREATE THE LOCATION AND WRITE THE FILE
         			try
         			{
-        				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FileName),"UTF8"));	
+        				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(FileName.toPath()), StandardCharsets.UTF_8));
 	    				out.write(strOut + "<body><BR><BR><i>"+getCopyright()+"</i></body></html>");
                                         if (strOut.substring(0, 4).equals("<html>"))
                                         {
@@ -214,22 +212,22 @@ class Helpers
                 String Year=Text.Phrases.get("Year").toString();
                 String Comma=Text.Phrases.get("Comma").toString();
                 String And=Text.Phrases.get("And").toString();
-                String AuthorList=Authors[0];
+                StringBuilder AuthorList= new StringBuilder(Authors[0]);
                 if (Authors.length>2)
                 {
                 for(int i=1;i < Authors.length-1;i++)
                 {
-                    AuthorList=AuthorList+Authors[i]+Comma;
+                    AuthorList.append(Authors[i]).append(Comma);
                 }
                 }
                 if (Authors.length>1)
                 {
-                    AuthorList=AuthorList+And+Authors[Authors.length-1];
+                    AuthorList.append(And).append(Authors[Authors.length - 1]);
                 }
 
                String Copyright=Text.Phrases.get("Copyright").toString();
                Copyright=Copyright.replace("^YY",Year);
-               Copyright=Copyright.replace("^AA",AuthorList);
+               Copyright=Copyright.replace("^AA", AuthorList.toString());
                return Copyright;
         }
         public Hashtable deepCopy(Hashtable original){

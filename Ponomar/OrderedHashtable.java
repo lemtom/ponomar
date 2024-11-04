@@ -135,7 +135,7 @@ public class OrderedHashtable extends Hashtable implements Cloneable
 	/** Returns a string representation of the OrderedHashtable. */
 	public String toString()
 	{
-		StringBuffer s = new StringBuffer();
+		StringBuilder s = new StringBuilder();
 		s.append("{ ");
 		Object key = null;
 		int i = 0;
@@ -170,7 +170,7 @@ public class OrderedHashtable extends Hashtable implements Cloneable
                 }
                 if (current.get(key) instanceof Integer){
                     Integer item=(Integer)current.get(key);
-                    cloned.put(new String(key), new Integer(item));
+                    cloned.put(new String(key), item);
                     continue;
                 }
                 String item=(String)current.get(key);
@@ -328,14 +328,12 @@ public class OrderedHashtable extends Hashtable implements Cloneable
 		}
 		else // the map is not ordered, so add at will
 		{
-			Iterator itr = m.entrySet().iterator();
 
-			while (itr.hasNext())
-			{
-				Map.Entry e = (Map.Entry) itr.next();
-				// Optimize in case the Entry is one of our own.
-				put(e.getKey(), e.getValue());
-			}
+            for (Object o : m.entrySet()) {
+                Map.Entry e = (Map.Entry) o;
+                // Optimize in case the Entry is one of our own.
+                put(e.getKey(), e.getValue());
+            }
 		}
 	}
         

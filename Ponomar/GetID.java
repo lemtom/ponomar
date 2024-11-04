@@ -1,15 +1,5 @@
 package Ponomar;
 
-import javax.swing.*;
-import java.beans.*;
-import java.awt.*;
-import java.util.*;
-import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
-import javax.swing.filechooser.FileFilter;
-
 /***********************************************************************
 THIS MODULE CREATES THE TEXT FOR THE ORTHODOX SERVICE OF THE FIRST HOUR (PRIME)
 THIS MODULE IS STILL IN THE DEVELOPMENT PHASE.

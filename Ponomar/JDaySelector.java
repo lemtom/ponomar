@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.text.*;
-import java.io.UnsupportedEncodingException;
 
 /**************************************************************
 JDaySelector: A class for the object that does the heavy duty work in JCalendar
@@ -447,7 +446,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 
 	private void drawTones()
 	{
-		String numerals[]  =Text.obtainValues((String)Text.Phrases.get("Tones"));
+		String[] numerals =Text.obtainValues((String)Text.Phrases.get("Tones"));
 		
 
 		// THIS WILL WORK FOR ALL TIMES EXCEPT DURING LENT 
@@ -670,7 +669,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 	{
 		JButton button = (JButton)e.getSource();
 		String buttonText = button.getText();
-		int day = new Integer(buttonText).intValue();
+		int day = Integer.parseInt(buttonText);
 		setDay(day);
 	}
 
@@ -745,9 +744,9 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 			}
 			super.paint(g);
 		}
-	};
+	}
 
-	public static void main(String[] argz)
+    public static void main(String[] argz)
 	{
 		// FOR TESTING PURPOSES ONLY!!!
 		JFrame frame = new JFrame("TESTING THE CALENDAR CONTROL");

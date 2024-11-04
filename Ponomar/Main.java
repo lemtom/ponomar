@@ -6,11 +6,6 @@ import java.beans.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.io.*;
-import java.lang.Math;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyledDocument;
-import javax.swing.text.MutableAttributeSet;
 
 /***********************************************************************
 Main.java :: MAIN MODULE FOR THE PONOMAR PROGRAM.
@@ -133,10 +128,10 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         OrderBox = (String) Phrases.Phrases.get("OrderBox");
 
         Font value1 = (Font) UIManager.get("Menu.font");
-        if (DisplaySize == null || DisplaySize.equals("")) {
+        if (DisplaySize == null || DisplaySize.isEmpty()) {
             DisplaySize = Integer.toString(value1.getSize());
         }
-        if (DisplayFont == null || DisplayFont.equals("")) {
+        if (DisplayFont == null || DisplayFont.isEmpty()) {
             DisplayFont = value1.getFontName();
         }
         DisplaySize = Integer.toString(Math.max(Integer.parseInt(DisplaySize), value1.getSize())); //If the default user's font size is larger than the required there is not need to change it.
@@ -150,7 +145,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         //This is a nifty way to set the default font for displaying everything in a programme. I (Y.S.) will
         //later work to implement it properly. At present, there seem to be some technical issues with obtaining
         //everything properly.
-        java.util.Enumeration keys = UIManager.getDefaults().keys();
+        Enumeration<Object> keys = UIManager.getDefaults().keys();
         while (keys.hasMoreElements()) {
             Object key = keys.nextElement();
             Object value = UIManager.get(key);
@@ -273,7 +268,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
             // FIND OUT THE OLD YEAR
             int year = today.getYear();
             today = new JDate2(calendar.getMonth(), calendar.getDay(), calendar.getYear(),DisplayCal);
-            today.setCalendar(ReligiousCal);
+            JDate2.setCalendar(ReligiousCal);
             //System.out.println("year is: "+year+" and religious year is: " +today.getYear());
             if (year != today.getYear()) {
                 pascha = Paschalion.getPascha(today.getYear(),ReligiousCal);
@@ -390,7 +385,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         if (e.getEventType().toString() == "ACTIVATED") {
             String cmd = e.getDescription();
             String[] parts = cmd.split("#");
-            if (parts[0].indexOf("reading") != -1) {
+            if (parts[0].contains("reading")) {
                 try {
                     bible.update(parts[1], parts[2]);
                     bible.show();
@@ -401,7 +396,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 }
             } else {
                 parts = cmd.split("\\?");
-                if (parts[0].indexOf("goDoSaint") != -1) {
+                if (parts[0].contains("goDoSaint")) {
 
                     String[] parts2 = parts[1].split("=");
                     //System.out.println(parts2[1]);
@@ -429,14 +424,14 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
          output = "<body style=\"font-family:" + DisplayFont + ";font-size:" + DisplaySize + "pt\">";
      
 
-         today.setCalendar(DisplayCal);
+         JDate2.setCalendar(DisplayCal);
         String AMC = (String) Phrases.Phrases.get("AMC");
         String AML = (String) Phrases.Phrases.get("AML");
         String CEnd=(String) Phrases.Phrases.get("CEnd"); //"."; //Later make it come from the configuration files for a given language.
         String Format = "";
         if (AMC.equals("1")) {
             //PCalendar checking = new PCalendar(today, PCalendar.julian, Analyse.dayInfo);
-            today.setCalendar(ReligiousCal);
+            JDate2.setCalendar(ReligiousCal);
             
             Format = (String) Phrases.Phrases.get("AM");
             if (Analyse.dayInfo.get("Ideographic").equals("1"))
@@ -459,7 +454,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         }
         if (ReligiousCal!=DisplayCal)
                 {
-                    today.setCalendar(DisplayCal);
+                    JDate2.setCalendar(DisplayCal);
                     if (DisplayCal==0)
                     {
                         
@@ -471,7 +466,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                         output += MainNames[0];
                     }
                     output += Colon + (String) today.toString(Analyse.dayInfo) + "<BR>";
-                    today.setCalendar(ReligiousCal);
+                    JDate2.setCalendar(ReligiousCal);
                 }
         else
         {
@@ -487,7 +482,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         //output += MainNames[0] + Colon + (String) today.getGregorianDateS(Analyse.dayInfo) + "<BR>";
         String filename = "";
         int lineNumber = 0;
-        today.setCalendar(ReligiousCal);
+        JDate2.setCalendar(ReligiousCal);
         int dow = today.getDayOfWeek();
         int doy = today.getDoy();
         int nday = (int) JDate2.difference(today, Paschalion.getPascha(today.getYear(),ReligiousCal));
@@ -535,7 +530,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
 
         // GET THE DAY'S ASTRONOMICAL DATA
         Sunrise sunrise = new Sunrise(Analyse.dayInfo);
-        String[] sunriseSunset = sunrise.getSunriseSunsetString(today, (String) ConfigurationFiles.Defaults.get("Longitude"), (String) ConfigurationFiles.Defaults.get("Latitude"), (String) ConfigurationFiles.Defaults.get("TimeZone"));
+        String[] sunriseSunset = Sunrise.getSunriseSunsetString(today, (String) ConfigurationFiles.Defaults.get("Longitude"), (String) ConfigurationFiles.Defaults.get("Latitude"), (String) ConfigurationFiles.Defaults.get("TimeZone"));
         output += "<BR>" + MainNames[1] + sunriseSunset[0];
         output += "<BR>" + MainNames[2] + sunriseSunset[1];
         output += "<BR><BR>"; //<B>"+MainNames[3]+"</B>"+Colon+ Paschalion.getLunarPhaseString(today) +"<BR><BR>";
@@ -610,10 +605,10 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         //System.out.println("First Menologion Reading is :"+MenaionReadings[0].get("Readings"));
         OrderedHashtable CombinedReadings = new OrderedHashtable();
         //for(int j=0;j<7;j++){
-        for (int k = 0; k < MenaionReadings.length; k++) {
-            OrderedHashtable Reading = (OrderedHashtable) MenaionReadings[k].get("Readings");
+        for (OrderedHashtable menaionReading : MenaionReadings) {
+            OrderedHashtable Reading = (OrderedHashtable) menaionReading.get("Readings");
             OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
-            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements();) {
+            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements(); ) {
                 String element1 = e.nextElement().toString();
                 if (CombinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
@@ -644,10 +639,10 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 }
             }
         }
-        for (int k = 0; k < PaschalReadings.length; k++) {
-            OrderedHashtable Reading = (OrderedHashtable) PaschalReadings[k].get("Readings");
+        for (OrderedHashtable paschalReading : PaschalReadings) {
+            OrderedHashtable Reading = (OrderedHashtable) paschalReading.get("Readings");
             OrderedHashtable Readings = (OrderedHashtable) Reading.get("Readings");
-            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements();) {
+            for (Enumeration e = Readings.enumerateKeys(); e.hasMoreElements(); ) {
                 String element1 = e.nextElement().toString();
                 if (CombinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
@@ -700,8 +695,8 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 Vector gospel = new Vector();
 
 
-                for (int j = 0; j < Readings.size(); j++) {
-                    OrderedHashtable liturgy = (OrderedHashtable) Readings.get(j);
+                for (Object reading : Readings) {
+                    OrderedHashtable liturgy = (OrderedHashtable) reading;
                     OrderedHashtable stepE = (OrderedHashtable) liturgy.get("apostol");
                     OrderedHashtable stepG = (OrderedHashtable) liturgy.get("gospel");
 
@@ -780,22 +775,22 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 }
                 Vector matins2 = new Vector();
 
-                for (int j = 0; j < Readings.size(); j++) {
-                    OrderedHashtable matins = (OrderedHashtable) Readings.get(j);
+                for (Object reading : Readings) {
+                    OrderedHashtable matins = (OrderedHashtable) reading;
                     //System.out.println("In Main1, we have "+matins+"\n matings.get(\"matins\")");
                     OrderedHashtable stepE = (OrderedHashtable) matins.get("matins");
                     if (stepE == null) {
-                       //stepE = (OrderedHashtable) matins.get("1");
-                       OrderedHashtable testing3=(OrderedHashtable) matins.get("1");
-                     //  System.out.println("kl: 0; readings: "+testing3);
-                       matins2.add(testing3.get("Reading").toString());
-                       
-                        for (int kl=1;kl<=matins.size()-1;kl++){
-                            testing3=(OrderedHashtable) matins.get(Integer.toString(kl+1));
+                        //stepE = (OrderedHashtable) matins.get("1");
+                        OrderedHashtable testing3 = (OrderedHashtable) matins.get("1");
+                        //  System.out.println("kl: 0; readings: "+testing3);
+                        matins2.add(testing3.get("Reading").toString());
+
+                        for (int kl = 1; kl <= matins.size() - 1; kl++) {
+                            testing3 = (OrderedHashtable) matins.get(Integer.toString(kl + 1));
                             //System.out.println("kl: "+kl+"; readings: "+testing3);
                             matins2.add(testing3.get("Reading").toString());
                         }
-                        
+
                     }
                     //OrderedHashtable stepE=(OrderedHashtable)matins.get("matins");
                     //System.out.println("In Main1, we have "+matins2);
@@ -875,8 +870,8 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         String[] iconImages = new String[ImageList.size()];
         String[] iconNames = new String[NamesList.size()];
 
-        iconImages = (String[]) ImageList.toArray(new String[ImageList.size()]);
-        iconNames = (String[]) NamesList.toArray(new String[NamesList.size()]);
+        iconImages = (String[]) ImageList.toArray(new String[0]);
+        iconNames = (String[]) NamesList.toArray(new String[0]);
 
 
 

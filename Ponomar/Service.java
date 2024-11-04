@@ -1,13 +1,13 @@
 package Ponomar;
 
 import javax.swing.*;
-import java.beans.*;
 import java.awt.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.io.*;
-import javax.swing.event.*;
-import java.awt.event.*;
-import java.beans.*;
+
 /***********************************************************************
 THIS MODULE READ XML FILES THAT CONTAIN A SET OF <CREATE> TAGS THAT SET THE RULES FOR THE CREATION OF
 A SERVICE
@@ -94,11 +94,11 @@ public class Service implements DocHandler
                 String DisplaySize=(String)Text.Phrases.get("FontSizeL");
                 
                 Font value1 = (Font)UIManager.get ("Menu.font");
-                if (DisplaySize == null || DisplaySize.equals(""))
+                if (DisplaySize == null || DisplaySize.isEmpty())
                 {
                     DisplaySize=Integer.toString(value1.getSize());
                 }
-                if (DisplayFont == null || DisplayFont.equals(""))
+                if (DisplayFont == null || DisplayFont.isEmpty())
                 {
                     DisplayFont=value1.getFontName();
                 }
@@ -115,7 +115,7 @@ public class Service implements DocHandler
 
             	try
 		{
-			BufferedReader frf = new BufferedReader(new InputStreamReader(new FileInputStream(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(),FileName)), "UTF8"));
+			BufferedReader frf = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(), FileName))), StandardCharsets.UTF_8));
 			QDParser.parse(this, frf);
 		}
 		catch (Exception e)
@@ -576,25 +576,25 @@ public class Service implements DocHandler
                                             "\ua66f",
                                             "\ua670","\ua671","\ua672","\ua673","\ua67c","\ua67d"};         //Some more Cyrilic Diacritics
                             //Continuing to add letters to the red part until none from the above list are found.
-                            String redNow=new String();
+                            StringBuilder redNow= new StringBuilder(new String());
                             int countRed=1;
-                            redNow=text2.substring(0,1);
+                            redNow = new StringBuilder(text2.substring(0, 1));
                             
                             boolean stopRed=false;
                             while (!stopRed){
                                 stopRed=true;
-                                for(int i=0;i<List.length;i++){
+                                for (String s : List) {
                                     //System.out.println(redNow +" a");
                                     //System.out.println(text2.substring(countRed,countRed+1));
-                                    if(text2.substring(countRed,countRed+1).equals(List[i])){
-                                        stopRed=false;
-                                        redNow=redNow+text2.substring(countRed,countRed+1);
-                                        countRed=countRed+1;
+                                    if (text2.substring(countRed, countRed + 1).equals(s)) {
+                                        stopRed = false;
+                                        redNow.append(text2.substring(countRed, countRed + 1));
+                                        countRed = countRed + 1;
                                         break;
                                     }
                                 }                               
                             }
-                            String newtext=ServiceFormat[0].replace("$redNow", redNow);
+                            String newtext=ServiceFormat[0].replace("$redNow", redNow.toString());
                             newtext=newtext.replace("$rest",text2.substring(countRed));
                             text2=newtext;//"<B><FONT color=\"red\">"+redNow+"</FONT></B>"+text2.substring(countRed);
 			}
@@ -615,7 +615,7 @@ public class Service implements DocHandler
 			try
 			{
 				String FileName="xml/Commands/Times.xml";
-				BufferedReader frf1 = new BufferedReader(new InputStreamReader(new FileInputStream(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(),FileName)), "UTF8"));
+				BufferedReader frf1 = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(findLanguage.langFileFind(Analyse.dayInfo.get("LS").toString(), FileName))), StandardCharsets.UTF_8));
 				QDParser.parse(this, frf1);
 			}
 			catch (Exception e)
@@ -729,7 +729,7 @@ public class Service implements DocHandler
 			
 		if(Header != 0)
 		{
-			if(text4 != null && text4.length()>0)
+			if(text4 != null && !text4.isEmpty())
 			{
                             //System.out.println(text4 +" lenght: "+text4.length());
                             text4=text4.substring(0,1).toUpperCase()+text4.substring(1);	
@@ -741,7 +741,7 @@ public class Service implements DocHandler
 				text4="<BR><B><Font color=\"red\">" +ServiceNames[3]+" </Font></B><BR>";
 			}
                         
-			if (!WhoLast.equals("")){
+			if (!WhoLast.isEmpty()){
                             text4="</p>"+text4;
                         }
                         WhoLast="";
@@ -751,18 +751,18 @@ public class Service implements DocHandler
 		{
 			text4="";
 		}
-		if(!Who.equals(WhoLast) || WhoLast.equals(""))
+		if(!Who.equals(WhoLast) || WhoLast.isEmpty())
 		{
 		//THERE HAS BEEN A CHANGE IN WHO IS READING THE SERVICE READER TO PRIEST OR SOMETHING SIMILAR
 		//THERE IS A NEED TO AFFIX THE NEW READER.
 		//THIS WILL ENTAIL BY DEFAULT A NEW LINE
-                    if(!Who.equals(""))
+                    if(!Who.isEmpty())
 			{
 				String textWho = textGet.readText(CommonPrayersFileName+Who+".xml");
                                 String newText=ServiceFormat[4].replace("$textWho", textWho);
                                 text2="<p>"+newText+text2;
                                 //text2="<p><B><FONT color=\"red\">"+textWho+"</FONT></B>"+text2;
-				if(!WhoLast.equals(""))
+				if(!WhoLast.isEmpty())
 				{
 					text2="</p>"+text4+text2;	
 				}

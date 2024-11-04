@@ -1,6 +1,9 @@
 package Ponomar;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 /***********************************************************************
 THIS MODULE READS XML FILES THAT CONTAIN THE <DAY> TYPE 
@@ -80,7 +83,7 @@ public class Database
     			String[] Days={"31","29","31","30","31","30","31","31","30","31","30","31"};
     			try
     			{
-    				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(Location+FileName),"UTF8"));
+    				BufferedWriter out = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(Paths.get(Location + FileName)), StandardCharsets.UTF_8));
 	    			int Count=-1;
 				for(int i=0;i<12;i++)
     				{
