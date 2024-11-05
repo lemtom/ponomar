@@ -18,7 +18,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /***********************************************************************
  * THIS MODULE CREATES THE WINDOW TO DISPLAY THE SAINT INFORMATION.
@@ -366,8 +366,8 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
 		// frames.setContentPane(contentPane);
 
 		Map<Object, Object> iconsM = saintInfo2.getDisplayIcons();
-		Vector imageList = (Vector) iconsM.get("Images");
-		Vector namesList = (Vector) iconsM.get("Names");
+		ArrayList imageList = (ArrayList) iconsM.get("Images");
+		ArrayList namesList = (ArrayList) iconsM.get("Names");
 		String[] iconImages = new String[imageList.size()];
 		String[] iconNames = new String[namesList.size()];
 

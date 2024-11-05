@@ -69,7 +69,7 @@ public class Fasting implements DocHandler {
 		 * 32 && nday != -48) || doy == 250 || doy == 226 || doy == 324 || doy == 83) {
 		 * //THESE ARE CLASS 2 HOLIDAYS StringOp.dayInfo.put("dRank",6); } //THIS WILL
 		 * NOT CATCH ALL THE RANK 3 OR 4 HOLIDAYS, BUT MOST OF THEM WILL BE SO CAUGHT
-		 * Vector vect = (Vector) Information.get("Class3Transfers"); if(vect != null) {
+		 * ArrayList vect = (ArrayList) Information.get("Class3Transfers"); if(vect != null) {
 		 * for(Enumeration e2=vect.elements();e2.hasMoreElements();) { String Command =
 		 * (String)e2.nextElement(); if (StringOp.evalbool(Command)) {
 		 * StringOp.dayInfo.put("dRank",5); //IT DOES NOT MATTER FOR THE FASTING RULES
@@ -228,9 +228,9 @@ public class Fasting implements DocHandler {
 		 * A GIVEN SITUATION AND ALLOW THE RESULTS TO BE DETEMINED. String name =
 		 * table.get("Name").toString(); String value=table.get("Value").toString();
 		 * //IF THE GIVEN name OCCURS IN THE information HASHTABLE THAN AUGMENT ITS
-		 * VALUES. if (Information.containsKey(name)) { Vector previous =
-		 * (Vector)Information.get(name); previous.add(value);
-		 * Information.put(name,previous); } else { Vector vect = new Vector();
+		 * VALUES. if (Information.containsKey(name)) { ArrayList previous =
+		 * (ArrayList)Information.get(name); previous.add(value);
+		 * Information.put(name,previous); } else { ArrayList vect = new ArrayList();
 		 * vect.add(value); Information.put(name,vect); }
 		 * 
 		 * } //TO HERE REMOVE

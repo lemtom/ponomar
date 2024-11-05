@@ -182,12 +182,12 @@ public class Commemoration implements DocHandler {
 			if (readings.containsKey(type)) {
 
 				// ADD THIS READING TO OTHERS OF THE SAME TYPE
-				Vector vect = (Vector) readings.get(type);
+				ArrayList<String> vect = (ArrayList<String>) readings.get(type);
 				vect.add(reading);
 				readings.put(type, vect);
 			} else {
 				// CREATE A NEW TYPE WITH A COLLECTION INCLUDING THIS READING
-				Vector vect = new Vector();
+				ArrayList<String> vect = new ArrayList<>();
 				vect.add(reading);
 				readings.put(type, vect);
 			}

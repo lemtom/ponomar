@@ -68,7 +68,7 @@ public class Day implements DocHandler {
 		 * Object>(); RoyalHours = new LinkedHashMap<Object, Object>();
 		 * Information.put("ID", FileName); helper = new Helpers();
 		 * 
-		 * counter = 0; OrderedCommemorations = new Vector(); dayRank = -100;
+		 * counter = 0; OrderedCommemorations = new ArrayList(); dayRank = -100;
 		 * readDay(FileName);
 		 */
 	}

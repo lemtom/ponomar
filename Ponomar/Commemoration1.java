@@ -187,12 +187,12 @@ public class Commemoration1 implements DocHandler {
 			if (readings.containsKey(type)) {
 
 				// ADD THIS READING TO OTHERS OF THE SAME TYPE
-				Vector<String> vect = (Vector<String>) readings.get(type);
+				ArrayList<String> vect = (ArrayList<String>) readings.get(type);
 				vect.add(reading);
 				readings.put(type, vect);
 			} else {
 				// CREATE A NEW TYPE WITH A COLLECTION INCLUDING THIS READING
-				Vector<String> vect = new Vector<>();
+				ArrayList<String> vect = new ArrayList<>();
 				vect.add(reading);
 				readings.put(type, vect);
 			}
@@ -420,8 +420,8 @@ public class Commemoration1 implements DocHandler {
 	public Map<Object, Object> getDisplayIcons() {
 
 		// Ordered List of the Icons
-		Vector<String> IconImages = new Vector<>();
-		Vector<String> IconNames = new Vector<>();
+		ArrayList<String> IconImages = new ArrayList<>();
+		ArrayList<String> IconNames = new ArrayList<>();
 
 		String Cid = information.get("CID").toString();
 		String NameF = getGrammar("Short");

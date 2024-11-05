@@ -147,8 +147,8 @@ class Bible extends JFrame implements DocHandler, ListSelectionListener, ActionL
 		// setLayout(new GridBagLayout());
 		// GridBagConstraints c = new GridBagConstraints();
 
-		versionsBox = new JComboBox<>(new Vector<>(versions.values()));
-		// versionsBox = new JComboBox(new Vector(comboBoxList.values()));
+		versionsBox = new JComboBox<>(versions.values().toArray(new String[0]));
+		// versionsBox = new JComboBox(new ArrayList(comboBoxList.values()));
 		// versionsBox.setComponentOrientation(new ComponentOrientation);
 		/*
 		 * c.weightx = 0.5; c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0; c.gridy
@@ -365,12 +365,12 @@ class Bible extends JFrame implements DocHandler, ListSelectionListener, ActionL
 				halfVerse = a.split(",");
 
 				cVSep = table.get("CVSep"); // Chapter Verse Separator: Book Chapter:Verse or Book
-														// Chapter,Verse or something else
+											// Chapter,Verse or something else
 				duration = table.get("Duration"); // SEPARATOR BETWEEN THE ENDS OF A CONTINUOUS READING:
-															// 3:2-4:5, or 3:2-10
+													// 3:2-4:5, or 3:2-10
 				selectionSeparator = table.get("SelectionSeparator"); // SEPARATOR BETWEEN SELECTIONS OF
-																				// READINGS, Exodus 3:2, 4:5-10,
-																				// 10:10-11:3
+																		// READINGS, Exodus 3:2, 4:5-10,
+																		// 10:10-11:3
 				// ALLOWINS DIFFERENT FONTS TO BE USED: 2009/02/16 n.s.
 				Font value1 = (Font) UIManager.get("Menu.font");
 

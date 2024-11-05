@@ -74,11 +74,11 @@ public class Matins implements DocHandler {
 			// IF THE GIVEN name OCCURS IN THE information HASHTABLE THAN AUGMENT ITS
 			// VALUES.
 			if (information.containsKey(name)) {
-				Vector<String> previous = (Vector) information.get(name);
+				ArrayList<String> previous = (ArrayList) information.get(name);
 				previous.add(value);
 				information.put(name, previous);
 			} else {
-				Vector<String> vect = new Vector<>();
+				ArrayList<String> vect = new ArrayList<>();
 				vect.add(value);
 				information.put(name, vect);
 			}
@@ -221,15 +221,15 @@ public class Matins implements DocHandler {
 
 		private LinkedHashMap<Object, Object> information2; // CONTAINS COMMANDS ABOUT HOW TO CARRY OUT THE ORDERING OF
 															// THE READINGS
-		public Vector dailyV = new Vector();
-		public Vector dailyR = new Vector();
-		public Vector dailyT = new Vector();
-		public final Vector menaionV = new Vector();
-		public final Vector menaionR = new Vector();
-		public final Vector menaionT = new Vector();
-		public final Vector suppressedV = new Vector();
-		public final Vector suppressedR = new Vector();
-		public final Vector suppressedT = new Vector();
+		public ArrayList dailyV = new ArrayList();
+		public ArrayList dailyR = new ArrayList();
+		public ArrayList dailyT = new ArrayList();
+		public final ArrayList menaionV = new ArrayList();
+		public final ArrayList menaionR = new ArrayList();
+		public final ArrayList menaionT = new ArrayList();
+		public final ArrayList suppressedV = new ArrayList();
+		public final ArrayList suppressedR = new ArrayList();
+		public final ArrayList suppressedT = new ArrayList();
 		private final StringOp parameterValues = new StringOp();
 
 		public classifyReadings() {
@@ -259,13 +259,13 @@ public class Matins implements DocHandler {
 			 * e.printStackTrace(); }
 			 */
 
-			Vector paschalV = (Vector) readingsIn.get("Readings");
-			Vector paschalR = (Vector) readingsIn.get("Rank");
-			Vector paschalT = (Vector) readingsIn.get("Tag");
+			ArrayList paschalV = (ArrayList) readingsIn.get("Readings");
+			ArrayList paschalR = (ArrayList) readingsIn.get("Rank");
+			ArrayList paschalT = (ArrayList) readingsIn.get("Tag");
 
-			dailyV = new Vector();
-			dailyR = new Vector();
-			dailyT = new Vector();
+			dailyV = new ArrayList();
+			dailyR = new ArrayList();
+			dailyT = new ArrayList();
 
 			if (paschalV == null) {
 				return;
@@ -324,11 +324,11 @@ public class Matins implements DocHandler {
 				// System.out.println("==============================\nTesting
 				// Information\n++++++++++++++++++++");
 				if (information2.containsKey(name)) {
-					Vector<String> previous = (Vector<String>) information2.get(name);
+					ArrayList<String> previous = (ArrayList<String>) information2.get(name);
 					previous.add(value);
 					information2.put(name, previous);
 				} else {
-					Vector<String> vect = new Vector<>();
+					ArrayList<String> vect = new ArrayList<>();
 					vect.add(value);
 					information2.put(name, vect);
 				}
@@ -383,10 +383,9 @@ public class Matins implements DocHandler {
 			int available = menaionV.size();
 
 			if (available > 0) {
-				Vector<String> vect = (Vector<String>) information2.get("Suppress");
+				ArrayList<String> vect = (ArrayList<String>) information2.get("Suppress");
 				if (vect != null) {
-					for (Enumeration<String> e2 = vect.elements(); e2.hasMoreElements();) {
-						String command = e2.nextElement();
+					for (String command : vect) {
 						if (parameterValues.evalbool(command)) {
 							// THE CURRENT COMMAND WAS TRUE AND THE SEQUENTITIAL READING IS TO BE SKIPPED
 							dailyV.clear();

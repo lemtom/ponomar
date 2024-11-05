@@ -41,18 +41,18 @@ public class DivineLiturgy1 implements DocHandler {
     private static String[] transferredDays;// = Phrases.obtainValues((String) Phrases.Phrases.get("DayReading"));
     private static String[] error;// = Phrases.obtainValues((String) Phrases.Phrases.get("Errors"));
     private static Helpers findLanguage;// = new Helpers();
-    private static final Vector dailyV = new Vector();
-    private static final Vector dailyR = new Vector();
-    private static final Vector dailyT = new Vector();
-    private static final Vector menaion2V = new Vector();
-    private static final Vector menaion2R = new Vector();
-    private static final Vector menaion2T = new Vector();
-    private static final Vector menaionV = new Vector();
-    private static final Vector menaionR = new Vector();
-    private static final Vector menaionT = new Vector();
-    private static final Vector suppressedV = new Vector();
-    private static final Vector suppressedR = new Vector();
-    private static final Vector suppressedT = new Vector();
+    private static final ArrayList dailyV = new ArrayList();
+    private static final ArrayList dailyR = new ArrayList();
+    private static final ArrayList dailyT = new ArrayList();
+    private static final ArrayList menaion2V = new ArrayList();
+    private static final ArrayList menaion2R = new ArrayList();
+    private static final ArrayList menaion2T = new ArrayList();
+    private static final ArrayList menaionV = new ArrayList();
+    private static final ArrayList menaionR = new ArrayList();
+    private static final ArrayList menaionT = new ArrayList();
+    private static final ArrayList suppressedV = new ArrayList();
+    private static final ArrayList suppressedR = new ArrayList();
+    private static final ArrayList suppressedT = new ArrayList();
     private static LinkedHashMap<Object, Object> tomorrowRead = new LinkedHashMap<>();
     private static LinkedHashMap<Object, Object> yesterdayRead = new LinkedHashMap<>();
     private static final StringOp Information3  = new StringOp();
@@ -91,11 +91,11 @@ public class DivineLiturgy1 implements DocHandler {
             String value = (String) table.get("Value");
             //IF THE GIVEN name OCCURS IN THE information HASHTABLE THAN AUGMENT ITS VALUES.
             if (information.containsKey(name)) {
-                Vector previous = (Vector) information.get(name);
+                ArrayList previous = (ArrayList) information.get(name);
                 previous.add(value);
                 information.put(name, previous);
             } else {
-                Vector vect = new Vector();
+                ArrayList vect = new ArrayList();
                 vect.add(value);
                 information.put(name, vect);
             }
@@ -146,7 +146,7 @@ public class DivineLiturgy1 implements DocHandler {
         }
 
         //CHECK WHETHER OR NOT IT IS DESIRED TO TRANSFER THE SKIPPED SEQUENTIAL READINGS
-        Vector transfer = (Vector) information.get("Transfer");
+        ArrayList transfer = (ArrayList) information.get("Transfer");
         boolean transfer1 = analyse.evalbool((String) transfer.get(0));
         classifyReadings tomorrows = new classifyReadings();
         classifyReadings yesterdays = new classifyReadings();
@@ -157,7 +157,7 @@ public class DivineLiturgy1 implements DocHandler {
             2. TUESDAY CAN HAVE 2 SETS OF READINGS TRANSFERRED TO IT: MONDAY'S AND WEDNESDAY'S
              */
             //NOTE 2: NO READINGS ARE TRANSFERRED DURING LENT, THAT IS, -48 <= nday <=0.
-            Vector transferRule = (Vector) information.get("TransferRulesB");
+            ArrayList transferRule = (ArrayList) information.get("TransferRulesB");
             boolean transfer2 =analyse.evalbool((String) transferRule.get(0));
             if (transfer2) //St. NICHOLAS'S DAY HAS A SPECIAL SET OF RULES
             {
@@ -205,7 +205,7 @@ public class DivineLiturgy1 implements DocHandler {
                 analyse.dayInfo.put("dRank",dRankOld);*/
             }
             //NOW WE NEED TO CHECK YESTERDAY'S READINGS, BUT THIS WILL ONLY OCCUR ON A TUESDAY OR DEC. 6th
-            transferRule = (Vector) information.get("TransferRulesF");
+            transferRule = (ArrayList) information.get("TransferRulesF");
             transfer2 = analyse.evalbool((String) transferRule.get(0));
 
             if (transfer2) //IF IT IS A SATURDAY, THEN THE READINGS WILL BE SKIPPED, ???
@@ -252,9 +252,9 @@ public class DivineLiturgy1 implements DocHandler {
         }
 
 
-        Vector dailyVf = new Vector();
-        Vector dailyRf = new Vector();
-        Vector dailyTf = new Vector();        
+        ArrayList dailyVf = new ArrayList();
+        ArrayList dailyRf = new ArrayList();
+        ArrayList dailyTf = new ArrayList();        
         for (int i=0;i<yesterdays.suppressedV.size();i++){
             dailyVf.add(yesterdays.suppressedV.get(i));
             dailyRf.add(yesterdays.suppressedR.get(i));
@@ -277,9 +277,9 @@ public class DivineLiturgy1 implements DocHandler {
 
         
         //System.out.println("Testing some math: " + (0 - 1 + 7) % 7);
-        Vector menaionV = new Vector();
-        Vector menaionR = new Vector();
-        Vector menaionT = new Vector();
+        ArrayList menaionV = new ArrayList();
+        ArrayList menaionR = new ArrayList();
+        ArrayList menaionT = new ArrayList();
 
         for (int i=0;i<orderedReadings.menaionV.size();i++){
             menaionV.add(orderedReadings.menaionV.get(i));
@@ -374,9 +374,9 @@ public class DivineLiturgy1 implements DocHandler {
                 if (combinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
                     LinkedHashMap<String, Object> temp = (LinkedHashMap<String, Object>) combinedReadings.get(element1);
-                    Vector readings2 = (Vector) temp.get("Readings");
-                    Vector rank = (Vector) temp.get("Rank");
-                    Vector tag = (Vector) temp.get("Tag");
+                    ArrayList readings2 = (ArrayList) temp.get("Readings");
+                    ArrayList rank = (ArrayList) temp.get("Rank");
+                    ArrayList tag = (ArrayList) temp.get("Tag");
                     readings2.add(entry.getValue());
                     rank.add(Reading.get("Rank"));
                     tag.add(Reading.get("Name"));
@@ -386,9 +386,9 @@ public class DivineLiturgy1 implements DocHandler {
                     combinedReadings.put(element1, temp);
                 } else {
                     //Reading does not exist
-                    Vector readings2 = new Vector();
-                    Vector rank = new Vector();
-                    Vector tag = new Vector();
+                    ArrayList readings2 = new ArrayList();
+                    ArrayList rank = new ArrayList();
+                    ArrayList tag = new ArrayList();
                     readings2.add(entry.getValue());
                     rank.add(Reading.get("Rank"));
                     tag.add(Reading.get("Name"));
@@ -408,9 +408,9 @@ public class DivineLiturgy1 implements DocHandler {
                 if (combinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
                     LinkedHashMap<Object, Object> temp = (LinkedHashMap<Object, Object>) combinedReadings.get(element1);
-                    Vector readings2 = (Vector) temp.get("Readings");
-                    Vector rank = (Vector) temp.get("Rank");
-                    Vector tag = (Vector) temp.get("Tag");
+                    ArrayList readings2 = (ArrayList) temp.get("Readings");
+                    ArrayList rank = (ArrayList) temp.get("Rank");
+                    ArrayList tag = (ArrayList) temp.get("Tag");
                     readings2.add(entry.getValue());
                     rank.add(reading.get("Rank"));
                     tag.add(reading.get("Name"));
@@ -420,9 +420,9 @@ public class DivineLiturgy1 implements DocHandler {
                     combinedReadings.put(element1, temp);
                 } else {
                     //Reading does not exist
-                    Vector readings2 = new Vector();
-                    Vector rank = new Vector();
-                    Vector tag = new Vector();
+                    ArrayList readings2 = new ArrayList();
+                    ArrayList rank = new ArrayList();
+                    ArrayList tag = new ArrayList();
                     readings2.add(entry.getValue());
                     rank.add(reading.get("Rank"));
 
@@ -439,13 +439,13 @@ public class DivineLiturgy1 implements DocHandler {
 
         LinkedHashMap<Object, Object> temp = (LinkedHashMap<Object, Object>) combinedReadings.get("LITURGY");
         //System.out.println("temp values (423)" + temp);
-        Vector readings = (Vector) temp.get("Readings");
-        Vector rank = (Vector) temp.get("Rank");
-        Vector tag = (Vector) temp.get("Tag");
+        ArrayList readings = (ArrayList) temp.get("Readings");
+        ArrayList rank = (ArrayList) temp.get("Rank");
+        ArrayList tag = (ArrayList) temp.get("Tag");
         //Special case and consider it differently
 
 
-        Vector type = new Vector();
+        ArrayList type = new ArrayList();
 
 
         for (Object reading : readings) {
@@ -497,7 +497,7 @@ public class DivineLiturgy1 implements DocHandler {
         return output;
     }
 
-    public String format(Vector vectV, Vector vectR, Vector vectT) {
+    public String format(ArrayList vectV, ArrayList vectR, ArrayList vectT) {
         StringBuilder output = new StringBuilder();
         //AT THIS POINT, THE PENTECOSTARION READINGS WILL BE FORMATED SO THAT THEY ARE SEQUENTIAL BY THE WEEK,
         //ESPECIALLY IF THERE ARE ANY RETRACTIONS OR THE LIKE.
@@ -530,7 +530,6 @@ public class DivineLiturgy1 implements DocHandler {
         }*/
         Bible shortForm = new Bible(analyse.dayInfo);
         try {
-            vectV.elements();
             for (int k = 0; k < vectV.size(); k++) {
                 String reading = (String) vectV.get(k);
                 output.append(shortForm.getHyperlinkLoc(reading));
@@ -572,15 +571,15 @@ public class DivineLiturgy1 implements DocHandler {
     class classifyReadings implements DocHandler {
 
         private LinkedHashMap<Object, Object> information2;		//CONTAINS COMMANDS ABOUT HOW TO CARRY OUT THE ORDERING OF THE READINGS
-        public Vector dailyV = new Vector();
-        public Vector dailyR = new Vector();
-        public Vector dailyT = new Vector();
-        public final Vector menaionV = new Vector();
-        public final Vector menaionR = new Vector();
-        public final Vector menaionT = new Vector();
-        public final Vector suppressedV = new Vector();
-        public final Vector suppressedR = new Vector();
-        public final Vector suppressedT = new Vector();
+        public ArrayList dailyV = new ArrayList();
+        public ArrayList dailyR = new ArrayList();
+        public ArrayList dailyT = new ArrayList();
+        public final ArrayList menaionV = new ArrayList();
+        public final ArrayList menaionR = new ArrayList();
+        public final ArrayList menaionT = new ArrayList();
+        public final ArrayList suppressedV = new ArrayList();
+        public final ArrayList suppressedR = new ArrayList();
+        public final ArrayList suppressedT = new ArrayList();
         private final StringOp parameterValues=new StringOp();
 
         public classifyReadings() {
@@ -613,13 +612,13 @@ public class DivineLiturgy1 implements DocHandler {
                 e.printStackTrace();
             }
 
-            Vector paschalV = (Vector) readingsIn.get("Readings");
-            Vector paschalR = (Vector) readingsIn.get("Rank");
-            Vector paschalT = (Vector) readingsIn.get("Tag");
+            ArrayList paschalV = (ArrayList) readingsIn.get("Readings");
+            ArrayList paschalR = (ArrayList) readingsIn.get("Rank");
+            ArrayList paschalT = (ArrayList) readingsIn.get("Tag");
 
-            dailyV = new Vector();
-            dailyR = new Vector();
-            dailyT = new Vector();
+            dailyV = new ArrayList();
+            dailyR = new ArrayList();
+            dailyT = new ArrayList();
 
             
             if (paschalV == null){
@@ -673,11 +672,11 @@ public class DivineLiturgy1 implements DocHandler {
                 //IF THE GIVEN name OCCURS IN THE information HASHTABLE THAN AUGMENT ITS VALUES.
                 //System.out.println("==============================\nTesting Information\n++++++++++++++++++++");
                 if (information2.containsKey(name)) {
-                    Vector previous = (Vector) information2.get(name);
+                    ArrayList previous = (ArrayList) information2.get(name);
                     previous.add(value);
                     information2.put(name, previous);
                 } else {
-                    Vector vect = new Vector();
+                    ArrayList vect = new ArrayList();
                     vect.add(value);
                     information2.put(name, vect);
                 }
@@ -747,11 +746,10 @@ public class DivineLiturgy1 implements DocHandler {
 
 
             if (dow != 0) {*/
-                Vector vect = (Vector) information2.get("Class3Transfers");
+                ArrayList<String> vect = (ArrayList) information2.get("Class3Transfers");
                 if (vect != null) {
-                    for (Enumeration e2 = vect.elements(); e2.hasMoreElements();) {
-                        String Command = (String) e2.nextElement();
-                        if (parameterValues.evalbool(Command)) {
+                    for (String command : vect) {
+                        if (parameterValues.evalbool(command)) {
                             //THE CURRENT COMMAND WAS TRUE AND THE SEQUENTITIAL READING IS TO BE SUPPRESSED/TRANSFERRED
                             for (int k = 0; k < dailyV.size(); k++) {
                                 suppressedV.add(dailyV.get(k));
@@ -779,10 +777,9 @@ public class DivineLiturgy1 implements DocHandler {
             int available = menaionV.size();
 
             if (available > 0) {
-                Vector vect = (Vector) information2.get("Suppress");
+                ArrayList<String> vect = (ArrayList) information2.get("Suppress");
                 if (vect != null) {
-                    for (Enumeration e2 = vect.elements(); e2.hasMoreElements();) {
-                        String command = (String) e2.nextElement();
+                    for (String command : vect) {
                         if (parameterValues.evalbool(command)) {
                             //THE CURRENT COMMAND WAS TRUE AND THE SEQUENTITIAL READING IS TO BE SKIPPED
                             dailyV.clear();

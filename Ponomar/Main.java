@@ -72,8 +72,8 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
     private String ideographic = "";
     private DoSaint1 saintLink;
     private final IconDisplay displayIcon;
-    private Vector iconImages;
-    private Vector iconNames;
+    private ArrayList iconImages;
+    private ArrayList iconNames;
     private final String orderBox;
     private final StringOp analyse = new StringOp();
     private int displayCal=0;
@@ -473,8 +473,8 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         int ndayF = (int) JDate2.difference(today, Paschalion.getPascha(today.getYear() + 1,religiousCal));
         //System.out.println("Checking the nday: "+nday+" ndayP: "+ndayP+" today’s religious year is: "+today.getYear());
         //Clearing the holders for the icons and names
-        iconImages = new Vector();
-        iconNames = new Vector();
+        iconImages = new ArrayList();
+        iconNames = new ArrayList();
 
         // PUT THE RELEVANT DATA IN THE HASH
         analyse.dayInfo.put("dow", dow);	// THE DAY'S DAY OF WEEK
@@ -579,9 +579,9 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 if (combinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
                     LinkedHashMap<Object, Object> temp = (LinkedHashMap<Object, Object>) combinedReadings.get(element1);
-                    Vector readings2 = (Vector) temp.get("Readings");
-                    Vector rank = (Vector) temp.get("Rank");
-                    Vector tag = (Vector) temp.get("Tag");
+                    ArrayList readings2 = (ArrayList) temp.get("Readings");
+                    ArrayList rank = (ArrayList) temp.get("Rank");
+                    ArrayList tag = (ArrayList) temp.get("Tag");
                     readings2.add(entry.getValue());
                     rank.add(reading.get("Rank"));
                     tag.add(reading.get("Name"));
@@ -591,9 +591,9 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                     combinedReadings.put(element1, temp);
                 } else {
                     //Reading does not exist
-                    Vector readings2 = new Vector();
-                    Vector rank = new Vector();
-                    Vector tag = new Vector();
+                    ArrayList readings2 = new ArrayList();
+                    ArrayList rank = new ArrayList();
+                    ArrayList tag = new ArrayList();
                     readings2.add(entry.getValue());
                     rank.add(reading.get("Rank"));
                     tag.add(reading.get("Name"));
@@ -613,9 +613,9 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 if (combinedReadings.get(element1) != null) {
                     //Type of Reading already exists combine them
                     LinkedHashMap<Object, Object> temp = (LinkedHashMap<Object, Object>) combinedReadings.get(element1);
-                    Vector readings2 = (Vector) temp.get("Readings");
-                    Vector rank = (Vector) temp.get("Rank");
-                    Vector tag = (Vector) temp.get("Tag");
+                    ArrayList readings2 = (ArrayList) temp.get("Readings");
+                    ArrayList rank = (ArrayList) temp.get("Rank");
+                    ArrayList tag = (ArrayList) temp.get("Tag");
                     readings2.add(entry.getValue());
                     rank.add(reading.get("Rank"));
                     tag.add(reading.get("Name"));
@@ -625,9 +625,9 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                     combinedReadings.put(element1, temp);
                 } else {
                     //Reading does not exist
-                    Vector readings2 = new Vector();
-                    Vector rank = new Vector();
-                    Vector tag = new Vector();
+                    ArrayList readings2 = new ArrayList();
+                    ArrayList rank = new ArrayList();
+                    ArrayList tag = new ArrayList();
                     readings2.add(entry.getValue());
                     rank.add(reading.get("Rank"));
 
@@ -646,9 +646,9 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
             String element1 = entry.getKey();
             //Temperary solution
             LinkedHashMap<Object, Object> temp = (LinkedHashMap<Object, Object>) entry.getValue();
-            Vector readings = (Vector) temp.get("Readings");
-            Vector rank = (Vector) temp.get("Rank");
-            Vector tag = (Vector) temp.get("Tag");
+            ArrayList readings = (ArrayList) temp.get("Readings");
+            ArrayList rank = (ArrayList) temp.get("Rank");
+            ArrayList tag = (ArrayList) temp.get("Tag");
             if (element1.equals("LITURGY")) {
                 if (firstTime) {
                     firstTime = false;
@@ -656,9 +656,9 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                     output += rSep;
                 }
                 //Special case and consider it differently
-                Vector epistle = new Vector();
+                ArrayList epistle = new ArrayList();
 
-                Vector gospel = new Vector();
+                ArrayList gospel = new ArrayList();
 
 
                 for (Object reading : readings) {
@@ -713,7 +713,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 } else {
                     output += rSep;
                 }
-                Vector matins2 = new Vector();
+                ArrayList matins2 = new ArrayList();
 
                 for (Object reading : readings) {
                     LinkedHashMap<Object, Object> matins = (LinkedHashMap<Object, Object>) reading;

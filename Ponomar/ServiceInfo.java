@@ -121,11 +121,11 @@ public class ServiceInfo implements DocHandler {
 			// IF THE GIVEN name OCCURS IN THE information HASHTABLE THAN AUGMENT ITS
 			// VALUES.
 			if (information.containsKey(name)) {
-				Vector<String> previous = (Vector<String>) information.get(name);
+				ArrayList<String> previous = (ArrayList<String>) information.get(name);
 				previous.add(value);
 				information.put(name, previous);
 			} else {
-				Vector<String> vect = new Vector<>();
+				ArrayList<String> vect = new ArrayList<>();
 				vect.add(value);
 				information.put(name, vect);
 			}

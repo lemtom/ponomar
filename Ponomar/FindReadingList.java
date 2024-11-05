@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Stack;
-import java.util.Vector;
+import java.util.ArrayList;
 
 /***********************************************************************
  * Main.java :: MAIN MODULE FOR THE PONOMAR PROGRAM. THIS MODULE CONSTITUTES THE
@@ -171,8 +171,8 @@ public class FindReadingList {
 
 			/*
 			 * for (Enumeration e = readings.enumerateKeys(); e.hasMoreElements(); ) {
-			 * String type = (String)e.nextElement(); Vector vect =
-			 * (Vector)readings.get(type);
+			 * String type = (String)e.nextElement(); ArrayList vect =
+			 * (ArrayList)readings.get(type);
 			 * 
 			 * ReadScriptures[0].put(type, vect); }
 			 * 
@@ -213,9 +213,9 @@ public class FindReadingList {
 						// Type of Reading already exists combine them
 						LinkedHashMap<Object, Object> temp = (LinkedHashMap<Object, Object>) combinedReadings
 								.get(element1);
-						Vector readings2 = (Vector) temp.get("Readings");
-						Vector rank = (Vector) temp.get("Rank");
-						Vector tag = (Vector) temp.get("Tag");
+						ArrayList readings2 = (ArrayList) temp.get("Readings");
+						ArrayList rank = (ArrayList) temp.get("Rank");
+						ArrayList tag = (ArrayList) temp.get("Tag");
 						readings2.add(entry.getValue());
 						rank.add(reading.get("Rank"));
 						tag.add(reading.get("Name"));
@@ -225,9 +225,9 @@ public class FindReadingList {
 						combinedReadings.put(element1, temp);
 					} else {
 						// Reading does not exist
-						Vector readings2 = new Vector();
-						Vector rank = new Vector();
-						Vector tag = new Vector();
+						ArrayList readings2 = new ArrayList();
+						ArrayList rank = new ArrayList();
+						ArrayList tag = new ArrayList();
 						readings2.add(entry.getValue());
 						rank.add(reading.get("Rank"));
 						tag.add(reading.get("Name"));
@@ -248,9 +248,9 @@ public class FindReadingList {
 						// Type of Reading already exists combine them
 						LinkedHashMap<Object, Object> temp = (LinkedHashMap<Object, Object>) combinedReadings
 								.get(element1);
-						Vector readings2 = (Vector) temp.get("Readings");
-						Vector rank = (Vector) temp.get("Rank");
-						Vector tag = (Vector) temp.get("Tag");
+						ArrayList readings2 = (ArrayList) temp.get("Readings");
+						ArrayList rank = (ArrayList) temp.get("Rank");
+						ArrayList tag = (ArrayList) temp.get("Tag");
 						readings2.add(entry.getValue());
 						rank.add(reading.get("Rank"));
 						tag.add(reading.get("Name"));
@@ -260,9 +260,9 @@ public class FindReadingList {
 						combinedReadings.put(element1, temp);
 					} else {
 						// Reading does not exist
-						Vector readings2 = new Vector();
-						Vector rank = new Vector();
-						Vector tag = new Vector();
+						ArrayList readings2 = new ArrayList();
+						ArrayList rank = new ArrayList();
+						ArrayList tag = new ArrayList();
 						readings2.add(entry.getValue());
 						rank.add(reading.get("Rank"));
 
@@ -280,9 +280,9 @@ public class FindReadingList {
 			for (Map.Entry<String, Object> entry : combinedReadings.entrySet()) {
 				// Temperary solution
 				LinkedHashMap<Object, Object> temp = (LinkedHashMap<Object, Object>) entry.getValue();
-				Vector Readings = (Vector) temp.get("Readings");
-				Vector Rank = (Vector) temp.get("Rank");
-				Vector Tag = (Vector) temp.get("Tag");
+				ArrayList Readings = (ArrayList) temp.get("Readings");
+				ArrayList Rank = (ArrayList) temp.get("Rank");
+				ArrayList Tag = (ArrayList) temp.get("Tag");
 				if (entry.getKey().equals("LITURGY")) {
 					if (firstTime) {
 						firstTime = false;
@@ -290,9 +290,9 @@ public class FindReadingList {
 						output += rSep;
 					}
 					// Special case and consider it differently
-					Vector epistle = new Vector();
+					ArrayList epistle = new ArrayList();
 
-					Vector gospel = new Vector();
+					ArrayList gospel = new ArrayList();
 
 					for (Object reading : Readings) {
 						LinkedHashMap<Object, Object> liturgy = (LinkedHashMap<Object, Object>) reading;
