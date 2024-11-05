@@ -1,55 +1,54 @@
 package Ponomar;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /***********************************************************************
-THIS MODULE CREATES THE TEXT FOR THE ORTHODOX USUAL BEGINNING OF A SERVICE
-THIS MODULE IS STILL IN THE DEVELOPMENT PHASE.
-
-(C) 2008 YURI SHARDT. ALL RIGHTS RESERVED.
-Updated some parts to make it compatible with the changes in Ponomar, especially the language issues!
-
- PERMISSION IS HEREBY GRANTED TO USE, MODIFY, AND/OR REDISTRIBUTE THIS SOURCE CODE
- PROVIDED THAT THIS NOTICE REMAINS IN ALL VERSION AND / OR DERIVATIVES THEREOF.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
- THE AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
-***********************************************************************/
-public class UsualBeginning
-{
-	//SOME QUICK NOTES FOR FURTHER IMPLEMENTATION:
-	//THE DATE OR THE RELEVANT INFORMATION WILL HAVE TO BE GIVEN
-	//TO THE PROGRAMME. AT PRESENT IT WILL BE ASSUMED THAT IT IS TONE 1
-	//DURING THE COURSE OF A SINGLE WEEK.
+ * THIS MODULE CREATES THE TEXT FOR THE ORTHODOX USUAL BEGINNING OF A SERVICE
+ * THIS MODULE IS STILL IN THE DEVELOPMENT PHASE.
+ * 
+ * (C) 2008 YURI SHARDT. ALL RIGHTS RESERVED. Updated some parts to make it
+ * compatible with the changes in Ponomar, especially the language issues!
+ * 
+ * PERMISSION IS HEREBY GRANTED TO USE, MODIFY, AND/OR REDISTRIBUTE THIS SOURCE
+ * CODE PROVIDED THAT THIS NOTICE REMAINS IN ALL VERSION AND / OR DERIVATIVES
+ * THEREOF.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ ***********************************************************************/
+public class UsualBeginning {
+	// SOME QUICK NOTES FOR FURTHER IMPLEMENTATION:
+	// THE DATE OR THE RELEVANT INFORMATION WILL HAVE TO BE GIVEN
+	// TO THE PROGRAMME. AT PRESENT IT WILL BE ASSUMED THAT IT IS TONE 1
+	// DURING THE COURSE OF A SINGLE WEEK.
 	public static String UsualBeginning1;
-        private static StringOp Analyse=new StringOp();
-	public UsualBeginning(int Weekday)
-	{
-		//Analyse.dayInfo = new OrderedHashtable();
-		Analyse.dayInfo.put("dow", Weekday);		//DETERMINE THE DAY OF THE WEEK.
-		Analyse.dayInfo.put("PS",1);
-		Analyse.dayInfo.put("nday",250);
-		Analyse.dayInfo.put("LS",0);
-		final String UsualFileName = "Ponomar/xml/Services/UsualBeginning/"; // THE LOCATION FOR ANY EXTRA INFORMATION
-		Service test2=new Service(Analyse.dayInfo.clone());
-		 test2.readService(UsualFileName+"UsualBeginning.xml");
-		UsualBeginning1= Service.Service1;
-	}	
-	public UsualBeginning(OrderedHashtable dayInfo)
-	{
-		final String UsualFileName = "Ponomar/xml/Services/UsualBeginning/";
-		Service test2=new Service(dayInfo);
-		UsualBeginning1=test2.readService(UsualFileName+"UsualBeginning.xml");
-		 	
-		 	
+	private static final StringOp analyse = new StringOp();
+
+	public UsualBeginning(int weekday) {
+		// analyse.dayInfo = new LinkedHashMap<Object, Object>();
+		analyse.dayInfo.put("dow", weekday); // DETERMINE THE DAY OF THE WEEK.
+		analyse.dayInfo.put("PS", 1);
+		analyse.dayInfo.put("nday", 250);
+		analyse.dayInfo.put("LS", 0);
+		final String usualFileName = "Ponomar/xml/Services/UsualBeginning/"; // THE LOCATION FOR ANY EXTRA INFORMATION
+		Service test2 = new Service(new LinkedHashMap<>(analyse.dayInfo));
+		test2.readService(usualFileName + "UsualBeginning.xml");
+		UsualBeginning1 = Service.Service1;
 	}
-	public String getUsualBeginning()
-	{
+
+	public UsualBeginning(Map<Object, Object> dayInfo) {
+		final String usualFileName = "Ponomar/xml/Services/UsualBeginning/";
+		Service test2 = new Service(dayInfo);
+		UsualBeginning1 = test2.readService(usualFileName + "UsualBeginning.xml");
+
+	}
+
+	public String getUsualBeginning() {
 		return UsualBeginning1;
 	}
 }
-
