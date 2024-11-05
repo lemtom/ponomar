@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -114,7 +114,7 @@ class RuleBasedNumber implements DocHandler {
 	public void endDocument() {
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 		if (table.get("Cmd") != null) {
 			// EXECUTE THE COMMAND, AND STOP IF IT IS FALSE
 			if (!analyse.evalbool(table.get("Cmd").toString())) {

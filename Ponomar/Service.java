@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -67,9 +67,9 @@ public class Service implements DocHandler {
 	public Service(Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		serviceNames = Text.obtainValues((String) Text.Phrases.get("ServiceRead"));
-		serviceFormat = Text.obtainValues((String) Text.Phrases.get("ServiceFormat"));
-		serviceCSSFormat = Text.obtainValues((String) Text.Phrases.get("ServiceCSSFormat"));
+		serviceNames = Text.obtainValues(Text.Phrases.get("ServiceRead"));
+		serviceFormat = Text.obtainValues(Text.Phrases.get("ServiceFormat"));
+		serviceCSSFormat = Text.obtainValues(Text.Phrases.get("ServiceCSSFormat"));
 		// ServiceFormat=Text.obtainValues("<B><FONT
 		// color=\"red\">$redNow</FONT></B>$rest/, <I><Font color=\"red\">($repeat$textR
 		// $textCommand)</Font></I>/, <I><Font color=\"red\">($repeat)</Font></I>/,
@@ -98,8 +98,8 @@ public class Service implements DocHandler {
 				+ serviceCSSFormat[2] + "\n" + serviceCSSFormat[3] + "\n" + serviceCSSFormat[4] + "\n"
 				+ serviceCSSFormat[5] + "\n";
 
-		String displayFont = (String) Text.Phrases.get("FontFaceL");
-		String displaySize = (String) Text.Phrases.get("FontSizeL");
+		String displayFont = Text.Phrases.get("FontFaceL");
+		String displaySize = Text.Phrases.get("FontSizeL");
 
 		Font value1 = (Font) UIManager.get("Menu.font");
 		if (displaySize == null || displaySize.isEmpty()) {
@@ -153,7 +153,7 @@ public class Service implements DocHandler {
 
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
@@ -199,8 +199,8 @@ public class Service implements DocHandler {
 			ReadText textGet1 = new ReadText(new LinkedHashMap<>(analyse.dayInfo));
 			whoLast = "";
 			String text4 = textGet1.readText(ServiceFileName + "Text/" + title + ".xml");
-			String ponomar = Text.Phrases.get("0").toString();
-			String colon = Text.Phrases.get("Colon").toString();
+			String ponomar = Text.Phrases.get("0");
+			String colon = Text.Phrases.get("Colon");
 			if (text4 != null) {
 				header1 = header1 + "<title>" + ponomar + colon + text4 + "</title>";
 
@@ -447,32 +447,32 @@ public class Service implements DocHandler {
 
 	}
 
-	private void readIncidentals(Hashtable table) {
+	private void readIncidentals(HashMap<String, String> table) {
 		// THIS READS THE COMMON LABELS FOR CREATE, BIBLE, AND TEXT TAGS.
 
-		who = table.get("Who").toString();
+		who = table.get("Who");
 		if (table.get("CommandB") != null) {
-			commandB = table.get("CommandB").toString();
+			commandB = table.get("CommandB");
 		} else {
 			commandB = null;
 		}
 		if (table.get("Command") != null) {
-			command = table.get("Command").toString();
+			command = table.get("Command");
 		} else {
 			command = null;
 		}
 		if (table.get("RedFirst") != null) {
-			redFirst = table.get("RedFirst").toString();
+			redFirst = table.get("RedFirst");
 		} else {
 			redFirst = null;
 		}
 		if (table.get("NewLine") != null) {
-			newLine = table.get("NewLine").toString();
+			newLine = table.get("NewLine");
 		} else {
 			newLine = null;
 		}
 		if (table.get("Times") != null) {
-			times = table.get("Times").toString();
+			times = table.get("Times");
 		} else {
 			times = null;
 		}

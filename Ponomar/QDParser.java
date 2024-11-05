@@ -3,7 +3,7 @@ package Ponomar;
 import java.io.Reader;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Hashtable;
+import java.util.HashMap;
 
 /**********************************************************
  * QDPARSER.JAVA : A QUICK AND DIRTY XML PARSER, WITH (VERY) LIMITED
@@ -48,7 +48,7 @@ public class QDParser {
 		String tagName = null;
 		String lvalue = null;
 		String rvalue = null;
-		Hashtable<String, String> attrs = null;
+		HashMap<String, String> attrs = null;
 		st = new ArrayDeque<>();
 		doc.startDocument();
 		int line = 1, col = 0;
@@ -158,7 +158,7 @@ public class QDParser {
 					st.push(mode);
 					mode = OPEN_TAG;
 					tagName = null;
-					attrs = new Hashtable<>();
+					attrs = new HashMap<>();
 					sb.append((char) c);
 				}
 
@@ -205,7 +205,7 @@ public class QDParser {
 					return;
 				}
 				sb.setLength(0);
-				attrs = new Hashtable<>();
+				attrs = new HashMap<>();
 				tagName = null;
 				mode = popMode(st);
 
@@ -220,7 +220,7 @@ public class QDParser {
 					depth++;
 					doc.startElement(tagName, attrs);
 					tagName = null;
-					attrs = new Hashtable<>();
+					attrs = new HashMap<>();
 					mode = popMode(st);
 				} else if (c == '/') {
 					mode = SINGLE_TAG;
@@ -297,7 +297,7 @@ public class QDParser {
 					doc.startElement(tagName, attrs);
 					depth++;
 					tagName = null;
-					attrs = new Hashtable<>();
+					attrs = new HashMap<>();
 				} else if (c == '/') {
 					mode = SINGLE_TAG;
 				} else if (Character.isWhitespace((char) c)) {

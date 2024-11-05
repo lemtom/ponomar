@@ -222,11 +222,11 @@ class JDate extends JDateGeneric {
 	protected String getGregorianDateS(LinkedHashMap<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Phrases = new LanguagePack(dayInfo);
-		dayNames = Phrases.obtainValues((String) Phrases.Phrases.get("2"));
-		civilMonthNames = Phrases.obtainValues((String) Phrases.Phrases.get("4"));
-		monthNames = Phrases.obtainValues((String) Phrases.Phrases.get("3"));
-		civilDayNames = Phrases.obtainValues((String) Phrases.Phrases.get("5"));
-		Errors = Phrases.obtainValues((String) Phrases.Phrases.get("Errors"));
+		dayNames = Phrases.obtainValues(Phrases.Phrases.get("2"));
+		civilMonthNames = Phrases.obtainValues(Phrases.Phrases.get("4"));
+		monthNames = Phrases.obtainValues(Phrases.Phrases.get("3"));
+		civilDayNames = Phrases.obtainValues(Phrases.Phrases.get("5"));
+		Errors = Phrases.obtainValues(Phrases.Phrases.get("Errors"));
 		// GIVES THE STRING IN THE LOCAL FORMAT.
 		double j1;
 
@@ -255,7 +255,7 @@ class JDate extends JDateGeneric {
 		if (y <= 0) {
 			--y;
 		}
-		Format = (String) Phrases.Phrases.get("DateFormat");
+		Format = Phrases.Phrases.get("DateFormat");
 		int dow = getDayOfWeek();
 		int year = y;
 		int month = m;

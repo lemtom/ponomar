@@ -31,12 +31,12 @@ class About extends JFrame {
 		analyse.dayInfo = dayInfo;
 		ponomar = new LanguagePack(dayInfo);
 
-		value = (String) ponomar.Phrases.get("0");
+		value = ponomar.Phrases.get("0");
 		// ALLOWS A DIFFERENT TITLE TO BE SPECIFIED BY THE USER (CYRILLIC FOR THE
 		// CYRILLIC VERSIONS)
 		setTitle(value);
 		LanguagePack Text = new LanguagePack(dayInfo);
-		String[] aboutNames = Text.obtainValues((String) Text.Phrases.get("About"));
+		String[] aboutNames = Text.obtainValues(Text.Phrases.get("About"));
 		Helpers about1 = new Helpers(analyse.dayInfo);
 		JPanel contentPane = new JPanel(new BorderLayout());
 		contentPane.setOpaque(true);

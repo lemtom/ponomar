@@ -65,7 +65,7 @@ class LanguageSelector extends JMenu implements ActionListener, PropertyChangeLi
 		Font currentFont = new Font((String) analyse.dayInfo.get("FontFaceM"), Font.PLAIN,
 				Integer.parseInt((String) analyse.dayInfo.get("FontSizeM")));
 		LanguagePack Text = new LanguagePack(dayInfo);
-		String[] languageNames = Text.obtainValues((String) Text.Phrases.get("LanguageMenu"));
+		String[] languageNames = Text.obtainValues(Text.Phrases.get("LanguageMenu"));
 		// DETERMINE THE DEFAULTS
 		String Default = (String) ConfigurationFiles.Defaults.get("Language");
 		String rough = (String) ConfigurationFiles.Defaults.get("AvailableLanguages");
@@ -87,8 +87,8 @@ class LanguageSelector extends JMenu implements ActionListener, PropertyChangeLi
 			LanguagePack lang = new LanguagePack(
 					getFile.langFileFind(availableLanguages[i], "xml/Commands/LanguagePacks.xml"),
 					new LinkedHashMap<>(analyse.dayInfo));
-			nameLanguages[i] = lang.Phrases.get("NameLocal").toString();
-			languageBox = new JRadioButtonMenuItem(lang.Phrases.get("NameLocal").toString());
+			nameLanguages[i] = lang.Phrases.get("NameLocal");
+			languageBox = new JRadioButtonMenuItem(lang.Phrases.get("NameLocal"));
 			languageBox.addActionListener(this);
 			if (i == defaultLocation) {
 				languageBox.setSelected(true);
@@ -132,7 +132,7 @@ class LanguageSelector extends JMenu implements ActionListener, PropertyChangeLi
 
 	public void actionPerformed(ActionEvent e) {
 		LanguagePack Text = new LanguagePack(new LinkedHashMap<>(analyse.dayInfo));
-		String[] languageNames = Text.obtainValues((String) Text.Phrases.get("LanguageMenu"));
+		String[] languageNames = Text.obtainValues(Text.Phrases.get("LanguageMenu"));
 		// THIS WILL DETERMINE THE APPROPRIATE LANGUAGE LOCATION
 		languageLocation = e.getActionCommand();
 		// System.out.println(LanguageLocation);
@@ -163,7 +163,7 @@ class LanguageSelector extends JMenu implements ActionListener, PropertyChangeLi
 																			// OCCUR.
 			// A MESSAGE BOX SHOULD ALSO BE DISPLAYED!
 			Object[] options = { languageNames[3] };
-			JOptionPane.showOptionDialog(null, languageNames[4], (String) Text.Phrases.get("0"),
+			JOptionPane.showOptionDialog(null, languageNames[4], Text.Phrases.get("0"),
 					JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 			// JOptionPane.showMessageDialog(null, "In order for the interface language to
 			// change, please restart the programme.","Ponomar");

@@ -45,7 +45,7 @@ class PrimeSelector extends JPanel implements ActionListener, PropertyChangeList
 	public PrimeSelector(Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		selectorNames = Text.obtainValues((String) Text.Phrases.get("PrimeSelection"));
+		selectorNames = Text.obtainValues(Text.Phrases.get("PrimeSelection"));
 	}
 
 	public JMenu createPrimeMenu() {

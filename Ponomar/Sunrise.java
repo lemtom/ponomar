@@ -314,7 +314,7 @@ final class Sunrise {
 		return hours;
 	}
 
-	static String[] getSunriseSunsetString(JDate2 date, String lon, String lat, String tzone) {
+	String[] getSunriseSunsetString(JDate2 date, String lon, String lat, String tzone) {
 		return getSunriseSunsetString(date, Double.parseDouble(lon), Double.parseDouble(lat), Integer.parseInt(tzone));
 	}
 
@@ -324,7 +324,7 @@ final class Sunrise {
 
 		// NOW, TAKE THE RAW INPUT AND PARSE IT TO HOURS / MINUTES
 		for (int i = 0; i < 2; i++) {
-			String format = (String) phrases.Phrases.get("TimeF");
+			String format = phrases.Phrases.get("TimeF");
 			int hour = (int) Math.floor(raw[i]);
 			int minute = (int) Math.floor((raw[i] - hour) * 60);
 			/*

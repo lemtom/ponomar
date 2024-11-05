@@ -1,8 +1,8 @@
 package Ponomar;
 
 import java.io.FileReader;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class is the most basic possible implementation of the DocHandler class.
@@ -22,13 +22,11 @@ public class Reporter implements DocHandler {
 		System.out.println("  end document");
 	}
 
-	public void startElement(String elem, Hashtable h) {
+	public void startElement(String elem, HashMap<String, String> h) {
 		System.out.println("    start elem: " + elem);
-		Enumeration e = h.keys();
-		while (e.hasMoreElements()) {
-			String key = (String) e.nextElement();
-			String val = (String) h.get(key);
-			System.out.println("      " + key + " = " + val);
+		for (Map.Entry<String, String> entry : h.entrySet()) {
+			String val = entry.getValue();
+			System.out.println("      " + entry.getKey() + " = " + val);
 		}
 	}
 

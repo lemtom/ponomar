@@ -42,8 +42,8 @@ public class Matins implements DocHandler {
 	public Matins(Map<Object, Object> dayInfo) {
 		information3.dayInfo = dayInfo;
 		phrases = new LanguagePack(dayInfo);
-		transferredDays = phrases.obtainValues((String) phrases.Phrases.get("DayReading"));
-		error = phrases.obtainValues((String) phrases.Phrases.get("Errors"));
+		transferredDays = phrases.obtainValues(phrases.Phrases.get("DayReading"));
+		error = phrases.obtainValues(phrases.Phrases.get("Errors"));
 		findLanguage = new Helpers(information3.dayInfo);
 	}
 
@@ -54,7 +54,7 @@ public class Matins implements DocHandler {
 	public void endDocument() {
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
 		// TODAY'S INFORMATION IN dayInfo.
@@ -302,14 +302,14 @@ public class Matins implements DocHandler {
 		public void endDocument() {
 		}
 
-		public void startElement(String elem, Hashtable table) {
+		public void startElement(String elem, HashMap<String, String> table) {
 			// THE TAG COULD CONTAIN A COMMAND Cmd
 			// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
 			// TODAY'S INFORMATION IN dayInfo.
 			if (table.get("Cmd") != null) {
 				// EXECUTE THE COMMAND, AND STOP IF IT IS FALSE
 
-				if (!parameterValues.evalbool(table.get("Cmd").toString())) {
+				if (!parameterValues.evalbool(table.get("Cmd"))) {
 					return;
 				}
 			}
@@ -317,18 +317,18 @@ public class Matins implements DocHandler {
 			if (elem.equals("COMMAND")) {
 				// THIS WILL STORE ALL THE POSSIBLE COMMANDS FOR A GIVEN SITUATION AND ALLOW THE
 				// RESULTS TO BE DETEMINED.
-				String name = (String) table.get("Name");
-				String value = (String) table.get("Value");
+				String name = table.get("Name");
+				String value = table.get("Value");
 				// IF THE GIVEN name OCCURS IN THE information HASHTABLE THAN AUGMENT ITS
 				// VALUES.
 				// System.out.println("==============================\nTesting
 				// Information\n++++++++++++++++++++");
 				if (information2.containsKey(name)) {
-					Vector previous = (Vector) information2.get(name);
+					Vector<String> previous = (Vector<String>) information2.get(name);
 					previous.add(value);
 					information2.put(name, previous);
 				} else {
-					Vector vect = new Vector();
+					Vector<String> vect = new Vector<>();
 					vect.add(value);
 					information2.put(name, vect);
 				}
@@ -383,10 +383,10 @@ public class Matins implements DocHandler {
 			int available = menaionV.size();
 
 			if (available > 0) {
-				Vector vect = (Vector) information2.get("Suppress");
+				Vector<String> vect = (Vector<String>) information2.get("Suppress");
 				if (vect != null) {
-					for (Enumeration e2 = vect.elements(); e2.hasMoreElements();) {
-						String command = (String) e2.nextElement();
+					for (Enumeration<String> e2 = vect.elements(); e2.hasMoreElements();) {
+						String command = e2.nextElement();
 						if (parameterValues.evalbool(command)) {
 							// THE CURRENT COMMAND WAS TRUE AND THE SEQUENTITIAL READING IS TO BE SKIPPED
 							dailyV.clear();

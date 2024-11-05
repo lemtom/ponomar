@@ -59,10 +59,10 @@ public abstract class JDateGeneric implements Comparable<JDateGeneric>, Cloneabl
 	public String toString(Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Phrases = new LanguagePack(dayInfo);
-		dayNames = Phrases.obtainValues((String) Phrases.Phrases.get("2"));
-		civilMonthNames = Phrases.obtainValues((String) Phrases.Phrases.get("4"));
-		monthNames = Phrases.obtainValues((String) Phrases.Phrases.get("3"));
-		Format = (String) Phrases.Phrases.get("DateFormat");
+		dayNames = Phrases.obtainValues(Phrases.Phrases.get("2"));
+		civilMonthNames = Phrases.obtainValues(Phrases.Phrases.get("4"));
+		monthNames = Phrases.obtainValues(Phrases.Phrases.get("3"));
+		Format = Phrases.Phrases.get("DateFormat");
 		int dow = getDayOfWeek();
 		int year = getYear();
 		int month = getMonth();

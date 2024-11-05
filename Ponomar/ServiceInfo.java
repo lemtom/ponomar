@@ -82,14 +82,14 @@ public class ServiceInfo implements DocHandler {
 
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap<String, String> table) {
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
 		// TODAY'S INFORMATION IN dayInfo.
 		if (table.get("Cmd") != null) {
 			// EXECUTE THE COMMAND, AND STOP IF IT IS FALSE
 
-			if (!analyse.evalbool(table.get("Cmd").toString())) {
+			if (!analyse.evalbool(table.get("Cmd"))) {
 				return;
 			}
 		}
@@ -102,14 +102,12 @@ public class ServiceInfo implements DocHandler {
 		}
 		if (elem.equals(type) && readPeriod && readLanguage) {
 			// A POTENTIAL ORDER RULE HAS BEEN ENCOUNTERED.
-			Enumeration<?> listed = table.keys();
-			while (listed.hasMoreElements()) {
-				String nextEle = listed.nextElement().toString();
-
-				if (nextEle == null) {
+			for (Map.Entry<String, String> entry : table.entrySet()) {
+                String nextEle = entry.getKey();
+                if (nextEle == null) {
 					continue;
 				}
-				service.put(nextEle, table.get(nextEle).toString());
+				service.put(nextEle, entry.getValue());
 
 			}
 		}
@@ -118,8 +116,8 @@ public class ServiceInfo implements DocHandler {
 		if (elem.equals("COMMAND")) {
 			// THIS WILL STORE ALL THE POSSIBLE COMMANDS FOR A GIVEN SITUATION AND ALLOW THE
 			// RESULTS TO BE DETEMINED.
-			String name = table.get("Name").toString();
-			String value = table.get("Value").toString();
+			String name = table.get("Name");
+			String value = table.get("Value");
 			// IF THE GIVEN name OCCURS IN THE information HASHTABLE THAN AUGMENT ITS
 			// VALUES.
 			if (information.containsKey(name)) {

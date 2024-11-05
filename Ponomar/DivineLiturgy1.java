@@ -61,8 +61,8 @@ public class DivineLiturgy1 implements DocHandler {
     public DivineLiturgy1(Map<Object, Object> dayInfo) {
         analyse.dayInfo=dayInfo;
           phrases = new LanguagePack(dayInfo);
-    transferredDays = phrases.obtainValues((String) phrases.Phrases.get("DayReading"));
-     error = phrases.obtainValues((String) phrases.Phrases.get("Errors"));
+    transferredDays = phrases.obtainValues(phrases.Phrases.get("DayReading"));
+     error = phrases.obtainValues(phrases.Phrases.get("Errors"));
      findLanguage=new Helpers(analyse.dayInfo);
     }
 
@@ -73,7 +73,7 @@ public class DivineLiturgy1 implements DocHandler {
     public void endDocument() {
     }
 
-    public void startElement(String elem, Hashtable table) {
+    public void startElement(String elem, HashMap table) {
         // THE TAG COULD CONTAIN A COMMAND Cmd
         // THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
         // TODAY'S INFORMATION IN dayInfo.
@@ -110,7 +110,7 @@ public class DivineLiturgy1 implements DocHandler {
     public void text(String text) {
     }
 
-    public String Readings(LinkedHashMap<Object, Object> readingsIn, String readingType, JDate2 today) {
+    public String Readings(Map<Object, Object> readingsIn, String readingType, JDate2 today) {
         /********************************************************
         SINCE I HAVE CORRECTED THE SCRIPTURE READINGS IN THE MAIN FILE, I CAN NOW PRECEDE WITH A BETTER VERSION OF THIS PROGRAMME!
          ********************************************************/
@@ -169,7 +169,7 @@ public class DivineLiturgy1 implements DocHandler {
 
                 
                 StringOp Transfers=new StringOp();
-                Transfers.dayInfo = new LinkedHashMap<>(analyse.dayInfo);//findLanguage.deepCopy((Hashtable)StringOp.dayInfo.clone());
+                Transfers.dayInfo = new LinkedHashMap<>(analyse.dayInfo);//findLanguage.deepCopy((HashMap)StringOp.dayInfo.clone());
                 Information3.dayInfo= new LinkedHashMap<>(analyse.dayInfo);
                 today.addDays(1);
                 // PUT THE RELEVANT DATA IN THE HASH FOR TOMORROW
@@ -654,7 +654,7 @@ public class DivineLiturgy1 implements DocHandler {
         public void endDocument() {
         }
 
-        public void startElement(String elem, Hashtable table) {
+        public void startElement(String elem, HashMap table) {
             // THE TAG COULD CONTAIN A COMMAND Cmd
             // THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
             // TODAY'S INFORMATION IN dayInfo.

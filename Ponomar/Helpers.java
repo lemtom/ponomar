@@ -12,8 +12,7 @@ import java.io.File;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 class Helpers {
@@ -28,11 +27,11 @@ class Helpers {
 
 	public boolean closeFrame(String title) {
 		LanguagePack Text = new LanguagePack(analyse.dayInfo);
-		String[] languageNames = Text.obtainValues((String) Text.Phrases.get("LanguageMenu"));
+		String[] languageNames = Text.obtainValues(Text.Phrases.get("LanguageMenu"));
 
 		Object[] options = { languageNames[3], languageNames[5] };
 		// JOptionPane pane=new JOptionPane();
-		Integer selectedValue = JOptionPane.showOptionDialog(null, title, (String) Text.Phrases.get("0"),
+		Integer selectedValue = JOptionPane.showOptionDialog(null, title, Text.Phrases.get("0"),
 				JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 		// Object selectedValue = pane.getValue();
 		// System.out.println(selectedValue);
@@ -43,14 +42,14 @@ class Helpers {
 		if (options[1].equals(selectedValue)) {
 			return false;
 		}
-        return !(selectedValue instanceof Integer) || selectedValue == 0;
-    }
+		return !(selectedValue instanceof Integer) || selectedValue == 0;
+	}
 
 	public void SaveHTMLFile(String defaultname, String strOut) {
 		LanguagePack Text = new LanguagePack(analyse.dayInfo);
-		String[] languageNames = Text.obtainValues((String) Text.Phrases.get("LanguageMenu"));
-		String[] helperNames = Text.obtainValues((String) Text.Phrases.get("Helpers"));
-		String[] aboutNames = Text.obtainValues((String) Text.Phrases.get("About"));
+		String[] languageNames = Text.obtainValues(Text.Phrases.get("LanguageMenu"));
+		String[] helperNames = Text.obtainValues(Text.Phrases.get("Helpers"));
+		String[] aboutNames = Text.obtainValues(Text.Phrases.get("About"));
 		JFileChooser fileSelector = new JFileChooser();
 		File fileSelected = new File(defaultname);
 		fileSelector.setDialogTitle(helperNames[0]);
@@ -68,7 +67,7 @@ class Helpers {
 				Object[] options = { languageNames[3], languageNames[5] };
 				JOptionPane pane = new JOptionPane();
 				JOptionPane.showOptionDialog(null, languageNames[6] + "\n " + fileName.getPath(),
-						(String) Text.Phrases.get("0"), JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
+                        Text.Phrases.get("0"), JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null,
 						options, options[0]);
 				Object selectedValue = pane.getValue();
 				if (selectedValue == null)
@@ -77,11 +76,10 @@ class Helpers {
 				// If there is an array of option buttons:
 				if (options[1].equals(selectedValue))
 					return;
-				if (selectedValue instanceof Integer) {
-					if ((Integer) selectedValue != 0) {
-						return;
-					}
+				if (selectedValue instanceof Integer && (Integer) selectedValue != 0) {
+					return;
 				}
+
 			}
 
 			// CREATE THE LOCATION AND WRITE THE FILE
@@ -179,10 +177,10 @@ class Helpers {
 
 		LanguagePack Text = new LanguagePack(analyse.dayInfo);
 		// String [] AboutNames=Text.obtainValues((String)Text.Phrases.get("About"));
-		String[] authors = Text.obtainValues((String) Text.Phrases.get("Authors"));
-		String year = Text.Phrases.get("Year").toString();
-		String comma = Text.Phrases.get("Comma").toString();
-		String and = Text.Phrases.get("And").toString();
+		String[] authors = Text.obtainValues(Text.Phrases.get("Authors"));
+		String year = Text.Phrases.get("Year");
+		String comma = Text.Phrases.get("Comma");
+		String and = Text.Phrases.get("And");
 		StringBuilder authorList = new StringBuilder(authors[0]);
 		if (authors.length > 2) {
 			for (int i = 1; i < authors.length - 1; i++) {
@@ -193,21 +191,16 @@ class Helpers {
 			authorList.append(and).append(authors[authors.length - 1]);
 		}
 
-		String copyright = Text.Phrases.get("Copyright").toString();
+		String copyright = Text.Phrases.get("Copyright");
 		copyright = copyright.replace("^YY", year);
 		copyright = copyright.replace("^AA", authorList.toString());
 		return copyright;
 	}
 
-	public Hashtable<String, String> deepCopy(Hashtable original) {
+	public Map<String, String> deepCopy(Map<String, String> original) {
 		// Currently does not work.
-		Hashtable<String, String> copy = new Hashtable();
-		for (Enumeration e = original.keys(); e.hasMoreElements();) {
-			String type = e.nextElement().toString();
-			String vect = original.get(type).toString();
-
-			copy.put(type, original.get(type).toString());
-		}
+		HashMap<String, String> copy = new HashMap<>();
+        copy.replaceAll((t, v) -> original.get(t));
 		return copy;
 	}
 
@@ -217,8 +210,8 @@ class JavaFileFilter extends FileFilter {
 	public boolean accept(File file) {
 		if (file.getName().endsWith(".html"))
 			return true;
-        return file.isDirectory();
-    }
+		return file.isDirectory();
+	}
 
 	public String getDescription() {
 		return "HTML Files (.html)";

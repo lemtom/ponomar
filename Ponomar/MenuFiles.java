@@ -51,14 +51,14 @@ class MenuFiles extends JMenu implements ItemListener, PropertyChangeListener {
 	public MenuFiles(Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		saintNames = Text.obtainValues((String) Text.Phrases.get("SMenu"));
-		optionsNames = (String) Text.Phrases.get("Options");
-		fileNames = Text.obtainValues((String) Text.Phrases.get("File"));
-		serviceNames = Text.obtainValues((String) Text.Phrases.get("Services"));
-		bibleName = Text.obtainValues((String) Text.Phrases.get("Bible"));
-		helpNames = Text.obtainValues((String) Text.Phrases.get("Help"));
-		editComm = Text.obtainValues((String) Text.Phrases.get("EditComm"));
-		editPrayers = Text.obtainValues((String) Text.Phrases.get("EditPrayers"));
+		saintNames = Text.obtainValues(Text.Phrases.get("SMenu"));
+		optionsNames = Text.Phrases.get("Options");
+		fileNames = Text.obtainValues(Text.Phrases.get("File"));
+		serviceNames = Text.obtainValues(Text.Phrases.get("Services"));
+		bibleName = Text.obtainValues(Text.Phrases.get("Bible"));
+		helpNames = Text.obtainValues(Text.Phrases.get("Help"));
+		editComm = Text.obtainValues(Text.Phrases.get("EditComm"));
+		editPrayers = Text.obtainValues(Text.Phrases.get("EditPrayers"));
 		new Font((String) analyse.dayInfo.get("FontFaceM"), Font.PLAIN,
 				Integer.parseInt((String) analyse.dayInfo.get("FontSizeM")));
 	}
@@ -78,9 +78,9 @@ class MenuFiles extends JMenu implements ItemListener, PropertyChangeListener {
 		LanguageSelection.addPropertyChangeListener(pl);
 		optionsMenu.add(selection2);
 
-		JMenuItem selection3 = new JMenuItem(Text.Phrases.get("OptionMenu").toString());
+		JMenuItem selection3 = new JMenuItem(Text.Phrases.get("OptionMenu"));
 		selection3.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, ActionEvent.CTRL_MASK));
-		selection3.getAccessibleContext().setAccessibleDescription(Text.Phrases.get("OptionMenu").toString());
+		selection3.getAccessibleContext().setAccessibleDescription(Text.Phrases.get("OptionMenu"));
 		selection3.addActionListener(al);
 		optionsMenu.add(selection3);
 

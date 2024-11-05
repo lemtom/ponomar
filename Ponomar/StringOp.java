@@ -26,7 +26,7 @@ import java.util.Map;
  * SUMMARY OF FUNCTIONS: capitalize(String) <- CAPITALIZES A STRING
  * join(String[]) <- JOINS THE MEMBERS OF THE ARRAY INTO ONE STRING, SEPARATED
  * BY " " join(String[], char) <- DITTO, SEPARATED BY char join(String[],
- * String) <- DITTO, SEPARATED BY String Hashtable dayInfo <- STORES VARIABLE
+ * String) <- DITTO, SEPARATED BY String HashMap dayInfo <- STORES VARIABLE
  * VALUES FOR eval(String), SET BY Main.write() eval(String) <- PARSES String
  * RETURNING A DOUBLE * evalbool(String) <- PARSES String RETURNING A BOOLEAN *
  * main(String[]) <- TESTS eval() PLEASE SEE COMMENTS BELOW FOR FULL
@@ -67,7 +67,7 @@ final class StringOp implements Cloneable {
 	}
 
 // STORES VARIABLE VALUES FOR eval(String) AS String variable -> int value
-// Hashtable MUST BE INITIALIZED AND VALUES MUST BE ENTERED BEFORE CALLING eval(String) [in a constructor, probably]
+// HashMap MUST BE INITIALIZED AND VALUES MUST BE ENTERED BEFORE CALLING eval(String) [in a constructor, probably]
 
 	/****************************************************************************************
 	 * eval 2.0 :: AN ALL PURPOSE EXPRESSION PARSER THAT FULLY OBEYS CORRECT ORDER

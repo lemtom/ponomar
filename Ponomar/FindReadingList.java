@@ -86,11 +86,11 @@ public class FindReadingList {
 		findLanguage = new Helpers(analyse.dayInfo);
 
 		rSep = " ";
-		cSep = (String) phrases.Phrases.get("CommSep");
-		colon = (String) phrases.Phrases.get("Colon");
+		cSep = phrases.Phrases.get("CommSep");
+		colon = phrases.Phrases.get("Colon");
 		analyse.dayInfo.put("ReadSep", rSep);
 		analyse.dayInfo.put("Colon", colon);
-		ideographic = (String) phrases.Phrases.get("Ideographic");
+		ideographic = phrases.Phrases.get("Ideographic");
 		analyse.dayInfo.put("Ideographic", ideographic);
 		// GospelLocation = new GospelSelector(analyse.dayInfo);
 
@@ -141,7 +141,7 @@ public class FindReadingList {
 			 * = new LinkedHashMap<Object, Object>(); //CONTAINS THE FLOATER READINGS.
 			 */
 			// TESTING THE LANGUAGE PACKS
-			String rough = (String) phrases.Phrases.get("1");
+			String rough = phrases.Phrases.get("1");
 			String[] final1 = rough.split(",");
 			// System.out.println(output);
 			String filename = "";
@@ -320,7 +320,7 @@ public class FindReadingList {
 						// System.out.println(Tag);
 						// System.out.println("Hello World");
 						DivineLiturgy1 trial1 = new DivineLiturgy1(analyse.dayInfo);
-						String type1 = (String) phrases.Phrases.get("apostol");
+						String type1 = phrases.Phrases.get("apostol");
 						outputE.append(trial1.Readings(readingsA, "apostol", today));
 						outputE.append(" \n");
 					}
@@ -328,7 +328,7 @@ public class FindReadingList {
 						readingsA.put("Readings", gospel);
 						readingsA.put("Rank", Rank);
 						readingsA.put("Tag", Tag);
-						String type1 = (String) phrases.Phrases.get("gospel");
+						String type1 = phrases.Phrases.get("gospel");
 						DivineLiturgy1 trial1 = new DivineLiturgy1(analyse.dayInfo);
 						outputG.append(trial1.Readings(readingsA, "gospel", today)).append(" \n");
 					}

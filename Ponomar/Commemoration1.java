@@ -66,8 +66,8 @@ public class Commemoration1 implements DocHandler {
 	protected Commemoration1(String SId, String CId, Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		commNames = Text.obtainValues((String) Text.Phrases.get("Commemoration"));
-		errorName = (String) Text.Phrases.get("Commemoration3");
+		commNames = Text.obtainValues(Text.Phrases.get("Commemoration"));
+		errorName = Text.Phrases.get("Commemoration3");
 		information = new LinkedHashMap<>();
 		readings = new LinkedHashMap<>();
 		royalHours = new LinkedHashMap<>();
@@ -133,7 +133,7 @@ public class Commemoration1 implements DocHandler {
 	public void endDocument() {
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap<String, String> table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
@@ -142,7 +142,7 @@ public class Commemoration1 implements DocHandler {
 		skipElement = false;
 		if (table.get("Cmd") != null) {
 			// EXECUTE THE COMMAND, AND STOP IF IT IS FALSE
-			if (!analyse.evalbool(table.get("Cmd").toString())) {
+			if (!analyse.evalbool(table.get("Cmd"))) {
 
 				skipElement = true;
 
@@ -164,7 +164,7 @@ public class Commemoration1 implements DocHandler {
 			location1 = "";
 
 			if (table.get("Type") != null) {
-				information.put("Rank", Integer.parseInt(table.get("Type").toString()));
+				information.put("Rank", Integer.parseInt(table.get("Type")));
 			}
 			return;
 		}
@@ -172,33 +172,27 @@ public class Commemoration1 implements DocHandler {
 			location1 += "/" + elem;
 			// elemRH=elem;
 			value = new LinkedHashMap<>();
-			for (Enumeration e = table.keys(); e.hasMoreElements();) {
-				String type = (String) e.nextElement();
-				value.put(type, table.get(type));
-			}
+            value.putAll(table);
 			return;
 		}
 
 		if (readRH && read) {
 			elemRH = elem;
 			value = new LinkedHashMap<>();
-			for (Enumeration e = table.keys(); e.hasMoreElements();) {
-				String type = (String) e.nextElement();
-				value.put(type, table.get(type));
-			}
+            value.putAll(table);
 		}
 		if (elem.equals("SCRIPTURE") && read) {
-			String type = (String) table.get("Type");
-			String reading = (String) table.get("Reading");
+			String type = table.get("Type");
+			String reading = table.get("Reading");
 			if (readings.containsKey(type)) {
 
 				// ADD THIS READING TO OTHERS OF THE SAME TYPE
-				Vector vect = (Vector) readings.get(type);
+				Vector<String> vect = (Vector<String>) readings.get(type);
 				vect.add(reading);
 				readings.put(type, vect);
 			} else {
 				// CREATE A NEW TYPE WITH A COLLECTION INCLUDING THIS READING
-				Vector vect = new Vector();
+				Vector<String> vect = new Vector<>();
 				vect.add(reading);
 				readings.put(type, vect);
 			}
@@ -210,10 +204,7 @@ public class Commemoration1 implements DocHandler {
 			if (grammar == null) {
 				grammar = new LinkedHashMap<>();
 			}
-			for (Enumeration e = table.keys(); e.hasMoreElements();) {
-				String type = (String) e.nextElement();
-				grammar.put(type, table.get(type));
-			}
+            grammar.putAll(table);
 			information.put("Grammar", grammar);
 		}
 		// if (elem.equals("SERVICE") && read) {
@@ -221,31 +212,28 @@ public class Commemoration1 implements DocHandler {
 		// Information.put("Cycle",table.get("Cycle").toString());
 		// }
 		if (elem.equals("ICON") && read) {
-			information.put("Icon", table.get("Id").toString());
+			information.put("Icon", table.get("Id"));
 		}
 		if (elem.equals("TROPARION") && read) {
 			variable = new LinkedHashMap<>();
-			variable.put("Tone", table.get("Tone").toString());
+			variable.put("Tone", table.get("Tone"));
 			if (table.get("Author") != null) {
-				variable.put("Author", table.get("Author").toString());
+				variable.put("Author", table.get("Author"));
 			}
 			// Information.put("presentPropers",true);
 		}
 		if (elem.equals("KONTAKION") && read) {
 			variable = new LinkedHashMap<>();
-			variable.put("Tone", table.get("Tone").toString());
+			variable.put("Tone", table.get("Tone"));
 			if (table.get("Author") != null) {
-				variable.put("Author", table.get("Author").toString());
+				variable.put("Author", table.get("Author"));
 				// Information.put("presentPropers",true);
 			}
 		}
 		if (elem.equals("NAME") && read) {
 			// grammar=new LinkedHashMap<Object, Object>();
 			// System.out.println("Hello World: This is Name testing!");
-			for (Enumeration e = table.keys(); e.hasMoreElements();) {
-				String type = (String) e.nextElement();
-				grammar.put(type, table.get(type));
-			}
+            grammar.putAll(table);
 			information.put("grammar", grammar);
 			// Information.put("Nominative", table.get("Nominative").toString());
 			// Information.put("Short", table.get("Short").toString());
@@ -432,12 +420,12 @@ public class Commemoration1 implements DocHandler {
 	public Map<Object, Object> getDisplayIcons() {
 
 		// Ordered List of the Icons
-		Vector IconImages = new Vector();
-		Vector IconNames = new Vector();
+		Vector<String> IconImages = new Vector<>();
+		Vector<String> IconNames = new Vector<>();
 
 		String Cid = information.get("CID").toString();
 		String NameF = getGrammar("Short");
-		String[] IconSearch = Text.obtainValues((String) Text.Phrases.get("IconSearch"));
+		String[] IconSearch = Text.obtainValues(Text.Phrases.get("IconSearch"));
 
 		File fileNew = new File(helper.langFileFind(analyse.dayInfo.get("LS").toString(), "/icons/" + Cid + "/0.jpg"));
 		int countSearch = 0;
@@ -578,14 +566,14 @@ public class Commemoration1 implements DocHandler {
 	public boolean checkLife() {
 		// Checks whether the given commemoration has an associated life or not
 
-        return information.get("LIFE") != null;
-    }
+		return information.get("LIFE") != null;
+	}
 
 	public boolean checkIcon() {
 		// Checks whether the given commemoration has any icons assoicated with it
 		Map<Object, Object> checkIcon = getDisplayIcons();
-        return !checkIcon.isEmpty();
-    }
+		return !checkIcon.isEmpty();
+	}
 
 	public boolean checkPropers() {
 		// Checks whether there are any associated propers for the given commemoration

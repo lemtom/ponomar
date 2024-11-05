@@ -71,7 +71,7 @@ public class Days implements DocHandler {
 
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN

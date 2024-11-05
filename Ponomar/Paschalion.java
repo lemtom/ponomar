@@ -1,6 +1,6 @@
 package Ponomar;
 
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -291,7 +291,7 @@ final class Paschalion {
 		// FROM THE TIME WE ARE CONSIDERING, SINCE THE TIME WE ARE CONSIDERING IS NOON
 		// ALL OTHER PHASES ARE ANALAGOUS
 		LanguagePack Text = new LanguagePack(dayInfo);
-		String[] phases = Text.obtainValues((String) Text.Phrases.get("Phases"));
+		String[] phases = Text.obtainValues(Text.Phrases.get("Phases"));
 		if (raw < lengthOfRem || raw > 1 - lengthOfRem) {
 			ret = phases[0];
 		} else if (raw < 0.25 - lengthOfRem) {
@@ -379,14 +379,14 @@ final class Paschalion {
 		}
 
 		// A HASHTABLE WITH MANDATORY FAST DAYS IN THE YEAR
-		Hashtable mustFast = new Hashtable();
+		HashMap<Long, String> mustFast = new HashMap<>();
 
 		mustFast.put(new JDate(1, 5, year).getJulianDay(), "Eve of Theophany");
 		mustFast.put(new JDate(8, 29, year).getJulianDay(), "Beheading");
 		mustFast.put(new JDate(9, 14, year).getJulianDay(), "Exaltation");
 
 		// A HASHTABLE WITH MANDATORY FAST-FREE DAYS
-		Hashtable cantFast = new Hashtable();
+		HashMap<Long, String> cantFast = new HashMap<>();
 
 		cantFast.put(new JDate(1, 6, year).getJulianDay(), "Theophany");
 
@@ -471,45 +471,45 @@ final class Paschalion {
 
 	// A METHOD TO OBTAIN MAJOR FEAST DAYS FOR A PARTICULAR YEAR
 	// PARAMETERS: AN int WITH THE YEAR DESIRED
-	// RETURNS: A Hashtable OBJECT WITH THE FEASTS FOR THAT YEAR
+	// RETURNS: A HashMap OBJECT WITH THE FEASTS FOR THAT YEAR
 	// FIRST ENTRY: THE julian date of a feast
 	// SECOND ENTRY: A STRING DESCRIBING THAT FEAST
 	// THROWS: ditto
-	static Hashtable getFeasts(int year, Map<Object, Object> dayInfo) throws IllegalArgumentException {
+	static HashMap<Long, String> getFeasts(int year, Map<Object, Object> dayInfo) throws IllegalArgumentException {
 		if (year < 33) {
 			throw (new IllegalArgumentException("Invalid year"));
 		}
 
-		Hashtable feasts = new Hashtable();
+		HashMap<Long, String> feasts = new HashMap<>();
 		LanguagePack Text = new LanguagePack(dayInfo);
-		String[] FeastNames = Text.obtainValues((String) Text.Phrases.get("Feasts"));
+		String[] feastNames = Text.obtainValues(Text.Phrases.get("Feasts"));
 		// ADD ALL THE FIXED FEASTS TO OUR HASHTABLE
-		feasts.put(new JDate(1, 1, year).getJulianDay(), FeastNames[0]);
-		feasts.put(new JDate(1, 6, year).getJulianDay(), FeastNames[1]);
-		feasts.put(new JDate(6, 24, year).getJulianDay(), FeastNames[2]);
-		feasts.put(new JDate(6, 29, year).getJulianDay(), FeastNames[3]);
-		feasts.put(new JDate(8, 6, year).getJulianDay(), FeastNames[4]);
-		feasts.put(new JDate(8, 15, year).getJulianDay(), FeastNames[5]);
-		feasts.put(new JDate(8, 29, year).getJulianDay(), FeastNames[6]);
-		feasts.put(new JDate(9, 8, year).getJulianDay(), FeastNames[7]);
-		feasts.put(new JDate(9, 14, year).getJulianDay(), FeastNames[8]);
-		feasts.put(new JDate(10, 1, year).getJulianDay(), FeastNames[9]);
-		feasts.put(new JDate(11, 21, year).getJulianDay(), FeastNames[10]);
-		feasts.put(new JDate(12, 25, year).getJulianDay(), FeastNames[11]);
+		feasts.put(new JDate(1, 1, year).getJulianDay(), feastNames[0]);
+		feasts.put(new JDate(1, 6, year).getJulianDay(), feastNames[1]);
+		feasts.put(new JDate(6, 24, year).getJulianDay(), feastNames[2]);
+		feasts.put(new JDate(6, 29, year).getJulianDay(), feastNames[3]);
+		feasts.put(new JDate(8, 6, year).getJulianDay(), feastNames[4]);
+		feasts.put(new JDate(8, 15, year).getJulianDay(), feastNames[5]);
+		feasts.put(new JDate(8, 29, year).getJulianDay(), feastNames[6]);
+		feasts.put(new JDate(9, 8, year).getJulianDay(), feastNames[7]);
+		feasts.put(new JDate(9, 14, year).getJulianDay(), feastNames[8]);
+		feasts.put(new JDate(10, 1, year).getJulianDay(), feastNames[9]);
+		feasts.put(new JDate(11, 21, year).getJulianDay(), feastNames[10]);
+		feasts.put(new JDate(12, 25, year).getJulianDay(), feastNames[11]);
 
 		// NOW ADD THE MOVEABLE FEASTS TO OUR HASHTABLE
 		JDate pascha = getPascha(year);
 		// DOUBLE CHECK THAT PASCHA IS NOT ON ANNUNCIATION:
 		if (pascha.equals(new JDate(3, 25, year))) {
-			feasts.put(pascha.getJulianDay(), FeastNames[12]);
+			feasts.put(pascha.getJulianDay(), feastNames[12]);
 		} else {
-			feasts.put(pascha.getJulianDay(), FeastNames[13]);
-			feasts.put(new JDate(3, 25, year).getJulianDay(), FeastNames[14]);
+			feasts.put(pascha.getJulianDay(), feastNames[13]);
+			feasts.put(new JDate(3, 25, year).getJulianDay(), feastNames[14]);
 		}
 
-		feasts.put(new JDate(pascha.getJulianDay() + 49).getJulianDay(), FeastNames[15]);
-		feasts.put(new JDate(pascha.getJulianDay() + 39).getJulianDay(), FeastNames[16]);
-		feasts.put(new JDate(pascha.getJulianDay() - 7).getJulianDay(), FeastNames[17]);
+		feasts.put(new JDate(pascha.getJulianDay() + 49).getJulianDay(), feastNames[15]);
+		feasts.put(new JDate(pascha.getJulianDay() + 39).getJulianDay(), feastNames[16]);
+		feasts.put(new JDate(pascha.getJulianDay() - 7).getJulianDay(), feastNames[17]);
 
 		// CHECK THAT MEETING OF THE LORD DOES NOT OCCUR ON THE FIRST MONDAY OF LENT
 		JDate meeting = new JDate(2, 2, year);
@@ -519,7 +519,7 @@ final class Paschalion {
 			meeting.subtractDays(1);
 		}
 
-		feasts.put(meeting.getJulianDay(), FeastNames[18]);
+		feasts.put(meeting.getJulianDay(), feastNames[18]);
 
 		return feasts;
 	}
@@ -530,14 +530,14 @@ final class Paschalion {
 		}
 
 		// A HASHTABLE WITH MANDATORY FAST DAYS IN THE YEAR
-		Hashtable mustFast = new Hashtable();
+		HashMap<Long, String> mustFast = new HashMap<>();
 
 		mustFast.put(new JDate2(1, 5, year, calendar).getJulianDay(), "Eve of Theophany");
 		mustFast.put(new JDate2(8, 29, year, calendar).getJulianDay(), "Beheading");
 		mustFast.put(new JDate2(9, 14, year, calendar).getJulianDay(), "Exaltation");
 
 		// A HASHTABLE WITH MANDATORY FAST-FREE DAYS
-		Hashtable cantFast = new Hashtable();
+		HashMap<Long, String> cantFast = new HashMap<>();
 
 		cantFast.put(new JDate2(1, 6, year, calendar).getJulianDay(), "Theophany");
 
@@ -633,19 +633,19 @@ final class Paschalion {
 
 	// A METHOD TO OBTAIN MAJOR FEAST DAYS FOR A PARTICULAR YEAR
 	// PARAMETERS: AN int WITH THE YEAR DESIRED
-	// RETURNS: A Hashtable OBJECT WITH THE FEASTS FOR THAT YEAR
+	// RETURNS: A HashMap OBJECT WITH THE FEASTS FOR THAT YEAR
 	// FIRST ENTRY: THE julian date of a feast
 	// SECOND ENTRY: A STRING DESCRIBING THAT FEAST
 	// THROWS: ditto
-	private static Hashtable<Long, String> getFeasts(int year, LinkedHashMap<Object, Object> dayInfo, int calendar)
+	private static HashMap<Long, String> getFeasts(int year, LinkedHashMap<Object, Object> dayInfo, int calendar)
 			throws IllegalArgumentException {
 		if (year < 33) {
 			throw (new IllegalArgumentException("Invalid year"));
 		}
 
-		Hashtable<Long, String> feasts = new Hashtable<>();
+		HashMap<Long, String> feasts = new HashMap<>();
 		LanguagePack Text = new LanguagePack(dayInfo);
-		String[] feastNames = Text.obtainValues((String) Text.Phrases.get("Feasts"));
+		String[] feastNames = Text.obtainValues(Text.Phrases.get("Feasts"));
 		// ADD ALL THE FIXED FEASTS TO OUR HASHTABLE
 		feasts.put(new JDate2(1, 1, year, calendar).getJulianDay(), feastNames[0]);
 		feasts.put(new JDate2(1, 6, year, calendar).getJulianDay(), feastNames[1]);

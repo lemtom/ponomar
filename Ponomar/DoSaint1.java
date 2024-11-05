@@ -15,7 +15,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -95,10 +95,10 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
 		// PrimesNames = Text.obtainValues((String) Text.Phrases.get("Primes"));
-		languageNames = Text.obtainValues((String) Text.Phrases.get("LanguageMenu"));
+		languageNames = Text.obtainValues(Text.Phrases.get("LanguageMenu"));
 
-		fileNames = Text.obtainValues((String) Text.Phrases.get("File"));
-		helpNames = Text.obtainValues((String) Text.Phrases.get("Help"));
+		fileNames = Text.obtainValues(Text.Phrases.get("File"));
+		helpNames = Text.obtainValues(Text.Phrases.get("Help"));
 		helper = new Helpers(analyse.dayInfo);
 
 		podobni = new LinkedHashMap<>();
@@ -173,16 +173,16 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
 		}
 
 		Text = new LanguagePack(analyse.dayInfo);
-		String[] toneNumbers = Text.obtainValues((String) Text.Phrases.get("Tones"));
-		String[] mainNames = Text.obtainValues((String) Text.Phrases.get("Main"));
-		String[] saintInfo = Text.obtainValues((String) Text.Phrases.get("LivesW"));
+		String[] toneNumbers = Text.obtainValues(Text.Phrases.get("Tones"));
+		String[] mainNames = Text.obtainValues(Text.Phrases.get("Main"));
+		String[] saintInfo = Text.obtainValues(Text.Phrases.get("LivesW"));
 		String textOut = "";
 
 		if (name.isEmpty()) {
 			textOut = saintInfo[6];
 		} else {
-			String displayFontM = (String) Text.Phrases.get("FontFaceM");
-			String displaySizeM = (String) Text.Phrases.get("FontSizeM");
+			String displayFontM = Text.Phrases.get("FontFaceM");
+			String displaySizeM = Text.Phrases.get("FontSizeM");
 			Font value1 = (Font) UIManager.get("Menu.font");
 			if (displaySizeM == null || displaySizeM.isEmpty()) {
 				displaySizeM = Integer.toString(value1.getSize());
@@ -201,8 +201,8 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
 			}
 
 			// Get the language settings
-			String displayFont = (String) Text.Phrases.get("FontFaceL");
-			String displaySize = (String) Text.Phrases.get("FontSizeL");
+			String displayFont = Text.Phrases.get("FontFaceL");
+			String displaySize = Text.Phrases.get("FontSizeL");
 
 			if (displaySize == null || displaySize.isEmpty()) {
 				displaySize = Integer.toString(value1.getSize());
@@ -320,7 +320,7 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
 		// Other information can go here!
 		// String textOut=header+image+rest;
 
-		frames = new JFrame(Text.Phrases.get("0") + (String) Text.Phrases.get("Colon") + name2);
+		frames = new JFrame(Text.Phrases.get("0") + Text.Phrases.get("Colon") + name2);
 
 		// frames.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel left = new JPanel();
@@ -445,7 +445,7 @@ public class DoSaint1 implements DocHandler, ActionListener, ItemListener, Prope
 	public void endDocument() {
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN

@@ -48,7 +48,7 @@ public class Search extends JFrame implements ActionListener {
 		// Assuming at present only English exists:
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		captions = Text.obtainValues((String) Text.Phrases.get("Search"));
+		captions = Text.obtainValues(Text.Phrases.get("Search"));
 		setTitle(captions[0]);
 
 //        LanguagePack getLang = new LanguagePack(analyse.dayInfo);

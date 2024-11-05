@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,8 +28,9 @@ import java.util.Map;
  **************************************************************/
 
 class LanguagePack implements DocHandler {
-	final LinkedHashMap<Object, Object> Phrases; // STORES ALL THE REQUIRED PHRASES FOR THE INTERFACE IN THE CURRENT INTERFACE
-											// LANGUAGE.
+	final LinkedHashMap<String, String> Phrases; // STORES ALL THE REQUIRED PHRASES FOR THE INTERFACE IN THE CURRENT
+													// INTERFACE
+	// LANGUAGE.
 	private boolean readPhrases = false; // DETERMINE WHETHER TO READ OR NOT TO READ THE GIVEN PHRASES (THIS MUST BE
 											// ADDED TO ALL THE READERS).
 	private final StringOp analyse = new StringOp();
@@ -88,11 +89,10 @@ class LanguagePack implements DocHandler {
 	public void endDocument() {
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap<String, String> table) {
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
 		// TODAY'S INFORMATION IN dayInfo.
-		String Language = "";
 
 		if (table.get("Cmd") != null) {
 			// EXECUTE THE COMMAND, AND STOP IF IT IS FALSE
@@ -100,17 +100,13 @@ class LanguagePack implements DocHandler {
 				return;
 			}
 		}
-		// if(elem.equals("LANGUAGE"))
-		// {
+
 		readPhrases = true;
-		// }
 		if (elem.equals("PHRASE") && readPhrases) {
 
-			String Key = table.get("Key").toString();
-			String Value = table.get("Value").toString();
-			Phrases.put(Key, Value);
-			// System.out.println("The current language is " + Language + ". The phrases are
-			// " +Phrases);
+			String key = table.get("Key");
+			String value = table.get("Value");
+			Phrases.put(key, value);
 		}
 	}
 

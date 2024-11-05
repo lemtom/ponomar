@@ -47,7 +47,7 @@ class GospelSelector extends JPanel implements ActionListener, PropertyChangeLis
 	public GospelSelector(Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		selectorNames = Text.obtainValues((String) Text.Phrases.get("GospelSelection"));
+		selectorNames = Text.obtainValues(Text.Phrases.get("GospelSelection"));
 		Font currentFont = new Font((String) analyse.dayInfo.get("FontFaceM"), Font.PLAIN,
 				Integer.parseInt((String) analyse.dayInfo.get("FontSizeM")));
 
@@ -55,7 +55,7 @@ class GospelSelector extends JPanel implements ActionListener, PropertyChangeLis
 
 	public JPanel createGospelSelector() {
 
-		selectorNames = Text.obtainValues((String) Text.Phrases.get("GospelSelection"));
+		selectorNames = Text.obtainValues(Text.Phrases.get("GospelSelection"));
 		Font currentFont = new Font((String) analyse.dayInfo.get("FontFaceM"), Font.PLAIN,
 				Integer.parseInt((String) analyse.dayInfo.get("FontSizeM")));
 		// DETERMINE THE DEFAULTS

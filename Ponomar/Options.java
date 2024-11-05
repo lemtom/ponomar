@@ -59,7 +59,7 @@ public class Options extends JFrame implements ActionListener, ItemListener, Pro
 		ConfigurationFiles.Defaults = new LinkedHashMap<>();
 		ConfigurationFiles.ReadFile();
 
-		options = Text.obtainValues((String) Text.Phrases.get("Options2"));
+		options = Text.obtainValues(Text.Phrases.get("Options2"));
 		currentFont = new Font((String) analyse.dayInfo.get("FontFaceM"), Font.PLAIN,
 				Integer.parseInt((String) analyse.dayInfo.get("FontSizeM")));
 
@@ -274,11 +274,11 @@ public class Options extends JFrame implements ActionListener, ItemListener, Pro
 		pack();
 		int width = 550;
 		if (Text.Phrases.get("OptionsW") != null) {
-			width = Integer.parseInt(Text.Phrases.get("OptionsW").toString());
+			width = Integer.parseInt(Text.Phrases.get("OptionsW"));
 		}
 		int height = 220;
 		if (Text.Phrases.get("OptionsH") != null) {
-			height = Integer.parseInt(Text.Phrases.get("OptionsH").toString());
+			height = Integer.parseInt(Text.Phrases.get("OptionsH"));
 		}
 		setSize(width, height);
 		setVisible(true);
@@ -369,13 +369,6 @@ public class Options extends JFrame implements ActionListener, ItemListener, Pro
 
 	public void propertyChange(PropertyChangeEvent e) {
 		// THERE IS NOTHING HERE TO DO??
-		try {
-			// output.setText(createHours());
-			// output.setCaretPosition(0);
-		} catch (Exception e1) {
-
-		}
-
 	}
 
 	public static void main(String[] argz) {

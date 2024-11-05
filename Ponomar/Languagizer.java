@@ -154,7 +154,7 @@ class Languagizer extends JFrame implements DocHandler, ListSelectionListener, A
 	public void endDocument() {
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 		if (table.get("Cmd") != null) {
 			// EXECUTE THE COMMAND, AND STOP IF IT IS FALSE
 			if (!analyse.evalbool(table.get("Cmd").toString())) {

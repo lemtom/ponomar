@@ -4,8 +4,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 /***************************************************************
@@ -87,13 +86,13 @@ public class ConfigurationFiles implements DocHandler {
 	public void endDocument() {
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap<String, String> table) {
 
 		if (elem.equals("DEFAULT")) {
-			for (Enumeration e = table.keys(); e.hasMoreElements();) {
+			for (Map.Entry<String, String> e : table.entrySet()) {
+                String entry = e.getKey();
 
-				String entry = (String) e.nextElement();
-				String value = (String) table.get(entry);
+                String value = e.getValue();
 
 				if (value != null && entry != null) {
 					Defaults.put(entry, value);

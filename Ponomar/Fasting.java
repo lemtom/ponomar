@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -110,7 +110,7 @@ public class Fasting implements DocHandler {
 		 * Permitted
 		 */
 
-		String[] fastNames = phrases.obtainValues((String) phrases.Phrases.get("Fasts"));
+		String[] fastNames = phrases.obtainValues(phrases.Phrases.get("Fasts"));
 
 		switch (fast) {
 		case "0000000":
@@ -198,7 +198,7 @@ public class Fasting implements DocHandler {
 
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN

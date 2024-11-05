@@ -50,10 +50,10 @@ public class Day implements DocHandler {
 		parameterValues.dayInfo = dayInfo;
 		helper = new Helpers(parameterValues.dayInfo);
 		Text = new LanguagePack(parameterValues.dayInfo);
-		commNames = Text.obtainValues((String) Text.Phrases.get("Commemoration"));
-		mainNames = Text.obtainValues((String) Text.Phrases.get("Main"));
-		toneNumbers = Text.obtainValues((String) Text.Phrases.get("Tones"));
-		forComm = (String) Text.Phrases.get("Commemoration2");
+		commNames = Text.obtainValues(Text.Phrases.get("Commemoration"));
+		mainNames = Text.obtainValues(Text.Phrases.get("Main"));
+		toneNumbers = Text.obtainValues(Text.Phrases.get("Tones"));
+		forComm = Text.Phrases.get("Commemoration2");
 		orderedCommemorations = new ArrayList<>();
 		dayRank = -100;
 		information.put("ID", FileName);
@@ -110,7 +110,7 @@ public class Day implements DocHandler {
 	public void endDocument() {
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
@@ -175,7 +175,7 @@ public class Day implements DocHandler {
 
 	public String getCommsHyper() {
 		// Returns a hyperlinked listing of all the commemorations for a given day.
-		String cSep = (String) Text.Phrases.get("CommSep");
+		String cSep = Text.Phrases.get("CommSep");
 		StringBuilder output = new StringBuilder();
 		for (Commemoration1 CCom : orderedCommemorations) {
 
@@ -193,13 +193,13 @@ public class Day implements DocHandler {
 				output.append("<A Href='goDoSaint?id=").append(sId).append(",").append(cId).append("'>");
 			}
 			int rank = CCom.getRank();
-			String Rank0Format = (String) Text.Phrases.get("Rank0");
-			String Rank1Format = (String) Text.Phrases.get("Rank1");
-			String Rank2Format = (String) Text.Phrases.get("Rank2");
-			String Rank3Format = (String) Text.Phrases.get("Rank3");
-			String Rank4Format = (String) Text.Phrases.get("Rank4");
-			String Rank5Format = (String) Text.Phrases.get("Rank5");
-			String Rank6Format = (String) Text.Phrases.get("Rank6");
+			String Rank0Format = Text.Phrases.get("Rank0");
+			String Rank1Format = Text.Phrases.get("Rank1");
+			String Rank2Format = Text.Phrases.get("Rank2");
+			String Rank3Format = Text.Phrases.get("Rank3");
+			String Rank4Format = Text.Phrases.get("Rank4");
+			String Rank5Format = Text.Phrases.get("Rank5");
+			String Rank6Format = Text.Phrases.get("Rank6");
 
 			switch (rank) {
 			case 8:
@@ -257,7 +257,7 @@ public class Day implements DocHandler {
 			CCom.getSId();
 			String cId = CCom.getCId();
 			String nameF = CCom.getGrammar("Short");
-			String[] iconSearch = Text.obtainValues((String) Text.Phrases.get("IconSearch"));
+			String[] iconSearch = Text.obtainValues(Text.Phrases.get("IconSearch"));
 
 			File fileNew = new File(
 					helper.langFileFind(parameterValues.dayInfo.get("LS").toString(), "/icons/" + cId + "/0.jpg"));

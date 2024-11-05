@@ -14,7 +14,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -64,10 +64,10 @@ public class RoyalHours implements DocHandler, ActionListener, ItemListener, Pro
 	public RoyalHours(JDate2 date, Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		primesNames = Text.obtainValues((String) Text.Phrases.get("RoyalHours"));
-		languageNames = Text.obtainValues((String) Text.Phrases.get("LanguageMenu"));
-		fileNames = Text.obtainValues((String) Text.Phrases.get("File"));
-		helpNames = Text.obtainValues((String) Text.Phrases.get("Help"));
+		primesNames = Text.obtainValues(Text.Phrases.get("RoyalHours"));
+		languageNames = Text.obtainValues(Text.Phrases.get("LanguageMenu"));
+		fileNames = Text.obtainValues(Text.Phrases.get("File"));
+		helpNames = Text.obtainValues(Text.Phrases.get("Help"));
 		today = date;
 		helper = new Helpers(analyse.dayInfo);
 		analyse.dayInfo.put("PS", 1);
@@ -77,7 +77,7 @@ public class RoyalHours implements DocHandler, ActionListener, ItemListener, Pro
 			if (strOut.equals("Royal Hours are not served today.")) {
 				Object[] options = { languageNames[3] };
 				JOptionPane.showOptionDialog(null, primesNames[0],
-						Text.Phrases.get("0") + (String) Text.Phrases.get("Colon") + primesNames[1],
+						Text.Phrases.get("0") + Text.Phrases.get("Colon") + primesNames[1],
 						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 			} else {
 				RoyalHoursWindow(strOut);
@@ -88,7 +88,7 @@ public class RoyalHours implements DocHandler, ActionListener, ItemListener, Pro
 	}
 
 	private void RoyalHoursWindow(String textOut) {
-		frames = new JFrame(Text.Phrases.get("0") + (String) Text.Phrases.get("Colon") + primesNames[1]);
+		frames = new JFrame(Text.Phrases.get("0") + Text.Phrases.get("Colon") + primesNames[1]);
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		textOut = textOut.replace("</br>", "<BR>");
@@ -167,7 +167,7 @@ public class RoyalHours implements DocHandler, ActionListener, ItemListener, Pro
 
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN

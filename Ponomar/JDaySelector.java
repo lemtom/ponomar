@@ -7,7 +7,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Arrays;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
@@ -64,7 +64,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 	private final boolean initialized;
 	private boolean decorationBackgroundVisible;
 	private boolean decorationBordersVisible;
-	private Hashtable feasts;
+	private HashMap<Long, String> feasts;
 	private int[] fasts;
 	private final LanguagePack Text;// =new LanguagePack();
 	private final StringOp analyse = new StringOp();
@@ -77,8 +77,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 	protected JDaySelector(LinkedHashMap<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		numFormat = NumberFormat.getInstance(
-				new Locale(Text.Phrases.get("Language").toString(), Text.Phrases.get("Country").toString()));
+		numFormat = NumberFormat.getInstance(new Locale(Text.Phrases.get("Language"), Text.Phrases.get("Country")));
 		currentFont = new Font((String) analyse.dayInfo.get("FontFaceM"), Font.BOLD,
 				Integer.parseInt((String) analyse.dayInfo.get("FontSizeM")));
 		// Initialise the required locales
@@ -86,7 +85,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 		DecimalFormatSymbols dfs = df.getDecimalFormatSymbols();
 		// dfs.setZeroDigit('\u0660');
 
-		dfs.setZeroDigit(Text.Phrases.get("ZeroPoint").toString().charAt(0));
+		dfs.setZeroDigit(Text.Phrases.get("ZeroPoint").charAt(0));
 		// System.out.println(Text.Phrases.get("ZeroPoint").toString().charAt(0));
 		df.setDecimalFormatSymbols(dfs);
 
@@ -189,7 +188,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 
 	private void drawDayNames() {
 		// DateFormatSymbols dateFormatSymbols = new DateFormatSymbols(locale);
-		dayNames = Text.obtainValues((String) Text.Phrases.get("Week1"));
+		dayNames = Text.obtainValues(Text.Phrases.get("Week1"));
 
 		int day = 0;
 
@@ -263,7 +262,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 				// THIS IS A FEAST DAY
 				days[i + n + 7].setForeground(weekdayForeground);
 				days[i + n + 7].setBackground(sundayForeground);
-				days[i + n + 7].setToolTipText((String) feasts.get(tmpCalendar.getJulianDay()));
+				days[i + n + 7].setToolTipText(feasts.get(tmpCalendar.getJulianDay()));
 			} else {
 				// days[i + n + 7].setBackground(commonBackground);
 				days[i + n + 7].setBackground(commonBackgrounds[fasts[diff]]);
@@ -377,7 +376,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 				// THIS IS A FEAST DAY
 				days[i + n + 7].setForeground(weekdayForeground);
 				days[i + n + 7].setBackground(sundayForeground);
-				days[i + n + 7].setToolTipText((String) feasts.get(tmpCalendar.getJulianDay()));
+				days[i + n + 7].setToolTipText(feasts.get(tmpCalendar.getJulianDay()));
 			} else {
 				// days[i + n + 7].setBackground(commonBackground);
 				days[i + n + 7].setBackground(commonBackgrounds[fasts[diff]]);
@@ -413,7 +412,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 	}
 
 	private void drawTones() {
-		String[] numerals = Text.obtainValues((String) Text.Phrases.get("Tones"));
+		String[] numerals = Text.obtainValues(Text.Phrases.get("Tones"));
 
 		// THIS WILL WORK FOR ALL TIMES EXCEPT DURING LENT
 		// WE'LL LEAVE IT AT THAT, FOR NOW
@@ -650,6 +649,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 			setBorderPainted(decorationBordersVisible);
 		}
 
+		@Override
 		public void addMouseListener(MouseListener l) {
 		}
 
@@ -669,7 +669,7 @@ class JDaySelector extends JPanel implements ActionListener, KeyListener, FocusL
 					g.setColor(days[7].getBackground());
 				}
 				g.fillRect(0, 0, getWidth(), getHeight());
-                setContentAreaFilled(isBorderPainted());
+				setContentAreaFilled(isBorderPainted());
 			}
 			super.paint(g);
 		}

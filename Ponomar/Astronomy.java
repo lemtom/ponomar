@@ -249,7 +249,7 @@ class Astronomy {
 		double tomorrowsAge = lunarage(day + 1);
 		String phase = "Error";
 		LanguagePack Text = new LanguagePack(dayInfo);
-		String[] PhaseNames = Text.obtainValues((String) Text.Phrases.get("Phases"));
+		String[] PhaseNames = Text.obtainValues(Text.Phrases.get("Phases"));
 		// Key="Phases" Value="New Moon/,Waxing Crescent/,First Quarter/,Waxing
 		// Gibbous/,Full Moon/,Waning Gibbous/,Third Quarter/,Waning Crescent"
 		// Comment="Lunar Phases" />

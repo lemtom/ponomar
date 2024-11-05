@@ -12,7 +12,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -67,13 +67,13 @@ public class Primes implements DocHandler, ActionListener, ItemListener, Propert
 	public Primes(JDate2 date, Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		primesNames = Text.obtainValues((String) Text.Phrases.get("Primes"));
-		languageNames = Text.obtainValues((String) Text.Phrases.get("LanguageMenu"));
-		fileNames = Text.obtainValues((String) Text.Phrases.get("File"));
-		helpNames = Text.obtainValues((String) Text.Phrases.get("Help"));
+		primesNames = Text.obtainValues(Text.Phrases.get("Primes"));
+		languageNames = Text.obtainValues(Text.Phrases.get("LanguageMenu"));
+		fileNames = Text.obtainValues(Text.Phrases.get("File"));
+		helpNames = Text.obtainValues(Text.Phrases.get("Help"));
 		new PrimeSelector(dayInfo);
 
-		// analyse.dayInfo = new Hashtable();
+		// analyse.dayInfo = new HashMap();
 		// analyse.dayInfo.put("dow", Weekday); //DETERMINE THE DAY OF THE WEEK.
 
 		// CREATING THE SERVICE
@@ -84,7 +84,7 @@ public class Primes implements DocHandler, ActionListener, ItemListener, Propert
 			if (strOut.equals("No Service Today")) {
 				Object[] options = { languageNames[3] };
 				JOptionPane.showOptionDialog(null, primesNames[0],
-						(String) Text.Phrases.get("0") + Text.Phrases.get("Colon") + primesNames[1],
+						Text.Phrases.get("0") + Text.Phrases.get("Colon") + primesNames[1],
 						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 			} else {
 				primesWindow(strOut);
@@ -95,7 +95,7 @@ public class Primes implements DocHandler, ActionListener, ItemListener, Propert
 	}
 
 	private void primesWindow(String textOut) {
-		frames = new JFrame(Text.Phrases.get("0") + (String) Text.Phrases.get("Colon") + primesNames[1]);
+		frames = new JFrame(Text.Phrases.get("0") + Text.Phrases.get("Colon") + primesNames[1]);
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		textOut = textOut.replace("</br>", "<BR>");
@@ -428,7 +428,7 @@ public class Primes implements DocHandler, ActionListener, ItemListener, Propert
 
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN

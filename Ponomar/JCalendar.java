@@ -64,8 +64,8 @@ class JCalendar extends JPanel implements ActionListener, FocusListener, Propert
 
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		months = Text.obtainValues((String) Text.Phrases.get("1"));
-		orderBox = (String) Text.Phrases.get("OrderBox");
+		months = Text.obtainValues(Text.Phrases.get("1"));
+		orderBox = Text.Phrases.get("OrderBox");
 		date = new JDate();
 
 	}
@@ -74,8 +74,8 @@ class JCalendar extends JPanel implements ActionListener, FocusListener, Propert
 		super();
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		months = Text.obtainValues((String) Text.Phrases.get("1"));
-		orderBox = (String) Text.Phrases.get("OrderBox");
+		months = Text.obtainValues(Text.Phrases.get("1"));
+		orderBox = Text.Phrases.get("OrderBox");
 		setName("JCalendar");
 		setLayout(new BorderLayout());
 

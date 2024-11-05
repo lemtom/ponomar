@@ -62,8 +62,8 @@ class IconDisplay extends JPanel implements ActionListener, FocusListener, Prope
 		// super();
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		months = Text.obtainValues((String) Text.Phrases.get("1"));
-		captions = Text.obtainValues((String) Text.Phrases.get("IconW"));
+		months = Text.obtainValues(Text.Phrases.get("1"));
+		captions = Text.obtainValues(Text.Phrases.get("IconW"));
 
 		images = imagesF;
 		names = namesF;
@@ -75,7 +75,7 @@ class IconDisplay extends JPanel implements ActionListener, FocusListener, Prope
 			// date = new JDate();
 			System.out.println(images.length);
 			images = new String[1];
-			images[0] = Text.Phrases.get("NoIcon").toString();// "Ponomar/languages/icons/Default1.jpg";
+			images[0] = Text.Phrases.get("NoIcon");// "Ponomar/languages/icons/Default1.jpg";
 			names = new String[1];
 			names[0] = captions[2];
 			// return;
@@ -165,15 +165,15 @@ class IconDisplay extends JPanel implements ActionListener, FocusListener, Prope
 		updateImages();
 	}
 
-	public void updateImages(String[] ImagesF, String[] NamesF) {
+	public void updateImages(String[] imagesF, String[] namesF) {
 		// This changes the images available in the system
 		number = 0;
-		images = ImagesF;
-		names = NamesF;
+		images = imagesF;
+		names = namesF;
 
 		if (images.length <= 0) {
 			images = new String[1];
-			images[0] = Text.Phrases.get("NoIcon").toString();// "Default1";
+			images[0] = Text.Phrases.get("NoIcon");// "Default1";
 			names = new String[1];
 			names[0] = captions[2];
 			// return;
@@ -290,18 +290,18 @@ class IconDisplay extends JPanel implements ActionListener, FocusListener, Prope
 		// frame.pack();
 	}
 
-	public void updateImagesFiled(String[] ImagesF, String[] NamesF) {
+	public void updateImagesFiled(String[] imagesF, String[] namesF) {
 		// This changes the images available in the system
 		// System.out.println(Names[0]);
 		number = 0;
-		images = ImagesF;
-		names = NamesF;
+		images = imagesF;
+		names = namesF;
 		System.out.println(images.length);
 
 		if (images.length <= 0) {
 
 			images = new String[1];
-			images[0] = Text.Phrases.get("NoIcon").toString();// "Ponomar/languages/icons/Default1.jpg";
+			images[0] = Text.Phrases.get("NoIcon");// "Ponomar/languages/icons/Default1.jpg";
 			names = new String[1];
 			names[0] = captions[2];
 			// return;

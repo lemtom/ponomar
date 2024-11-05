@@ -12,7 +12,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 /***********************************************************************
@@ -66,13 +66,13 @@ public class NinthHour implements DocHandler, ActionListener, ItemListener, Prop
 	public NinthHour(JDate2 date, Map<Object, Object> dayInfo) {
 		analyse.dayInfo = dayInfo;
 		Text = new LanguagePack(dayInfo);
-		primesNames = Text.obtainValues((String) Text.Phrases.get("None"));
-		languageNames = Text.obtainValues((String) Text.Phrases.get("LanguageMenu"));
-		fileNames = Text.obtainValues((String) Text.Phrases.get("File"));
-		helpNames = Text.obtainValues((String) Text.Phrases.get("Help"));
+		primesNames = Text.obtainValues(Text.Phrases.get("None"));
+		languageNames = Text.obtainValues(Text.Phrases.get("LanguageMenu"));
+		fileNames = Text.obtainValues(Text.Phrases.get("File"));
+		helpNames = Text.obtainValues(Text.Phrases.get("Help"));
 		new PrimeSelector(dayInfo);
 
-		// StringOp.dayInfo = new Hashtable();
+		// StringOp.dayInfo = new HashMap();
 		// StringOp.dayInfo.put("dow", Weekday); //DETERMINE THE DAY OF THE WEEK.
 
 		// CREATING THE SERVICE
@@ -83,7 +83,7 @@ public class NinthHour implements DocHandler, ActionListener, ItemListener, Prop
 			if (strOut.equals("No Service Today")) {
 				Object[] options = { languageNames[3] };
 				JOptionPane.showOptionDialog(null, primesNames[0],
-						Text.Phrases.get("0") + (String) Text.Phrases.get("Colon") + primesNames[1],
+						Text.Phrases.get("0") + Text.Phrases.get("Colon") + primesNames[1],
 						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
 			} else {
 				// strOut=strOut+"<p><Font Color='red'>Disclaimer: This is a preliminary attempt
@@ -104,7 +104,7 @@ public class NinthHour implements DocHandler, ActionListener, ItemListener, Prop
 	}
 
 	private void primesWindow(String textOut) {
-		frames = new JFrame(Text.Phrases.get("0") + (String) Text.Phrases.get("Colon") + primesNames[1]);
+		frames = new JFrame(Text.Phrases.get("0") + Text.Phrases.get("Colon") + primesNames[1]);
 		// setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		textOut = textOut.replace("</br>", "<BR>");
@@ -321,7 +321,7 @@ public class NinthHour implements DocHandler, ActionListener, ItemListener, Prop
 
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN

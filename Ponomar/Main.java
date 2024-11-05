@@ -102,20 +102,20 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         //Changing language storage format
         findLanguage = new Helpers(analyse.dayInfo);
 
-        toneNumbers = phrases.obtainValues((String) phrases.Phrases.get("Tones"));
-        saintNames = phrases.obtainValues((String) phrases.Phrases.get("SMenu"));
-        fileNames = phrases.obtainValues((String) phrases.Phrases.get("File"));
-        serviceNames = phrases.obtainValues((String) phrases.Phrases.get("Services"));
-        bibleName = phrases.obtainValues((String) phrases.Phrases.get("Bible"));
-        helpNames = phrases.obtainValues((String) phrases.Phrases.get("Help"));
+        toneNumbers = phrases.obtainValues(phrases.Phrases.get("Tones"));
+        saintNames = phrases.obtainValues(phrases.Phrases.get("SMenu"));
+        fileNames = phrases.obtainValues(phrases.Phrases.get("File"));
+        serviceNames = phrases.obtainValues(phrases.Phrases.get("Services"));
+        bibleName = phrases.obtainValues(phrases.Phrases.get("Bible"));
+        helpNames = phrases.obtainValues(phrases.Phrases.get("Help"));
 	//EditComm = Phrases.obtainValues((String) Phrases.Phrases.get("EditComm"));
         //EditPrayers=Phrases.obtainValues((String) Phrases.Phrases.get("EditPrayers")); //to change to Prayers!
 
-        errors = phrases.obtainValues((String) phrases.Phrases.get("Errors"));
-        mainNames = phrases.obtainValues((String) phrases.Phrases.get("Main"));
-        displayFont = (String) phrases.Phrases.get("FontFaceM");
-        displaySize = (String) phrases.Phrases.get("FontSizeM");
-        orderBox = (String) phrases.Phrases.get("OrderBox");
+        errors = phrases.obtainValues(phrases.Phrases.get("Errors"));
+        mainNames = phrases.obtainValues(phrases.Phrases.get("Main"));
+        displayFont = phrases.Phrases.get("FontFaceM");
+        displaySize = phrases.Phrases.get("FontSizeM");
+        orderBox = phrases.Phrases.get("OrderBox");
 
         Font value1 = (Font) UIManager.get("Menu.font");
         if (displaySize == null || displaySize.isEmpty()) {
@@ -162,15 +162,15 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         }
 
         //System.out.println(this.getFont());
-        setTitle((String) phrases.Phrases.get("0"));
-        rSep = (String) phrases.Phrases.get("ReadSep");
-        cSep = (String) phrases.Phrases.get("CommSep");
-        colon = (String) phrases.Phrases.get("Colon");
+        setTitle(phrases.Phrases.get("0"));
+        rSep = phrases.Phrases.get("ReadSep");
+        cSep = phrases.Phrases.get("CommSep");
+        colon = phrases.Phrases.get("Colon");
         analyse.dayInfo.put("FontFaceM", displayFont);
         analyse.dayInfo.put("FontSizeM", displaySize);
         analyse.dayInfo.put("ReadSep", rSep);
         analyse.dayInfo.put("Colon", colon);
-        ideographic = (String) phrases.Phrases.get("Ideographic");
+        ideographic = phrases.Phrases.get("Ideographic");
         analyse.dayInfo.put("Ideographic", ideographic);
         gospelLocation = new GospelSelector(analyse.dayInfo);
 
@@ -216,7 +216,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 
         setContentPane(splitter);
 
-        Locale place = new Locale(phrases.Phrases.get("Language").toString(), phrases.Phrases.get("Country").toString());
+        Locale place = new Locale(phrases.Phrases.get("Language"), phrases.Phrases.get("Country"));
         Helpers orient = new Helpers(analyse.dayInfo);
         analyse.dayInfo.put("Locale", place);
         analyse.dayInfo.put("Orient", ComponentOrientation.getOrientation(place));
@@ -407,15 +407,15 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
      
 
          JDate2.setCalendar(displayCal);
-        String amc = (String) phrases.Phrases.get("AMC");
-        String aml = (String) phrases.Phrases.get("AML");
-        String cEnd=(String) phrases.Phrases.get("CEnd"); //"."; //Later make it come from the configuration files for a given language.
+        String amc = phrases.Phrases.get("AMC");
+        String aml = phrases.Phrases.get("AML");
+        String cEnd= phrases.Phrases.get("CEnd"); //"."; //Later make it come from the configuration files for a given language.
         String format = "";
         if (amc.equals("1")) {
             //PCalendar checking = new PCalendar(today, PCalendar.julian, analyse.dayInfo);
             JDate2.setCalendar(religiousCal);
             
-            format = (String) phrases.Phrases.get("AM");
+            format = phrases.Phrases.get("AM");
             if (analyse.dayInfo.get("Ideographic").equals("1"))
                 {
                     RuleBasedNumber convertN=new RuleBasedNumber(analyse.dayInfo);
@@ -504,12 +504,12 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
         ReadScriptures[2] = new LinkedHashMap<Object, Object>();		//CONTAINS THE FLOATER READINGS.
          */
         //TESTING THE LANGUAGE PACKS
-        String rough = (String) phrases.Phrases.get("1");
+        String rough = phrases.Phrases.get("1");
 
 
 
-        new Sunrise(analyse.dayInfo);
-        String[] sunriseSunset = Sunrise.getSunriseSunsetString(today, (String) ConfigurationFiles.Defaults.get("Longitude"), (String) ConfigurationFiles.Defaults.get("Latitude"), (String) ConfigurationFiles.Defaults.get("TimeZone"));
+        Sunrise sunrise = new Sunrise(analyse.dayInfo);
+        String[] sunriseSunset = sunrise.getSunriseSunsetString(today, (String) ConfigurationFiles.Defaults.get("Longitude"), (String) ConfigurationFiles.Defaults.get("Latitude"), (String) ConfigurationFiles.Defaults.get("TimeZone"));
         output += "<BR>" + mainNames[1] + sunriseSunset[0];
         output += "<BR>" + mainNames[2] + sunriseSunset[1];
         output += "<BR><BR>"; //<B>"+MainNames[3]+"</B>"+Colon+ Paschalion.getLunarPhaseString(today) +"<BR><BR>";
@@ -688,7 +688,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                     //System.out.println(Tag);
                     //System.out.println("Hello World");
                     DivineLiturgy1 trial1 = new DivineLiturgy1(analyse.dayInfo);
-                    String type1 = (String) phrases.Phrases.get("apostol");
+                    String type1 = phrases.Phrases.get("apostol");
                     output += "<B>" + type1 + "</B>" + colon;
                     //System.out.println(readingsA);
                     output += trial1.Readings(readingsA, "apostol", today);
@@ -698,7 +698,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                     readingsA.put("Readings", gospel);
                     readingsA.put("Rank", rank);
                     readingsA.put("Tag", tag);
-                    String type1 = (String) phrases.Phrases.get("gospel");
+                    String type1 = phrases.Phrases.get("gospel");
                     DivineLiturgy1 trial1 = new DivineLiturgy1(analyse.dayInfo);
                     output += "<B>" + type1 + "</B>" + colon;
                     output += trial1.Readings(readingsA, "gospel", today);
@@ -749,7 +749,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
                 readingsA.put("Rank", rank);
                 readingsA.put("Tag", tag);
                 Matins trial1 = new Matins(analyse.dayInfo);
-                String type1 = (String) phrases.Phrases.get("matins");
+                String type1 = phrases.Phrases.get("matins");
                 output += "<B>" + type1 + "</B>" + colon;
                 //System.out.println("Matins: "+ readingsA);
                 output += trial1.Readings(readingsA, today);
@@ -763,7 +763,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
             } else {
                 output += rSep;
             }
-            String type1 = (String) phrases.Phrases.get(element1.toLowerCase());
+            String type1 = phrases.Phrases.get(element1.toLowerCase());
             output += "<B>" + type1 + "</B>" + colon;
             for (int i = 0; i < readings.size(); i++) {
                 LinkedHashMap<String, Object> Reading = (LinkedHashMap<String, Object>) readings.get(i);
@@ -816,7 +816,7 @@ public class Main extends JFrame implements PropertyChangeListener, HyperlinkLis
 
         }
 
-        phrases.obtainValues((String) phrases.Phrases.get("Fasts"));
+        phrases.obtainValues(phrases.Phrases.get("Fasts"));
         Fasting getfast = new Fasting(analyse.dayInfo);
         output += "<BR><BR>" + getfast.FastRules() + "<BR><BR>";
         //output+="</FONT>";

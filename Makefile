@@ -5,7 +5,6 @@ JC = javac
 	$(JC) $(JFLAGS) $*.java
 
 CLASSES = \
-	Ponomar/OrderedHashtable.java \
 	Ponomar/DocHandler.java \
 	Ponomar/QDParser.java \
 	Ponomar/Reporter.java \

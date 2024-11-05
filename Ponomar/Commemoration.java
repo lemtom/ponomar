@@ -64,11 +64,11 @@ public class Commemoration implements DocHandler {
 		helper = new Helpers(analyse.dayInfo);
 		readCommemoration(Location + fileName);
 		Text = new LanguagePack(analyse.dayInfo);
-		commNames = Text.obtainValues((String) Text.Phrases.get("Commemoration"));
+		commNames = Text.obtainValues(Text.Phrases.get("Commemoration"));
 
 	}
 
-	protected Commemoration(String FileName, String Type) {
+	protected Commemoration(String fileName, String type) {
 		// This allows a more generalised approach to reading, those file that are found
 		// not only in the menaion, but also in the triodion, pentecostarion, etc...
 		// Codes: M: menaion
@@ -77,19 +77,19 @@ public class Commemoration implements DocHandler {
 		information = new LinkedHashMap<>();
 		readings = new LinkedHashMap<>();
 		royalHours = new LinkedHashMap<>();
-		information.put("ID", FileName);
+		information.put("ID", fileName);
 		helper = new Helpers(analyse.dayInfo);
-		String FilePath = "";
-		if (Type.equals("M")) {
-			FilePath = Location + FileName;
+		String filePath = "";
+		if (type.equals("M")) {
+			filePath = Location + fileName;
 		}
-		if (Type.equals("T")) {
-			FilePath = LocationT + FileName;
+		if (type.equals("T")) {
+			filePath = LocationT + fileName;
 		}
-		if (Type.equals("P")) {
-			FilePath = LocationP + FileName;
+		if (type.equals("P")) {
+			filePath = LocationP + fileName;
 		}
-		readCommemoration(FilePath);
+		readCommemoration(filePath);
 	}
 
 	protected Commemoration() {
@@ -98,12 +98,12 @@ public class Commemoration implements DocHandler {
 		helper = new Helpers(analyse.dayInfo);
 	}
 
-	protected Commemoration(String Name, LinkedHashMap<Object, Object> grammar,
+	protected Commemoration(String name, LinkedHashMap<Object, Object> grammar,
 			LinkedHashMap<Object, Object> readings) {
 		// THIS WILL CREATE A QUASI-COMMEMORATION FILE ONLY GIVEN THE NAME OF THE
 		// COMMEMORATION!
 		information = new LinkedHashMap<>();
-		information.put("Name", Name);
+		information.put("Name", name);
 		information.put("Rank", -1);
 		information.put("Cycle", -1);
 		information.put("Grammar", grammar);
@@ -134,7 +134,7 @@ public class Commemoration implements DocHandler {
 
 	}
 
-	public void startElement(String elem, Hashtable table) {
+	public void startElement(String elem, HashMap<String, String> table) {
 
 		// THE TAG COULD CONTAIN A COMMAND Cmd
 		// THE COMMAND TELLS US WHETHER OR NOT TO PROCESS THIS TAG GIVEN
@@ -143,7 +143,7 @@ public class Commemoration implements DocHandler {
 		if (table.get("Cmd") != null) {
 			// EXECUTE THE COMMAND, AND STOP IF IT IS FALSE
 
-			if (!analyse.evalbool(table.get("Cmd").toString())) {
+			if (!analyse.evalbool(table.get("Cmd"))) {
 
 				return;
 			}
@@ -164,10 +164,7 @@ public class Commemoration implements DocHandler {
 			location1 += "/" + elem;
 			// elemRH=elem;
 			value = new LinkedHashMap<>();
-			for (Enumeration e = table.keys(); e.hasMoreElements();) {
-				String type = (String) e.nextElement();
-				value.put(type, table.get(type));
-			}
+            value.putAll(table);
 			return;
 		}
 		// if(elem.equals("ROYALHOURS") && read){
@@ -177,14 +174,11 @@ public class Commemoration implements DocHandler {
 		if (readRH && read) {
 			elemRH = elem;
 			value = new LinkedHashMap<>();
-			for (Enumeration e = table.keys(); e.hasMoreElements();) {
-				String type = (String) e.nextElement();
-				value.put(type, table.get(type));
-			}
+            value.putAll(table);
 		}
 		if (elem.equals("SCRIPTURE") && read) {
-			String type = (String) table.get("Type");
-			String reading = (String) table.get("Reading");
+			String type = table.get("Type");
+			String reading = table.get("Reading");
 			if (readings.containsKey(type)) {
 
 				// ADD THIS READING TO OTHERS OF THE SAME TYPE
@@ -202,28 +196,25 @@ public class Commemoration implements DocHandler {
 		if (elem.equals("GRAMMAR") && read) {
 			// THIS SHOULD ONLY BE READ ONCE PER LANGUAGE AND PASS!
 			grammar = new LinkedHashMap<>();
-			for (Enumeration e = table.keys(); e.hasMoreElements();) {
-				String type = (String) e.nextElement();
-				grammar.put(type, table.get(type));
-			}
+            grammar.putAll(table);
 			information.put("Grammar", grammar);
 		}
 		if (elem.equals("CHURCH") && read) {
-			information.put("Rank", table.get("Rank").toString());
-			information.put("Cycle", table.get("Cycle").toString());
+			information.put("Rank", table.get("Rank"));
+			information.put("Cycle", table.get("Cycle"));
 		}
 		if (elem.equals("ICON") && read) {
-			information.put("Icon", table.get("Id").toString());
+			information.put("Icon", table.get("Id"));
 		}
 		if (elem.equals("TROPARION") && read) {
 			variable = new LinkedHashMap<>();
-			variable.put("Tone", table.get("Tone").toString());
-			variable.put("Author", table.get("Author").toString());
+			variable.put("Tone", table.get("Tone"));
+			variable.put("Author", table.get("Author"));
 		}
 		if (elem.equals("KONTAKION") && read) {
 			variable = new LinkedHashMap<>();
-			variable.put("Tone", table.get("Tone").toString());
-			variable.put("Author", table.get("Author").toString());
+			variable.put("Tone", table.get("Tone"));
+			variable.put("Author", table.get("Author"));
 		}
 		if (elem.equals("NAME") && read) {
 
@@ -338,35 +329,35 @@ public class Commemoration implements DocHandler {
 		return information.get("Cycle").toString();
 	}
 
-	public LinkedHashMap<Object, Object> getService(String Node, String Type) {
+	public Map<Object, Object> getService(String node, String type) {
 		// System.out.println(ServiceInfo);
 		// System.out.println("\n\n");
 		// System.out.println(Node+"/"+Type);
-		if (serviceInfo.containsKey(Node)) {
-			LinkedHashMap<Object, Object> stuff = (LinkedHashMap<Object, Object>) serviceInfo.get(Node);
+		if (serviceInfo.containsKey(node)) {
+			LinkedHashMap<Object, Object> stuff = (LinkedHashMap<Object, Object>) serviceInfo.get(node);
 
-			if (stuff.containsKey(Type)) {
-				LinkedHashMap<Object, Object> stuff1 = (LinkedHashMap<Object, Object>) stuff.get(Type);
+			if (stuff.containsKey(type)) {
+				LinkedHashMap<Object, Object> stuff1 = (LinkedHashMap<Object, Object>) stuff.get(type);
 
 				return stuff1;
 			} else {
-				System.out.println(commNames[0] + Node + commNames[1] + Type);
+				System.out.println(commNames[0] + node + commNames[1] + type);
 				return new LinkedHashMap<>();
 			}
 		} else {
-			System.out.println(commNames[2] + Node);
+			System.out.println(commNames[2] + node);
 			return new LinkedHashMap<>();
 		}
 	}
 
-	public LinkedHashMap<Object, Object> getRH(String Node, String Type) {
+	public Map<Object, Object> getRH(String mode, String type) {
 
-		if (royalHours.containsKey(Node)) {
+		if (royalHours.containsKey(mode)) {
 
-			LinkedHashMap<Object, Object> stuff = (LinkedHashMap<Object, Object>) royalHours.get(Node);
+			LinkedHashMap<Object, Object> stuff = (LinkedHashMap<Object, Object>) royalHours.get(mode);
 			// System.out.println(stuff);
-			if (stuff.containsKey(Type)) {
-				LinkedHashMap<Object, Object> stuff1 = (LinkedHashMap<Object, Object>) stuff.get(Type);
+			if (stuff.containsKey(type)) {
+				LinkedHashMap<Object, Object> stuff1 = (LinkedHashMap<Object, Object>) stuff.get(type);
 				return stuff1;
 			} else {
 				System.out.println(commNames[3]);
